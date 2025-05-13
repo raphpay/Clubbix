@@ -1,12 +1,12 @@
 import { addDoc, collection, deleteDoc, doc } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { db } from "../lib/firebase";
+import { db } from "../../lib/firebase";
 
-import type { Member } from "../types/Member";
+import type { Member } from "../../types/Member";
 
-import ButtonClose from "./ButtonClose";
-import ButtonDanger from "./ButtonDanger";
-import ButtonPrimary from "./ButtonPrimary";
+import ButtonClose from "../ButtonClose";
+import ButtonDanger from "../ButtonDanger";
+import ButtonPrimary from "../ButtonPrimary";
 
 type MemberModalProps = {
   member?: Member;

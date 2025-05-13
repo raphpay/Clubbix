@@ -5,7 +5,10 @@ const AdminDashboard = () => {
     <div className="p-6">
       <Header />
       <h2 className="text-2xl font-bold">Admin Dashboard</h2>
-      <a href="/admin/members">Voir les membres</a>
+      <div className="flex gap-2">
+        <a href="/admin/members">Voir les membres</a>
+        <a href="/admin/events">Voir les évènements</a>
+      </div>
     </div>
   );
 };
