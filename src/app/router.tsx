@@ -1,6 +1,8 @@
 import { Route, Routes } from "react-router-dom";
 import AdminDashboard from "../routes/admin/Dashboard";
 
+import ProtectedRoute from "../components/ProtectedRoute";
+import Members from "../routes/admin/Members";
 import LoginPage from "../routes/auth/Login";
 import SignUp from "../routes/auth/SignUp";
 import ClubPage from "../routes/public/ClubPage";
@@ -12,7 +14,22 @@ const Router = () => (
     <Route path="/club/:clubId" element={<ClubPage />} />
     <Route path="/login" element={<LoginPage />} />
     <Route path="/signup" element={<SignUp />} />
-    <Route path="/admin" element={<AdminDashboard />} />
+    <Route
+      path="/admin"
+      element={
+        <ProtectedRoute>
+          <AdminDashboard />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/admin/members"
+      element={
+        <ProtectedRoute>
+          <Members />
+        </ProtectedRoute>
+      }
+    />
   </Routes>
 );
 
