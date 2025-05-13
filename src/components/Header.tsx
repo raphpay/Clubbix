@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import LogoutButton from "./LogoutButton";
 
@@ -6,16 +7,29 @@ const Header = () => {
 
   return (
     <header className="flex justify-between p-4 bg-muted">
-      <span className="text-lg font-bold">Clubbix</span>
+      <h1 className="text-3xl font-bold text-primary tracking-tight">
+        Clubbix
+      </h1>
       {user ? (
         <div className="flex items-center gap-4">
           <span className="text-sm">{user.email}</span>
           <LogoutButton />
         </div>
       ) : (
-        <a href="/login" className="text-primary hover:underline">
-          Connexion
-        </a>
+        <div className="flex gap-2">
+          <Link
+            to="/signup"
+            className="text-primary hover:underline font-medium"
+          >
+            Créer un compte
+          </Link>
+          <Link
+            to="/login"
+            className="text-primary hover:underline font-medium"
+          >
+            Connexion
+          </Link>
+        </div>
       )}
     </header>
   );
