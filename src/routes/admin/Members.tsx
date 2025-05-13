@@ -12,6 +12,7 @@ const MembersList = () => {
   const [selectedMember, setSelectedMember] = useState<Member | undefined>(
     undefined
   );
+  const [displayErase, setDisplayErase] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [paymentFilter, setPaymentFilter] = useState<"all" | "paid" | "unpaid">(
     "all"
@@ -35,9 +36,16 @@ const MembersList = () => {
     return matchesName && matchesPayment && matchesRole;
   });
 
-  function displayModal(member?: Member) {
+  function displayModal(member?: Member, displayErase: boolean = false) {
     setShowModal(true);
     setSelectedMember(member);
+    setDisplayErase(displayErase);
+  }
+
+  function closeDialog() {
+    setShowModal(false);
+    setSelectedMember(undefined);
+    setDisplayErase(false);
   }
 
   async function loadMembers() {
@@ -153,7 +161,7 @@ const MembersList = () => {
                 </td>
                 <td className="px-4 py-3 text-right">
                   <button
-                    onClick={() => displayModal(member)}
+                    onClick={() => displayModal(member, true)}
                     className="text-blue-500 font-semibold hover:underline"
                   >
                     Voir / Modifier →
@@ -175,8 +183,9 @@ const MembersList = () => {
       <MemberModal
         show={showModal}
         member={selectedMember}
-        onClose={() => setShowModal(false)}
+        onClose={() => closeDialog()}
         onSubmit={() => loadMembers()}
+        displayErase={displayErase}
       />
     </div>
   );

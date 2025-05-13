@@ -10,11 +10,18 @@ import ButtonPrimary from "./ButtonPrimary";
 type MemberModalProps = {
   member?: Member;
   show: boolean;
+  displayErase: boolean;
   onClose: () => void;
   onSubmit: () => void;
 };
 
-const MemberModal = ({ member, show, onClose, onSubmit }: MemberModalProps) => {
+const MemberModal = ({
+  member,
+  show,
+  displayErase,
+  onClose,
+  onSubmit,
+}: MemberModalProps) => {
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [birthDate, setBirthDate] = useState<string>("");
@@ -192,10 +199,12 @@ const MemberModal = ({ member, show, onClose, onSubmit }: MemberModalProps) => {
               >
                 Fermer
               </button>
-              <ButtonDanger
-                title={"Effacer"}
-                action={() => eraseMember(member)}
-              />
+              {displayErase && (
+                <ButtonDanger
+                  title={"Effacer"}
+                  action={() => eraseMember(member)}
+                />
+              )}
               <ButtonPrimary title={"Sauvegarder"} action={saveMember} />
             </div>
           </div>
