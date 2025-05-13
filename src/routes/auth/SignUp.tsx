@@ -1,8 +1,9 @@
 // File: src/routes/auth/SignUp.tsx
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../../lib/firebase";
+import { auth, db } from "../../lib/firebase";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -12,7 +13,21 @@ const SignUp = () => {
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+
+      // Sauvegarde dans Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        email: user.email,
+        role: "admin",
+        createdAt: new Date().toISOString(),
+      });
+
       navigate("/admin");
     } catch (error) {
       alert("Erreur lors de la création de compte");
