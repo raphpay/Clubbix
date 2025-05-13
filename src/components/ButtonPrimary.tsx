@@ -1,0 +1,19 @@
+type ButtonPrimaryProps = {
+  title: string;
+  action: () => void;
+  disabled?: boolean;
+};
+
+const ButtonPrimary = ({ title, action, disabled }: ButtonPrimaryProps) => {
+  return (
+    <button
+      onClick={action}
+      disabled={disabled ?? false}
+      className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+    >
+      {title}
+    </button>
+  );
+};
+
+export default ButtonPrimary;

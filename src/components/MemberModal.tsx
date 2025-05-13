@@ -1,14 +1,17 @@
+import { addDoc, collection } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import type { Member } from "../../types/Member";
+import { db } from "../lib/firebase";
+import type { Member } from "../types/Member";
+import ButtonPrimary from "./ButtonPrimary";
 
 type MemberModalProps = {
   member?: Member;
   show: boolean;
   onClose: () => void;
-  // onSubmit: (member: Member) => void;
+  onSubmit: () => void;
 };
 
-const MemberModal = ({ member, show, onClose }: MemberModalProps) => {
+const MemberModal = ({ member, show, onClose, onSubmit }: MemberModalProps) => {
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [birthDate, setBirthDate] = useState<string>("");
@@ -16,10 +19,37 @@ const MemberModal = ({ member, show, onClose }: MemberModalProps) => {
   const [phone, setPhone] = useState<string>("");
   const [role, setRole] = useState<string>("");
   const [paid, setPaid] = useState<boolean>(false);
-  const [certificate, setCertificate] = useState<File | string | undefined>(
-    undefined
-  );
-  const [photo, setPhoto] = useState<File | string | undefined>(undefined);
+
+  const clubId = "6HRbFwNVA2INAaoxAbyu"; // TODO: To be loaded dynamically
+
+  async function saveMember() {
+    const date = new Date().toDateString();
+    try {
+      const newMember: Member = {
+        firstName,
+        lastName,
+        birthDate,
+        email,
+        phone,
+        role,
+        paid,
+        documents: {
+          certificateUrl: "",
+          photoUrl: "",
+        },
+        createdAt: date,
+      };
+      await addDoc(collection(db, "clubs", clubId, "members"), newMember);
+      onClose();
+      onSubmit();
+    } catch (error) {}
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await saveMember();
+    onClose();
+  };
 
   useEffect(() => {
     if (member) {
@@ -32,12 +62,6 @@ const MemberModal = ({ member, show, onClose }: MemberModalProps) => {
       setPaid(member.paid);
     }
   }, [member]);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // onSubmit(form);
-    onClose();
-  };
 
   return (
     <>
@@ -145,32 +169,17 @@ const MemberModal = ({ member, show, onClose }: MemberModalProps) => {
                   Paiement effectué
                 </label>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm text-texte-secondaire mb-1">
-                    Certificat médical ( optionnel )
-                  </label>
-                  <input
-                    type="file"
-                    name="certificate"
-                    onChange={(e) => setCertificate("")}
-                    className="w-full p-3 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm text-texte-secondaire mb-1">
-                    Photo
-                  </label>
-                  <input
-                    type="file"
-                    name="photo"
-                    onChange={(e) => setPhoto("")}
-                    className="w-full p-3 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-              </div>
             </form>
-            <button onClick={onClose}>Fermer</button>
+            <div className="flex justify-end space-x-2">
+              <button
+                className="bg-gray-300 text-black px-4 py-2 rounded"
+                onClick={onClose}
+              >
+                Fermer
+              </button>
+
+              <ButtonPrimary title={"Sauvegarder"} action={saveMember} />
+            </div>
           </div>
         </div>
       ) : null}

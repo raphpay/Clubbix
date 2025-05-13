@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import { db } from "../../lib/firebase";
 import type { Member } from "../../types/Member";
 
-import MemberModal from "./MemberModal";
+import ButtonPrimary from "../../components/ButtonPrimary";
+import MemberModal from "../../components/MemberModal";
 
 const MembersList = () => {
   const [members, setMembers] = useState<Member[]>([]);
@@ -47,12 +48,7 @@ const MembersList = () => {
     <div className="max-w-6xl mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-secondary">Liste des membres</h1>
-        <button
-          onClick={() => displayModal()}
-          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
-        >
-          + Ajouter un membre
-        </button>
+        <ButtonPrimary title={"+ Ajouter un membre"} action={displayModal} />
       </div>
 
       <div className="overflow-x-auto bg-white rounded-xl shadow-sm border border-gray-200">
@@ -123,6 +119,7 @@ const MembersList = () => {
         show={showModal}
         member={selectedMember}
         onClose={() => setShowModal(false)}
+        onSubmit={() => loadMembers()}
       />
     </div>
   );
