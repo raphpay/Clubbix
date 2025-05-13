@@ -1,4 +1,5 @@
 export type Member = {
+  id?: string;
   firstName: string;
   lastName: string;
   birthDate: string;

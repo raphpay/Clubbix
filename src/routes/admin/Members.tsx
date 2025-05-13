@@ -28,7 +28,8 @@ const MembersList = () => {
       const docs = snapshot.docs;
       let apiMembers: Member[] = [];
       for (const doc of docs) {
-        const member = doc.data() as Member;
+        let member = doc.data() as Member;
+        member.id = doc.id;
         apiMembers.push(member);
       }
       setMembers(apiMembers);

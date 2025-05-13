@@ -1,7 +1,10 @@
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../lib/firebase";
+
 import type { Member } from "../types/Member";
+
+import ButtonDanger from "./ButtonDanger";
 import ButtonPrimary from "./ButtonPrimary";
 
 type MemberModalProps = {
@@ -21,6 +24,12 @@ const MemberModal = ({ member, show, onClose, onSubmit }: MemberModalProps) => {
   const [paid, setPaid] = useState<boolean>(false);
 
   const clubId = "6HRbFwNVA2INAaoxAbyu"; // TODO: To be loaded dynamically
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await saveMember();
+    onClose();
+  };
 
   async function saveMember() {
     const date = new Date().toDateString();
@@ -45,11 +54,17 @@ const MemberModal = ({ member, show, onClose, onSubmit }: MemberModalProps) => {
     } catch (error) {}
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await saveMember();
-    onClose();
-  };
+  async function eraseMember(member?: Member) {
+    try {
+      if (member?.id) {
+        await deleteDoc(doc(db, "clubs", clubId, "members", member.id));
+        onClose();
+        onSubmit();
+      }
+    } catch (error) {
+      console.error("Error deleting member:", error);
+    }
+  }
 
   useEffect(() => {
     if (member) {
@@ -177,7 +192,10 @@ const MemberModal = ({ member, show, onClose, onSubmit }: MemberModalProps) => {
               >
                 Fermer
               </button>
-
+              <ButtonDanger
+                title={"Effacer"}
+                action={() => eraseMember(member)}
+              />
               <ButtonPrimary title={"Sauvegarder"} action={saveMember} />
             </div>
           </div>
