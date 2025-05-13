@@ -12,8 +12,28 @@ const MembersList = () => {
   const [selectedMember, setSelectedMember] = useState<Member | undefined>(
     undefined
   );
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [paymentFilter, setPaymentFilter] = useState<"all" | "paid" | "unpaid">(
+    "all"
+  );
+  const [roleFilter, setRoleFilter] = useState<string>("all");
 
   const clubId = "6HRbFwNVA2INAaoxAbyu"; // TODO: To be loaded dynamically
+
+  const filteredMembers = members.filter((member) => {
+    const matchesName =
+      member.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      member.lastName.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const matchesPayment =
+      paymentFilter === "all" ||
+      (paymentFilter === "paid" && member.paid) ||
+      (paymentFilter === "unpaid" && !member.paid);
+
+    const matchesRole = roleFilter === "all" || member.role === roleFilter;
+
+    return matchesName && matchesPayment && matchesRole;
+  });
 
   function displayModal(member?: Member) {
     setShowModal(true);
@@ -52,6 +72,42 @@ const MembersList = () => {
         <ButtonPrimary title={"+ Ajouter un membre"} action={displayModal} />
       </div>
 
+      <div className="flex gap-4 mb-6">
+        {/* Search by name */}
+        <input
+          type="text"
+          placeholder="Rechercher par nom"
+          className="p-3 border border-gray-300 rounded-md"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+
+        {/* Filter by payment status */}
+        <select
+          className="p-3 border border-gray-300 rounded-md"
+          value={paymentFilter}
+          onChange={(e) =>
+            setPaymentFilter(e.target.value as "all" | "paid" | "unpaid")
+          }
+        >
+          <option value="all">Tous</option>
+          <option value="paid">Payé</option>
+          <option value="unpaid">Non payé</option>
+        </select>
+
+        {/* Filter by role */}
+        <select
+          className="p-3 border border-gray-300 rounded-md"
+          value={roleFilter}
+          onChange={(e) => setRoleFilter(e.target.value)}
+        >
+          <option value="all">Tous les rôles</option>
+          <option value="rider">Rider</option>
+          <option value="coach">Coach</option>
+          <option value="staff">Staff</option>
+        </select>
+      </div>
+
       <div className="overflow-x-auto bg-white rounded-xl shadow-sm border border-gray-200">
         <table className="w-full text-left min-w-[800px]">
           <thead className="bg-gray-50 text-sm text-texte-secondaire">
@@ -66,7 +122,7 @@ const MembersList = () => {
             </tr>
           </thead>
           <tbody className="text-sm">
-            {members.map((member, idx) => (
+            {filteredMembers.map((member, idx) => (
               <tr
                 key={idx}
                 className="border-t border-gray-100 hover:bg-gray-50"
@@ -105,7 +161,7 @@ const MembersList = () => {
                 </td>
               </tr>
             ))}
-            {members.length === 0 && (
+            {filteredMembers.length === 0 && (
               <tr>
                 <td colSpan={7} className="px-4 py-6 text-center text-gray-400">
                   Aucun membre trouvé.
