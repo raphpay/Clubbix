@@ -8,6 +8,7 @@ const AdminDashboard = () => {
       <div className="flex gap-2">
         <a href="/admin/members">Voir les membres</a>
         <a href="/admin/events">Voir les évènements</a>
+        <a href="/admin/trainings">Voir les entrainements</a>
       </div>
     </div>
   );
