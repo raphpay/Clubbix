@@ -4,6 +4,7 @@ import { db } from "../lib/firebase";
 
 import type { Member } from "../types/Member";
 
+import ButtonClose from "./ButtonClose";
 import ButtonDanger from "./ButtonDanger";
 import ButtonPrimary from "./ButtonPrimary";
 
@@ -193,12 +194,7 @@ const MemberModal = ({
               </div>
             </form>
             <div className="flex justify-end space-x-2">
-              <button
-                className="bg-gray-300 text-black px-4 py-2 rounded"
-                onClick={onClose}
-              >
-                Fermer
-              </button>
+              <ButtonClose action={onClose} title={"Fermer"} />
               {displayErase && (
                 <ButtonDanger
                   title={"Effacer"}
