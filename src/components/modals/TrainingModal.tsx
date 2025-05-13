@@ -3,15 +3,16 @@ import { useEffect, useState } from "react";
 import { db } from "../../lib/firebase";
 
 import type { Training } from "../../types/Training";
+import ModalRole from "../../types/enums/ModalRole";
 
 import ButtonClose from "../ButtonClose";
 import ButtonDanger from "../ButtonDanger";
 import ButtonPrimary from "../ButtonPrimary";
 
 type TrainingModalProps = {
-  training: Training;
+  training?: Training;
   show: boolean;
-  displayErase: boolean;
+  modalRole: ModalRole;
   onClose: () => void;
   onSubmit: () => void;
 };
@@ -19,12 +20,12 @@ type TrainingModalProps = {
 const TrainingModal = ({
   training,
   show,
-  displayErase,
+  modalRole,
   onClose,
   onSubmit,
 }: TrainingModalProps) => {
   const [type, setType] = useState<string>("");
-  const [group, setGroup] = useState<string>("");
+  const [coach, setCoach] = useState<string>("");
   const clubId = "6HRbFwNVA2INAaoxAbyu"; // TODO: To be loaded dynamically
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -50,7 +51,7 @@ const TrainingModal = ({
   useEffect(() => {
     if (training) {
       setType(training.type);
-      setGroup(training.group);
+      setCoach(training.coach);
     }
   }, [training]);
 
@@ -66,7 +67,7 @@ const TrainingModal = ({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm text-texte-secondaire mb-1">
-                    Prénom
+                    Type
                   </label>
                   <input
                     type="text"
@@ -79,13 +80,13 @@ const TrainingModal = ({
                 </div>
                 <div>
                   <label className="block text-sm text-texte-secondaire mb-1">
-                    Nom
+                    Coach
                   </label>
                   <input
                     type="text"
-                    name="group"
-                    value={group}
-                    onChange={(e) => setGroup(e.target.value)}
+                    name="coach"
+                    value={coach}
+                    onChange={(e) => setCoach(e.target.value)}
                     className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
@@ -94,7 +95,7 @@ const TrainingModal = ({
             </form>
             <div className="flex justify-end space-x-2">
               <ButtonClose action={onClose} title={"Fermer"} />
-              {displayErase && (
+              {modalRole === ModalRole.modify && (
                 <ButtonDanger
                   title={"Effacer"}
                   action={() => eraseTraining(training)}
