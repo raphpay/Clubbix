@@ -1,23 +1,9 @@
+import { collection, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
+import { db } from "../../lib/firebase";
 import type { Member } from "../../types/Member";
-import MemberModal from "./MemberModal";
 
-const mockMembers: Member[] = [
-  {
-    firstName: "Louis",
-    lastName: "Dupont",
-    birthDate: "2008-04-12",
-    email: "louis@example.com",
-    phone: "0601234567",
-    paid: true,
-    role: "member",
-    documents: {
-      certificateUrl: "https://example.com/certificate.pdf",
-      photoUrl: "https://example.com/photo.jpg",
-    },
-    createdAt: "2024-09-01T12:34:56Z",
-  },
-];
+import MemberModal from "./MemberModal";
 
 const MembersList = () => {
   const [members, setMembers] = useState<Member[]>([]);
@@ -26,14 +12,35 @@ const MembersList = () => {
     undefined
   );
 
+  const clubId = "6HRbFwNVA2INAaoxAbyu"; // TODO: To be loaded dynamically
+
   function displayModal(member?: Member) {
     setShowModal(true);
     setSelectedMember(member);
   }
 
+  async function loadMembers() {
+    try {
+      const snapshot = await getDocs(
+        collection(db, "clubs", clubId, "members")
+      );
+      const docs = snapshot.docs;
+      let apiMembers: Member[] = [];
+      for (const doc of docs) {
+        const member = doc.data() as Member;
+        apiMembers.push(member);
+      }
+      setMembers(apiMembers);
+    } catch (error) {
+      console.log("Error loading members");
+    }
+  }
+
   useEffect(() => {
-    // Remplacer par un appel à Firebase/Firestore plus tard
-    setMembers(mockMembers);
+    async function init() {
+      loadMembers();
+    }
+    init();
   }, []);
 
   return (
