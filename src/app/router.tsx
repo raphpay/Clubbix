@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import AdminDashboard from "../routes/admin/Dashboard";
 
 import ProtectedRoute from "../components/ProtectedRoute";
+import Events from "../routes/admin/Events";
 import Members from "../routes/admin/Members";
 import LoginPage from "../routes/auth/Login";
 import SignUp from "../routes/auth/SignUp";
@@ -27,6 +28,14 @@ const Router = () => (
       element={
         <ProtectedRoute>
           <Members />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/admin/events"
+      element={
+        <ProtectedRoute>
+          <Events />
         </ProtectedRoute>
       }
     />
