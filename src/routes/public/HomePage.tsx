@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import Header from "../../components/Header";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ const HomePage = () => {
 
   return (
     <div className="p-6 text-center">
+      <Header />
       <h1 className="text-3xl font-bold text-primary">Bienvenue sur Clubbix</h1>
       <button onClick={goToLogin}>Se connecter</button>
       <button onClick={goToSignUp}>Créer un compte</button>
