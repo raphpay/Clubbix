@@ -1,21 +1,35 @@
 import { collection, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import ButtonPrimary from "../../components/ButtonPrimary";
+import EventModal from "../../components/modals/EventModal";
 import { db } from "../../lib/firebase";
 import type { Event } from "../../types/Event";
+import ModalRole from "../../types/enums/ModalRole";
 
 const Events = () => {
   const [events, setEvents] = useState<Event[]>([]);
+  const [selectedEvent, setSelectedEvent] = useState<Event | undefined>(
+    undefined
+  );
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [modalRole, setModalRole] = useState<ModalRole | undefined>(undefined);
 
   const clubId = "6HRbFwNVA2INAaoxAbyu"; // TODO: To be loaded dynamically
 
-  function displayModal() {
+  function displayModal(event: Event) {
     setShowModal(true);
+    setSelectedEvent(event);
+    if (event) setModalRole(ModalRole.modify);
   }
 
-  useEffect(() => {
-    const fetchEvents = async () => {
+  function closeModal() {
+    setShowModal(false);
+    setSelectedEvent(undefined);
+    setModalRole(undefined);
+  }
+
+  async function loadEvents() {
+    try {
       const snapshot = await getDocs(collection(db, "clubs", clubId, "events"));
       const docs = snapshot.docs;
       let apiEvents: Event[] = [];
@@ -25,9 +39,16 @@ const Events = () => {
         apiEvents.push(event);
       }
       setEvents(apiEvents);
-    };
+    } catch (error) {
+      console.log("Error loading members");
+    }
+  }
 
-    fetchEvents();
+  useEffect(() => {
+    async function init() {
+      loadEvents();
+    }
+    init();
   }, []);
 
   return (
@@ -42,6 +63,7 @@ const Events = () => {
             <tr>
               <th className="px-4 py-3">Titre</th>
               <th className="px-4 py-3">Date</th>
+              <th className="px-4 py-3">Localisation</th>
               <th className="px-4 py-3">Max de participants</th>
               <th className="px-4 py-3">Statut</th>
               <th className="px-4 py-3">Actions</th>
@@ -59,13 +81,14 @@ const Events = () => {
                 <td className="px-4 py-3">
                   {new Date(event.date).toLocaleString()}
                 </td>
+                <td className="px-4 py-3">{event.location}</td>
                 <td className="px-4 py-3">{event.maxParticipants}</td>
                 <td className="px-4 py-3">
                   {event.published ? "Publié" : "Brouillon"}
                 </td>
                 <td>
                   <button
-                    onClick={() => displayModal()}
+                    onClick={() => displayModal(event)}
                     className="text-blue-500 font-semibold hover:underline"
                   >
                     Voir / Modifier →
@@ -75,7 +98,7 @@ const Events = () => {
             ))}
             {events.length === 0 && (
               <tr>
-                <td colSpan={5} className="px-4 py-6 text-center text-gray-400">
+                <td colSpan={6} className="px-4 py-6 text-center text-gray-400">
                   Aucun évènement de prévu.
                 </td>
               </tr>
@@ -83,6 +106,14 @@ const Events = () => {
           </tbody>
         </table>
       </div>
+
+      <EventModal
+        event={selectedEvent}
+        show={showModal}
+        onClose={closeModal}
+        onSubmit={loadEvents}
+        modalRole={modalRole}
+      />
     </div>
   );
 };

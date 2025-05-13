@@ -1,90 +1,117 @@
-import { addDoc, collection, deleteDoc, doc } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../../lib/firebase";
 
-import type { Member } from "../../types/Member";
+import type { Event } from "../../types/Event";
 
+import ModalRole from "../../types/enums/ModalRole";
 import ButtonClose from "../ButtonClose";
 import ButtonDanger from "../ButtonDanger";
 import ButtonPrimary from "../ButtonPrimary";
 
-type MemberModalProps = {
-  member?: Member;
+type EventModalProps = {
+  event?: Event;
   show: boolean;
-  displayErase: boolean;
+  modalRole?: ModalRole;
   onClose: () => void;
   onSubmit: () => void;
 };
 
-const MemberModal = ({
-  member,
+const EventModal = ({
+  event,
   show,
-  displayErase,
+  modalRole,
   onClose,
   onSubmit,
-}: MemberModalProps) => {
-  const [firstName, setFirstName] = useState<string>("");
-  const [lastName, setLastName] = useState<string>("");
-  const [birthDate, setBirthDate] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [phone, setPhone] = useState<string>("");
-  const [role, setRole] = useState<string>("");
-  const [paid, setPaid] = useState<boolean>(false);
+}: EventModalProps) => {
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [date, setDate] = useState<string>("");
+  const [location, setLocation] = useState<string>("");
+  const [type, setType] = useState<string>("");
+  const [maxParticipants, setMaxParticipants] = useState<string>("");
+  const [published, setPublished] = useState<boolean>(false);
 
   const clubId = "6HRbFwNVA2INAaoxAbyu"; // TODO: To be loaded dynamically
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await saveMember();
+    await saveEvent();
     onClose();
   };
 
-  async function saveMember() {
+  async function modifyEvent() {
+    if (!event?.id) return;
+
+    const updatedEvent: Event = {
+      title,
+      description,
+      date,
+      location,
+      type,
+      maxParticipants: +maxParticipants,
+      published,
+    };
+
+    try {
+      await setDoc(doc(db, "clubs", clubId, "events", event.id), updatedEvent);
+      onClose();
+      onSubmit();
+    } catch (error) {
+      console.error("Error modifying event:", error);
+    }
+  }
+
+  async function createEvent() {
     const date = new Date().toDateString();
     try {
-      const newMember: Member = {
-        firstName,
-        lastName,
-        birthDate,
-        email,
-        phone,
-        role,
-        paid,
-        documents: {
-          certificateUrl: "",
-          photoUrl: "",
-        },
-        createdAt: date,
+      const maxPart: number = +maxParticipants;
+      const newEvent: Event = {
+        title,
+        description,
+        date,
+        location,
+        type,
+        maxParticipants: maxPart,
+        published,
       };
-      await addDoc(collection(db, "clubs", clubId, "members"), newMember);
+      await addDoc(collection(db, "clubs", clubId, "events"), newEvent);
       onClose();
       onSubmit();
     } catch (error) {}
   }
 
-  async function eraseMember(member?: Member) {
+  async function saveEvent() {
+    if (modalRole === ModalRole.create) {
+      await createEvent();
+    } else {
+      await modifyEvent();
+    }
+  }
+
+  async function eraseEvent(event?: Event) {
     try {
-      if (member?.id) {
-        await deleteDoc(doc(db, "clubs", clubId, "members", member.id));
+      if (event?.id) {
+        await deleteDoc(doc(db, "clubs", clubId, "events", event.id));
         onClose();
         onSubmit();
       }
     } catch (error) {
-      console.error("Error deleting member:", error);
+      console.error("Error deleting event:", error);
     }
   }
 
   useEffect(() => {
-    if (member) {
-      setFirstName(member.firstName);
-      setLastName(member.lastName);
-      setBirthDate(member.birthDate);
-      setEmail(member.email);
-      setPhone(member.phone);
-      setRole(member.role);
-      setPaid(member.paid);
+    if (event) {
+      setTitle(event.title);
+      setDescription(event.description);
+      setDate(event.date);
+      setLocation(event.location);
+      setType(event.type);
+      setMaxParticipants(event.maxParticipants.toString());
+      setPublished(event.published);
     }
-  }, [member]);
+  }, [event]);
 
   return (
     <>
@@ -92,32 +119,32 @@ const MemberModal = ({
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-500/75 transition-opacity">
           <div className="bg-white p-6 rounded shadow-md">
             <h1 className="text-2xl font-bold mb-6 text-secondary">
-              {member ? "Modifier le membre" : "Ajouter un membre"}
+              {event ? "Modifier le membre" : "Ajouter un membre"}
             </h1>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm text-texte-secondaire mb-1">
-                    Prénom
+                    Titre
                   </label>
                   <input
                     type="text"
-                    name="firstName"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
+                    name="title"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
                     className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
                 <div>
                   <label className="block text-sm text-texte-secondaire mb-1">
-                    Nom
+                    Description
                   </label>
                   <input
                     type="text"
-                    name="lastName"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
+                    name="description"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
                     className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
@@ -126,82 +153,70 @@ const MemberModal = ({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm text-texte-secondaire mb-1">
-                    Date de naissance
+                    Date
                   </label>
                   <input
                     type="text"
-                    name="birthDate"
-                    value={birthDate}
-                    onChange={(e) => setBirthDate(e.target.value)}
+                    name="date"
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
                     className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
                 <div>
                   <label className="block text-sm text-texte-secondaire mb-1">
-                    Email
+                    Type
                   </label>
                   <input
-                    type="email"
-                    name="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    type="text"
+                    name="type"
+                    value={type}
+                    onChange={(e) => setType(e.target.value)}
                     className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
                   <label className="block text-sm text-texte-secondaire mb-1">
-                    Numéro de téléphone
+                    Nombre de participants maximum
                   </label>
                   <input
                     type="text"
-                    name="phone"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
+                    name="maxParticipants"
+                    value={maxParticipants}
+                    onChange={(e) => setMaxParticipants(e.target.value)}
                     className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
-                <div>
-                  <label className="block text-sm text-texte-secondaire mb-1">
-                    Role
-                  </label>
+
+                <div className="flex items-center gap-2 pt-6">
                   <input
-                    type="text"
-                    name="role"
-                    value={role}
-                    onChange={(e) => setRole(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    required
+                    type="checkbox"
+                    name="published"
+                    checked={published}
+                    onClick={() => setPublished(!published)}
+                    onChange={() => {}}
+                    className="accent-blue-500 w-5 h-5"
                   />
+                  <label className="text-sm text-texte-secondaire">
+                    Publié
+                  </label>
                 </div>
-              </div>
-              <div className="flex items-center gap-2 pt-6">
-                <input
-                  type="checkbox"
-                  name="paid"
-                  checked={paid}
-                  onClick={() => setPaid(!paid)}
-                  onChange={() => {}}
-                  className="accent-blue-500 w-5 h-5"
-                />
-                <label className="text-sm text-texte-secondaire">
-                  Paiement effectué
-                </label>
               </div>
             </form>
             <div className="flex justify-end space-x-2">
               <ButtonClose action={onClose} title={"Fermer"} />
-              {displayErase && (
+              {modalRole === ModalRole.modify && (
                 <ButtonDanger
                   title={"Effacer"}
-                  action={() => eraseMember(member)}
+                  action={() => eraseEvent(event)}
                 />
               )}
-              <ButtonPrimary title={"Sauvegarder"} action={saveMember} />
+              <ButtonPrimary title={"Sauvegarder"} action={saveEvent} />
             </div>
           </div>
         </div>
@@ -210,4 +225,4 @@ const MemberModal = ({
   );
 };
 
-export default MemberModal;
+export default EventModal;
