@@ -1,26 +1,26 @@
-// File: src/routes/auth/Login.tsx
-import { signInWithEmailAndPassword } from "firebase/auth";
+// File: src/routes/auth/SignUp.tsx
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../../lib/firebase";
 
-const LoginPage = () => {
+const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await createUserWithEmailAndPassword(auth, email, password);
       navigate("/admin");
     } catch (error) {
-      alert("Erreur de connexion");
+      alert("Erreur lors de la création de compte");
     }
   };
 
   return (
-    <form onSubmit={handleLogin} className="max-w-sm mx-auto mt-10 space-y-4">
+    <form onSubmit={handleSignUp} className="max-w-sm mx-auto mt-10 space-y-4">
       <input
         type="email"
         placeholder="Email"
@@ -41,10 +41,10 @@ const LoginPage = () => {
         type="submit"
         className="w-full bg-primary text-white py-2 rounded"
       >
-        Connexion
+        Créer un compte
       </button>
     </form>
   );
 };
 
-export default LoginPage;
+export default SignUp;
