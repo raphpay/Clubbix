@@ -16,7 +16,7 @@ const Events = () => {
 
   const clubId = "6HRbFwNVA2INAaoxAbyu"; // TODO: To be loaded dynamically
 
-  function displayModal(event: Event) {
+  function displayModal(event?: Event) {
     setShowModal(true);
     setSelectedEvent(event);
     if (event) setModalRole(ModalRole.modify);
@@ -55,7 +55,10 @@ const Events = () => {
     <div className="max-w-6xl mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold mb-6">Liste d'évènements</h1>
-        <ButtonPrimary title={"+ Ajouter un évènement"} action={displayModal} />
+        <ButtonPrimary
+          title={"+ Ajouter un évènement"}
+          action={() => displayModal()}
+        />
       </div>
       <div className="overflow-x-auto bg-white rounded-xl shadow-sm border border-gray-200">
         <table className="w-full text-left min-w-[800px]">

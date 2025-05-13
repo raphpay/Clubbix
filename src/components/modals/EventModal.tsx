@@ -65,14 +65,13 @@ const EventModal = ({
   async function createEvent() {
     const date = new Date().toDateString();
     try {
-      const maxPart: number = +maxParticipants;
       const newEvent: Event = {
         title,
         description,
         date,
         location,
         type,
-        maxParticipants: maxPart,
+        maxParticipants: +maxParticipants,
         published,
       };
       await addDoc(collection(db, "clubs", clubId, "events"), newEvent);
