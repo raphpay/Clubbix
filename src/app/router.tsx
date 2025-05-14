@@ -4,6 +4,7 @@ import AdminDashboard from "../routes/admin/Dashboard";
 import ProtectedRoute from "../components/ProtectedRoute";
 import Events from "../routes/admin/Events";
 import Members from "../routes/admin/Members";
+import Trainings from "../routes/admin/Trainings";
 import LoginPage from "../routes/auth/Login";
 import SignUp from "../routes/auth/SignUp";
 import ClubPage from "../routes/public/ClubPage";
@@ -36,6 +37,14 @@ const Router = () => (
       element={
         <ProtectedRoute>
           <Events />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/admin/trainings"
+      element={
+        <ProtectedRoute>
+          <Trainings />
         </ProtectedRoute>
       }
     />
