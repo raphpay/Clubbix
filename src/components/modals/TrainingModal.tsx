@@ -32,6 +32,18 @@ type GroupOption = {
   label: string;
 };
 
+type TypeOption = {
+  value: string;
+  label: string;
+};
+
+const typeOptions: TypeOption[] = [
+  { value: "BMX", label: "BMX" },
+  { value: "VTT", label: "VTT" },
+  { value: "Stage", label: "Stage" },
+  { value: "Autre", label: "Autre" },
+];
+
 const TrainingModal = ({
   training,
   show,
@@ -39,7 +51,7 @@ const TrainingModal = ({
   onClose,
   onSubmit,
 }: TrainingModalProps) => {
-  const [type, setType] = useState<string>("BMX");
+  const [type, setType] = useState<TypeOption>(typeOptions[0]);
   const [coach, setCoach] = useState<string>("");
   const [notes, setNotes] = useState<string>("");
   // Set default dateTimeStart to today at 18:00
@@ -61,7 +73,6 @@ const TrainingModal = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await saveTraining();
-    onClose();
   };
 
   const onGroupSelectChange = (newValue: OnChangeValue<GroupOption, true>) => {
@@ -70,11 +81,12 @@ const TrainingModal = ({
 
   async function modifyTraining() {
     if (!training?.id) return;
+    console.log("modify");
 
     const updatedTraining: Training = {
-      type,
+      type: type.label,
       coach,
-      notes: "",
+      notes: "notes",
       dateTimeStart: Timestamp.fromDate(new Date(dateTimeStart)),
       durationInMin,
       cancelled,
@@ -89,6 +101,7 @@ const TrainingModal = ({
         doc(db, "clubs", clubId, "trainings", training.id),
         updatedTraining
       );
+
       onClose();
       onSubmit();
     } catch (error) {
@@ -98,10 +111,11 @@ const TrainingModal = ({
 
   async function createTraining() {
     try {
-      if (!dateTimeStart || !type || !coach) return;
+      console.log("create");
+      if (!dateTimeStart) return;
       // Using as unknown as Timestamp, since the form provides string
       const training: Training = {
-        type,
+        type: type.label,
         coach,
         notes: "",
         dateTimeStart: Timestamp.fromDate(new Date(dateTimeStart)),
@@ -129,15 +143,15 @@ const TrainingModal = ({
     }
   }
 
-  async function eraseTraining() {
+  async function deleteTraining() {
     try {
       if (training?.id) {
         await deleteDoc(doc(db, "clubs", clubId, "trainings", training.id));
-        onSubmit();
         onClose();
+        onSubmit();
       }
     } catch (error) {
-      console.error("Error deleting training:", error);
+      console.error("Error deleting event:", error);
     }
   }
 
@@ -165,12 +179,17 @@ const TrainingModal = ({
 
   useEffect(() => {
     if (training) {
-      setType(training.type);
+      const matchedType = typeOptions.find(
+        (opt) => opt.value === training.type
+      );
+      if (matchedType) setType(matchedType);
       setCoach(training.coach);
       setNotes(training.notes);
       setDateTimeStart(
-        training.dateTimeStart
+        training.dateTimeStart instanceof Timestamp
           ? training.dateTimeStart.toDate().toISOString().slice(0, 16)
+          : typeof training.dateTimeStart === "string"
+          ? new Date(training.dateTimeStart).toISOString().slice(0, 16)
           : ""
       );
       setDurationInMin(training.durationInMin ?? 60);
@@ -204,16 +223,14 @@ const TrainingModal = ({
                   <label className="block text-sm text-texte-secondaire mb-1">
                     Type
                   </label>
-                  <select
+                  <Select
+                    name="type"
+                    options={typeOptions}
+                    classNamePrefix="select"
                     value={type}
-                    onChange={(e) => setType(e.target.value)}
-                    required
-                    className="w-full p-3 border border-gray-300 rounded-md"
-                  >
-                    <option value="BMX">BMX</option>
-                    <option value="VTT">VTT</option>
-                    <option value="Stage">Stage</option>
-                  </select>
+                    onChange={(selected) => setType(selected as TypeOption)}
+                    className="basic-multi-select"
+                  />
                 </div>
                 <div>
                   <label className="block text-sm text-texte-secondaire mb-1">
@@ -221,6 +238,7 @@ const TrainingModal = ({
                   </label>
                   <input
                     type="text"
+                    name="coach"
                     value={coach}
                     onChange={(e) => setCoach(e.target.value)}
                     className="w-full p-3 border border-gray-300 rounded-md"
@@ -236,7 +254,9 @@ const TrainingModal = ({
                   </label>
                   <input
                     type="datetime-local"
+                    name="dateTimeStart"
                     value={dateTimeStart}
+                    defaultValue={dateTimeStart}
                     onChange={(e) => setDateTimeStart(e.target.value)}
                     className="w-full p-3 border border-gray-300 rounded-md"
                     required
@@ -248,6 +268,7 @@ const TrainingModal = ({
                   </label>
                   <input
                     type="number"
+                    name="durationInMin"
                     value={durationInMin}
                     onChange={(e) => setDurationInMin(parseInt(e.target.value))}
                     className="w-full p-3 border border-gray-300 rounded-md"
@@ -256,28 +277,16 @@ const TrainingModal = ({
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm text-texte-secondaire mb-1">
-                    Notes
-                  </label>
-                  <input
-                    type="text"
-                    value={notes}
-                    onChange={(e) => setNotes(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-md"
-                  />
-                </div>
-                <div className="flex items-center gap-2 pt-6">
-                  <input
-                    type="checkbox"
-                    checked={cancelled}
-                    onChange={(e) => setCancelled(e.target.checked)}
-                  />
-                  <label className="text-sm text-texte-secondaire">
-                    Séance annulée
-                  </label>
-                </div>
+              <div className="flex items-center gap-2 pt-6">
+                <input
+                  type="checkbox"
+                  name="cancelled"
+                  checked={cancelled}
+                  onChange={(e) => setCancelled(e.target.checked)}
+                />
+                <label className="text-sm text-texte-secondaire">
+                  Séance annulée
+                </label>
               </div>
 
               <div>
@@ -297,7 +306,7 @@ const TrainingModal = ({
               <div className="flex justify-end space-x-2">
                 <ButtonClose action={onClose} title={"Fermer"} />
                 {modalRole === ModalRole.modify && (
-                  <ButtonDanger title={"Effacer"} action={eraseTraining} />
+                  <ButtonDanger title={"Effacer"} action={deleteTraining} />
                 )}
                 <ButtonPrimary title={"Sauvegarder"} action={saveTraining} />
               </div>

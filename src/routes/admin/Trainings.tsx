@@ -2,25 +2,27 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import { collection, getDocs } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import { db } from "../../lib/firebase";
 
 import ButtonPrimary from "../../components/ButtonPrimary";
 import TrainingModal from "../../components/modals/TrainingModal";
 
+import { collection, getDocs } from "firebase/firestore";
 import type { Training } from "../../types/Training";
 import ModalRole from "../../types/enums/ModalRole";
 
 const Trainings = () => {
-  const [trainings, setTrainings] = useState<Training[]>([]);
+  const clubId = "6HRbFwNVA2INAaoxAbyu"; // TODO: Load dynamically
+
+  const queryClient = useQueryClient();
+
   const [showModal, setShowModal] = useState<boolean>(false);
   const [selectedTraining, setSelectedTraining] = useState<
     Training | undefined
   >(undefined);
   const [modalRole, setModalRole] = useState<ModalRole>(ModalRole.create);
-
-  const clubId = "6HRbFwNVA2INAaoxAbyu"; // TODO: To be loaded dynamically
 
   const trainingColors: Record<string, string> = {
     BMX: "#3B82F6",
@@ -35,6 +37,23 @@ const Trainings = () => {
     return "Other";
   };
 
+  const {
+    data: trainings = [],
+    isLoading,
+    isError,
+  } = useQuery<Training[]>({
+    queryKey: ["trainings", clubId],
+    queryFn: async () => {
+      const snapshot = await getDocs(
+        collection(db, "clubs", clubId, "trainings")
+      );
+      return snapshot.docs.map((doc) => ({
+        ...(doc.data() as Training),
+        id: doc.id,
+      }));
+    },
+  });
+
   const calendarEvents = trainings.map((training) => ({
     id: training.id,
     title: `${training.type} - ${training.coach}`,
@@ -44,19 +63,6 @@ const Trainings = () => {
     ),
     color: trainingColors[getBaseCategory(training.type)] || "#6B7280",
   }));
-
-  async function loadTrainings() {
-    const snapshot = await getDocs(
-      collection(db, "clubs", clubId, "trainings")
-    );
-    let apiTrainings: Training[] = [];
-    for (const doc of snapshot.docs) {
-      let training = doc.data() as Training;
-      training.id = doc.id;
-      apiTrainings.push(training);
-    }
-    setTrainings(apiTrainings);
-  }
 
   function displayModal(
     training?: Training,
@@ -73,12 +79,9 @@ const Trainings = () => {
     setModalRole(ModalRole.create);
   }
 
-  useEffect(() => {
-    async function init() {
-      loadTrainings();
-    }
-    init();
-  }, []);
+  if (isLoading) return <div className="p-6">Chargement...</div>;
+  if (isError)
+    return <div className="p-6 text-red-500">Erreur lors du chargement.</div>;
 
   return (
     <div className="max-w-6xl mx-auto p-6">
@@ -118,9 +121,10 @@ const Trainings = () => {
         show={showModal}
         modalRole={modalRole}
         onClose={closeModal}
-        onSubmit={loadTrainings}
+        onSubmit={() => {
+          queryClient.invalidateQueries({ queryKey: ["trainings", clubId] });
+        }}
       />
-      {/* TODO: Add sortable past trainings table here */}
     </div>
   );
 };
