@@ -1,11 +1,12 @@
 export type Club = {
   id?: string;
   name: string;
-  logoUrl: string;
+  description: string;
+  logoUrl?: string;
   address: string;
   socials: Socials;
-  settings: Settings;
-  adminIds: string[];
+  settings?: Settings;
+  adminIds?: string[];
 };
 
 export type Socials = {
