@@ -8,7 +8,7 @@ export type Training = {
   dateTimeStart: Timestamp;
   cancelled: boolean;
   durationInMin: number;
-  recurence: Recurrence;
+  recurrence: Recurrence;
   groupIds: string[];
 };
 

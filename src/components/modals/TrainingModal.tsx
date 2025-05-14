@@ -1,5 +1,14 @@
-import { deleteDoc, doc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  setDoc,
+  Timestamp,
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
+import Select, { type OnChangeValue } from "react-select";
 import { db } from "../../lib/firebase";
 
 import type { Training } from "../../types/Training";
@@ -17,6 +26,12 @@ type TrainingModalProps = {
   onSubmit: () => void;
 };
 
+type GroupOption = {
+  id: string;
+  value: string;
+  label: string;
+};
+
 const TrainingModal = ({
   training,
   show,
@@ -24,8 +39,23 @@ const TrainingModal = ({
   onClose,
   onSubmit,
 }: TrainingModalProps) => {
-  const [type, setType] = useState<string>("");
+  const [type, setType] = useState<string>("BMX");
   const [coach, setCoach] = useState<string>("");
+  const [notes, setNotes] = useState<string>("");
+  // Set default dateTimeStart to today at 18:00
+  const getTodayAt6PM = () => {
+    const todayAt6PM = new Date();
+    todayAt6PM.setHours(18, 0, 0, 0);
+    return todayAt6PM.toISOString().slice(0, 16);
+  };
+  const [dateTimeStart, setDateTimeStart] = useState<string>(getTodayAt6PM());
+  const [durationInMin, setDurationInMin] = useState<number>(60);
+  const [cancelled, setCancelled] = useState<boolean>(false);
+  const [availableGroups, setAvailableGroups] = useState<GroupOption[]>([]);
+  const [selectedGroups, setSelectedGroups] = useState<readonly GroupOption[]>(
+    []
+  );
+
   const clubId = "6HRbFwNVA2INAaoxAbyu"; // TODO: To be loaded dynamically
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -34,17 +64,102 @@ const TrainingModal = ({
     onClose();
   };
 
-  async function saveTraining() {}
+  const onGroupSelectChange = (newValue: OnChangeValue<GroupOption, true>) => {
+    setSelectedGroups(newValue as readonly GroupOption[]);
+  };
 
-  async function eraseTraining(training?: Training) {
+  async function modifyTraining() {
+    if (!training?.id) return;
+
+    const updatedTraining: Training = {
+      type,
+      coach,
+      notes: "",
+      dateTimeStart: Timestamp.fromDate(new Date(dateTimeStart)),
+      durationInMin,
+      cancelled,
+      groupIds: selectedGroups.map((group) => group.id),
+      recurrence: {
+        frequency: "none",
+      },
+    };
+
+    try {
+      await setDoc(
+        doc(db, "clubs", clubId, "trainings", training.id),
+        updatedTraining
+      );
+      onClose();
+      onSubmit();
+    } catch (error) {
+      console.error("Error modifying training:", error);
+    }
+  }
+
+  async function createTraining() {
+    try {
+      if (!dateTimeStart || !type || !coach) return;
+      // Using as unknown as Timestamp, since the form provides string
+      const training: Training = {
+        type,
+        coach,
+        notes: "",
+        dateTimeStart: Timestamp.fromDate(new Date(dateTimeStart)),
+        durationInMin,
+        cancelled,
+        groupIds: selectedGroups.map((group) => group.id),
+        recurrence: {
+          frequency: "none",
+        },
+      };
+
+      await addDoc(collection(db, "clubs", clubId, "trainings"), training);
+      onClose();
+      onSubmit();
+    } catch (error) {
+      console.log("Error creating training:", error);
+    }
+  }
+
+  async function saveTraining() {
+    if (modalRole === ModalRole.modify) {
+      await modifyTraining();
+    } else {
+      await createTraining();
+    }
+  }
+
+  async function eraseTraining() {
     try {
       if (training?.id) {
         await deleteDoc(doc(db, "clubs", clubId, "trainings", training.id));
-        onClose();
         onSubmit();
+        onClose();
       }
     } catch (error) {
       console.error("Error deleting training:", error);
+    }
+  }
+
+  async function loadGroups() {
+    try {
+      const snapshot = await getDocs(collection(db, "clubs", clubId, "groups"));
+      const docs = snapshot.docs;
+      let groupOptions: GroupOption[] = [];
+      let groupIds: string[] = [];
+      for (const doc of docs) {
+        const data = doc.data();
+        groupIds.push(doc.id);
+        let groupOption = {
+          id: doc.id,
+          value: data.name,
+          label: data.name,
+        };
+        groupOptions.push(groupOption);
+      }
+      setAvailableGroups(groupOptions);
+    } catch (error) {
+      console.log("Error loading groups", error);
     }
   }
 
@@ -52,8 +167,28 @@ const TrainingModal = ({
     if (training) {
       setType(training.type);
       setCoach(training.coach);
+      setNotes(training.notes);
+      setDateTimeStart(
+        training.dateTimeStart
+          ? training.dateTimeStart.toDate().toISOString().slice(0, 16)
+          : ""
+      );
+      setDurationInMin(training.durationInMin ?? 60);
+      setCancelled(training.cancelled ?? false);
+    } else {
+      // Set dateTimeStart to today at 18:00 when no training is provided
+      const todayAt6PM = new Date();
+      todayAt6PM.setHours(18, 0, 0, 0);
+      setDateTimeStart(todayAt6PM.toISOString().slice(0, 16));
     }
   }, [training]);
+
+  useEffect(() => {
+    async function init() {
+      loadGroups();
+    }
+    init();
+  }, []);
 
   return (
     <>
@@ -61,7 +196,7 @@ const TrainingModal = ({
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-500/75 transition-opacity">
           <div className="bg-white p-6 rounded shadow-md">
             <h1 className="text-2xl font-bold mb-6 text-secondary">
-              {training ? "Modifier le membre" : "Ajouter un membre"}
+              {training ? "Modifier la séance" : "Ajouter une séance"}
             </h1>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -69,14 +204,16 @@ const TrainingModal = ({
                   <label className="block text-sm text-texte-secondaire mb-1">
                     Type
                   </label>
-                  <input
-                    type="text"
-                    name="type"
+                  <select
                     value={type}
                     onChange={(e) => setType(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
-                  />
+                    className="w-full p-3 border border-gray-300 rounded-md"
+                  >
+                    <option value="BMX">BMX</option>
+                    <option value="VTT">VTT</option>
+                    <option value="Stage">Stage</option>
+                  </select>
                 </div>
                 <div>
                   <label className="block text-sm text-texte-secondaire mb-1">
@@ -84,25 +221,87 @@ const TrainingModal = ({
                   </label>
                   <input
                     type="text"
-                    name="coach"
                     value={coach}
                     onChange={(e) => setCoach(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-3 border border-gray-300 rounded-md"
                     required
                   />
                 </div>
               </div>
-            </form>
-            <div className="flex justify-end space-x-2">
-              <ButtonClose action={onClose} title={"Fermer"} />
-              {modalRole === ModalRole.modify && (
-                <ButtonDanger
-                  title={"Effacer"}
-                  action={() => eraseTraining(training)}
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm text-texte-secondaire mb-1">
+                    Date et heure
+                  </label>
+                  <input
+                    type="datetime-local"
+                    value={dateTimeStart}
+                    onChange={(e) => setDateTimeStart(e.target.value)}
+                    className="w-full p-3 border border-gray-300 rounded-md"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-texte-secondaire mb-1">
+                    Durée (minutes)
+                  </label>
+                  <input
+                    type="number"
+                    value={durationInMin}
+                    onChange={(e) => setDurationInMin(parseInt(e.target.value))}
+                    className="w-full p-3 border border-gray-300 rounded-md"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm text-texte-secondaire mb-1">
+                    Notes
+                  </label>
+                  <input
+                    type="text"
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    className="w-full p-3 border border-gray-300 rounded-md"
+                  />
+                </div>
+                <div className="flex items-center gap-2 pt-6">
+                  <input
+                    type="checkbox"
+                    checked={cancelled}
+                    onChange={(e) => setCancelled(e.target.checked)}
+                  />
+                  <label className="text-sm text-texte-secondaire">
+                    Séance annulée
+                  </label>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm text-texte-secondaire mb-1">
+                  Groupes
+                </label>
+                <Select
+                  isMulti
+                  name="colors"
+                  options={availableGroups}
+                  classNamePrefix="select"
+                  onChange={onGroupSelectChange}
+                  value={selectedGroups}
+                  className="basic-multi-select"
                 />
-              )}
-              <ButtonPrimary title={"Sauvegarder"} action={saveTraining} />
-            </div>
+              </div>
+              <div className="flex justify-end space-x-2">
+                <ButtonClose action={onClose} title={"Fermer"} />
+                {modalRole === ModalRole.modify && (
+                  <ButtonDanger title={"Effacer"} action={eraseTraining} />
+                )}
+                <ButtonPrimary title={"Sauvegarder"} action={saveTraining} />
+              </div>
+            </form>
           </div>
         </div>
       ) : null}

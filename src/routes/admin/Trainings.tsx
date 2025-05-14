@@ -73,8 +73,6 @@ const Trainings = () => {
     setModalRole(ModalRole.create);
   }
 
-  async function saveTraining() {}
-
   useEffect(() => {
     async function init() {
       loadTrainings();
@@ -105,6 +103,13 @@ const Trainings = () => {
           }}
           events={calendarEvents}
           height="auto"
+          eventClick={(info) => {
+            const trainingId = info.event.id;
+            const training = trainings.find((t) => t.id === trainingId);
+            if (training) {
+              displayModal(training, ModalRole.modify);
+            }
+          }}
         />
       </div>
 
@@ -113,7 +118,7 @@ const Trainings = () => {
         show={showModal}
         modalRole={modalRole}
         onClose={closeModal}
-        onSubmit={saveTraining}
+        onSubmit={loadTrainings}
       />
       {/* TODO: Add sortable past trainings table here */}
     </div>
