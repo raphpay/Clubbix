@@ -2,11 +2,14 @@ import { Route, Routes } from "react-router-dom";
 import AdminDashboard from "../routes/admin/Dashboard";
 
 import ProtectedRoute from "../components/ProtectedRoute";
+// Auth
+import LoginPage from "../routes/auth/Login";
+import SignUp from "../routes/auth/SignUp";
+// Admin
+import ClubConfiguration from "../routes/admin/ClubConfiguration";
 import Events from "../routes/admin/Events";
 import Members from "../routes/admin/Members";
 import Trainings from "../routes/admin/Trainings";
-import LoginPage from "../routes/auth/Login";
-import SignUp from "../routes/auth/SignUp";
 import ClubPage from "../routes/public/ClubPage";
 import HomePage from "../routes/public/HomePage";
 
@@ -45,6 +48,14 @@ const Router = () => (
       element={
         <ProtectedRoute>
           <Trainings />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/admin/club-configuration"
+      element={
+        <ProtectedRoute>
+          <ClubConfiguration />
         </ProtectedRoute>
       }
     />

@@ -9,6 +9,7 @@ const AdminDashboard = () => {
         <a href="/admin/members">Voir les membres</a>
         <a href="/admin/events">Voir les évènements</a>
         <a href="/admin/trainings">Voir les entrainements</a>
+        <a href="/admin/club-configuration">Configuration du site club</a>
       </div>
     </div>
   );
