@@ -15,7 +15,7 @@ export type Socials = {
 };
 
 export type Settings = {
-  allowOnlineRegistration: boolean;
-  membershipFee: number;
-  requireCertificate: boolean;
+  allowOnlineRegistration?: boolean;
+  membershipFee?: number;
+  requireCertificate?: boolean;
 };

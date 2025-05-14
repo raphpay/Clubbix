@@ -14,6 +14,8 @@ const ClubConfiguration = () => {
   const [facebookLink, setFacebookLink] = useState<string>("");
   const [instagramLink, setInstagramLink] = useState<string>("");
   const [address, setAddress] = useState<string>("");
+  const [certificateRequired, setCertificateRequired] =
+    useState<boolean>(false);
   const [hasChanges, setHasChanges] = useState<boolean>(false);
   const originalData = useRef({
     name: "",
@@ -21,6 +23,9 @@ const ClubConfiguration = () => {
     facebookLink: "",
     instagramLink: "",
     address: "",
+    settings: {
+      requireCertificate: false,
+    },
   });
 
   const {
@@ -46,9 +51,21 @@ const ClubConfiguration = () => {
           instagram: instagramLink,
         },
         address,
+        settings: {
+          requireCertificate: certificateRequired,
+        },
       };
-      console.log("club", club);
       await setDoc(doc(db, "clubs", clubId), updatedClub);
+      originalData.current = {
+        name,
+        description,
+        facebookLink,
+        instagramLink,
+        address,
+        settings: {
+          requireCertificate: certificateRequired,
+        },
+      };
     } catch (error) {}
   }
 
@@ -59,12 +76,14 @@ const ClubConfiguration = () => {
       const fbVal = club.socials?.facebook || "";
       const instaVal = club.socials?.instagram || "";
       const addressVal = club.address || "";
+      const settingsVal = club.settings || { requireCertificate: false };
 
       setName(nameVal);
       setDescription(descVal);
       setFacebookLink(fbVal);
       setInstagramLink(instaVal);
       setAddress(addressVal);
+      setCertificateRequired(settingsVal.requireCertificate || false);
 
       originalData.current = {
         name: nameVal,
@@ -72,6 +91,9 @@ const ClubConfiguration = () => {
         facebookLink: fbVal,
         instagramLink: instaVal,
         address: addressVal,
+        settings: {
+          requireCertificate: settingsVal.requireCertificate || false,
+        },
       };
     }
   }, [club]);
@@ -82,10 +104,18 @@ const ClubConfiguration = () => {
       description !== originalData.current.description ||
       facebookLink !== originalData.current.facebookLink ||
       instagramLink !== originalData.current.instagramLink ||
-      address !== originalData.current.address;
+      address !== originalData.current.address ||
+      certificateRequired !== originalData.current.settings.requireCertificate;
 
     setHasChanges(changed);
-  }, [name, description, facebookLink, instagramLink, address]);
+  }, [
+    name,
+    description,
+    facebookLink,
+    instagramLink,
+    address,
+    certificateRequired,
+  ]);
 
   if (isLoading) return <div className="p-6">Chargement...</div>;
   if (isError)
@@ -95,7 +125,7 @@ const ClubConfiguration = () => {
     <div className="p-6">
       <Header />
       <h2 className="text-3xl font-bold text-primary tracking-tight">
-        General information
+        Informations générales
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
         <div>
@@ -162,6 +192,22 @@ const ClubConfiguration = () => {
             className="w-full p-3 border border-gray-300 rounded-md"
             required
           />
+        </div>
+      </div>
+      <h2 className="text-3xl font-bold text-primary tracking-tight mt-4">
+        Paramètres d'inscription
+      </h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
+        <div className="flex items-center gap-2 pt-6">
+          <input
+            type="checkbox"
+            name="certificateRequired"
+            checked={certificateRequired}
+            onChange={(e) => setCertificateRequired(e.target.checked)}
+          />
+          <label className="text-sm text-texte-secondaire">
+            Certificat médical requis
+          </label>
         </div>
       </div>
       <ButtonPrimary
