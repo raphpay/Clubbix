@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import ButtonPrimary from "./ButtonPrimary";
+import ButtonSecondary from "./ButtonSecondary";
 import LogoutButton from "./LogoutButton";
 
 const Header = () => {
@@ -29,7 +30,7 @@ const Header = () => {
         </span>
       </div>
 
-      {!user && (
+      {/* {!user && (
         <nav className="hidden md:flex gap-6 justify-center items-center w-full ml-40">
           <a href="#features" className="hover:text-blue-600 transition">
             Fonctionnalités
@@ -41,14 +42,12 @@ const Header = () => {
             Tarifs
           </a>
         </nav>
-      )}
+      )} */}
       {user ? (
         <LogoutButton />
       ) : (
         <div className="flex gap-4">
-          <a href="/login" className="hover:text-blue-600 transition">
-            Se connecter
-          </a>
+          <ButtonSecondary title="Se connecter" action={goToLogin} />
           <ButtonPrimary title="Commencer" action={goToStartUp} />
         </div>
       )}
