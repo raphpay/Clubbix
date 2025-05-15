@@ -8,7 +8,7 @@ import Trainings from "../routes/admin/Trainings";
 import LoginPage from "../routes/auth/Login";
 import SignUp from "../routes/auth/SignUp";
 import ClubPage from "../routes/public/ClubPage";
-import HomePage from "../routes/public/HomePage";
+import HomePage from "../routes/public/home/HomePage";
 
 const Router = () => (
   <Routes>
