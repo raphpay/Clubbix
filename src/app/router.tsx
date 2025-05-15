@@ -1,17 +1,15 @@
 import { Route, Routes } from "react-router-dom";
-import AdminDashboard from "../routes/admin/Dashboard";
 
 import ProtectedRoute from "../components/ProtectedRoute";
-// Auth
+import ClubConfiguration from "../routes/admin/ClubConfiguration";
+import Dashboard from "../routes/admin/dashboard/Dashboard";
+import Events from "../routes/admin/events/Events";
+import Members from "../routes/admin/members/Members";
+import Trainings from "../routes/admin/trainings/Trainings";
 import LoginPage from "../routes/auth/Login";
 import SignUp from "../routes/auth/SignUp";
-// Admin
-import ClubConfiguration from "../routes/admin/ClubConfiguration";
-import Events from "../routes/admin/Events";
-import Members from "../routes/admin/Members";
-import Trainings from "../routes/admin/Trainings";
 import ClubPage from "../routes/public/ClubPage";
-import HomePage from "../routes/public/HomePage";
+import HomePage from "../routes/public/home/HomePage";
 
 const Router = () => (
   <Routes>
@@ -20,10 +18,10 @@ const Router = () => (
     <Route path="/login" element={<LoginPage />} />
     <Route path="/signup" element={<SignUp />} />
     <Route
-      path="/admin"
+      path="/admin/dashboard"
       element={
         <ProtectedRoute>
-          <AdminDashboard />
+          <Dashboard />
         </ProtectedRoute>
       }
     />

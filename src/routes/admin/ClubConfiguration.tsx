@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useEffect, useRef, useState } from "react";
 import ButtonPrimary from "../../components/ButtonPrimary";
-import Header from "../../components/Header";
 import { db } from "../../lib/firebase";
 import type { Club } from "../../types/Club";
 
@@ -123,7 +122,6 @@ const ClubConfiguration = () => {
 
   return (
     <div className="p-6">
-      <Header />
       <h2 className="text-3xl font-bold text-primary tracking-tight">
         Informations générales
       </h2>

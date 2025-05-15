@@ -4,14 +4,14 @@ import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { db } from "../../lib/firebase";
+import { db } from "../../../lib/firebase";
 
-import ButtonPrimary from "../../components/ButtonPrimary";
-import TrainingModal from "../../components/modals/TrainingModal";
+import ButtonPrimary from "../../../components/ButtonPrimary";
+import TrainingModal from "../../../components/modals/TrainingModal";
 
 import { collection, getDocs } from "firebase/firestore";
-import type { Training } from "../../types/Training";
-import ModalRole from "../../types/enums/ModalRole";
+import type { Training } from "../../../types/Training";
+import ModalRole from "../../../types/enums/ModalRole";
 
 const Trainings = () => {
   const clubId = "6HRbFwNVA2INAaoxAbyu"; // TODO: Load dynamically
