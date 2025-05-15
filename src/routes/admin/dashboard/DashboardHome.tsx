@@ -1,5 +1,5 @@
-import Card from "../../components/Card";
-import Section from "../../components/Section";
+import Card from "../../../components/Card";
+import Section from "../../../components/Section";
 
 const DashboardHome = () => {
   return (

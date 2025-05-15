@@ -1,10 +1,10 @@
 import { Route, Routes } from "react-router-dom";
 
 import ProtectedRoute from "../components/ProtectedRoute";
-import Dashboard from "../routes/admin/Dashboard";
-import Events from "../routes/admin/Events";
-import Members from "../routes/admin/Members";
-import Trainings from "../routes/admin/Trainings";
+import Dashboard from "../routes/admin/dashboard/Dashboard";
+import Events from "../routes/admin/events/Events";
+import Members from "../routes/admin/members/Members";
+import Trainings from "../routes/admin/trainings/Trainings";
 import LoginPage from "../routes/auth/Login";
 import SignUp from "../routes/auth/SignUp";
 import ClubPage from "../routes/public/ClubPage";
