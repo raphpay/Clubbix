@@ -15,7 +15,7 @@ const LoginPage = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!loading && user) navigate("/admin");
+    if (!loading && user) navigate("/admin/dashboard");
   }, [user, loading]);
 
   const handleLogin = async (e: React.FormEvent) => {

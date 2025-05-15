@@ -38,10 +38,10 @@ const GettingStartedSection = () => {
   };
 
   return (
-    <section id="getting-started" class="py-20 bg-white px-12">
-      <div class="text-center mb-12">
-        <h2 class="text-4xl font-bold">Commencez en quelques minutes</h2>
-        <p class="text-gray-600 mt-2">
+    <section id="getting-started" className="py-20 bg-white px-12">
+      <div className="text-center mb-12">
+        <h2 className="text-4xl font-bold">Commencez en quelques minutes</h2>
+        <p className="text-gray-600 mt-2">
           Des étapes simples et rapides pour vous lancer avec Clubbix.
         </p>
       </div>

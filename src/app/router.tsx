@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
-import AdminDashboard from "../routes/admin/Dashboard";
 
 import ProtectedRoute from "../components/ProtectedRoute";
+import Dashboard from "../routes/admin/Dashboard";
 import Events from "../routes/admin/Events";
 import Members from "../routes/admin/Members";
 import Trainings from "../routes/admin/Trainings";
@@ -17,10 +17,10 @@ const Router = () => (
     <Route path="/login" element={<LoginPage />} />
     <Route path="/signup" element={<SignUp />} />
     <Route
-      path="/admin"
+      path="/admin/dashboard"
       element={
         <ProtectedRoute>
-          <AdminDashboard />
+          <Dashboard />
         </ProtectedRoute>
       }
     />
