@@ -1,34 +1,54 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import ButtonPrimary from "./ButtonPrimary";
+import ButtonSecondary from "./ButtonSecondary";
 import LogoutButton from "./LogoutButton";
 
 const Header = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
+
+  function goToMainScreen() {
+    if (!user) {
+      navigate("/");
+    }
+  }
+
+  function goToLogin() {
+    navigate("/login");
+  }
+
+  function goToStartUp() {
+    navigate("/startup");
+  }
 
   return (
-    <header className="flex justify-between p-4 bg-muted">
-      <h1 className="text-3xl font-bold text-primary tracking-tight">
-        Clubbix
-      </h1>
+    <header className="w-full flex items-center justify-between px-8 py-4 mb-4 shadow-md sticky top-0 bg-white z-50">
+      <div className="text-xl font-bold">
+        <span className="cursor-pointer" onClick={goToMainScreen}>
+          Clubbix
+        </span>
+      </div>
+
+      {/* {!user && (
+        <nav className="hidden md:flex gap-6 justify-center items-center w-full ml-40">
+          <a href="#features" className="hover:text-blue-600 transition">
+            Fonctionnalités
+          </a>
+          <a href="#how-it-works" className="hover:text-blue-600 transition">
+            Comment ça fonctionne
+          </a>
+          <a href="#pricing" className="hover:text-blue-600 transition">
+            Tarifs
+          </a>
+        </nav>
+      )} */}
       {user ? (
-        <div className="flex items-center gap-4">
-          <span className="text-sm">{user.email}</span>
-          <LogoutButton />
-        </div>
+        <LogoutButton />
       ) : (
-        <div className="flex gap-2">
-          <Link
-            to="/signup"
-            className="text-primary hover:underline font-medium"
-          >
-            Créer un compte
-          </Link>
-          <Link
-            to="/login"
-            className="text-primary hover:underline font-medium"
-          >
-            Connexion
-          </Link>
+        <div className="flex gap-4">
+          <ButtonSecondary title="Se connecter" action={goToLogin} />
+          <ButtonPrimary title="Commencer" action={goToStartUp} />
         </div>
       )}
     </header>

@@ -1,11 +1,11 @@
 import { collection, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { db } from "../../lib/firebase";
-import type { Member } from "../../types/Member";
+import { db } from "../../../lib/firebase";
+import type { Member } from "../../../types/Member";
 
-import ButtonPrimary from "../../components/ButtonPrimary";
-import ButtonSecondary from "../../components/ButtonSecondary";
-import MemberModal from "../../components/modals/MemberModal";
+import ButtonPrimary from "../../../components/ButtonPrimary";
+import ButtonSecondary from "../../../components/ButtonSecondary";
+import MemberModal from "../../../components/modals/MemberModal";
 
 const MembersList = () => {
   const [members, setMembers] = useState<Member[]>([]);

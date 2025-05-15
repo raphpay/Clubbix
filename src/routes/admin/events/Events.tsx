@@ -1,10 +1,10 @@
 import { collection, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import ButtonPrimary from "../../components/ButtonPrimary";
-import EventModal from "../../components/modals/EventModal";
-import { db } from "../../lib/firebase";
-import type { Event } from "../../types/Event";
-import ModalRole from "../../types/enums/ModalRole";
+import ButtonPrimary from "../../../components/ButtonPrimary";
+import EventModal from "../../../components/modals/EventModal";
+import { db } from "../../../lib/firebase";
+import type { Event } from "../../../types/Event";
+import ModalRole from "../../../types/enums/ModalRole";
 
 const Events = () => {
   const [events, setEvents] = useState<Event[]>([]);
