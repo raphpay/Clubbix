@@ -14,7 +14,7 @@ const SignUp = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!loading && user) navigate("/admin");
+    if (!loading && user) navigate("/admin/dashboard");
   }, [user, loading]);
 
   const handleSignUp = async (e: React.FormEvent) => {
@@ -34,6 +34,7 @@ const SignUp = () => {
         createdAt: new Date().toISOString(),
       });
     } catch (err) {
+      console.error("🔥 SignUp error:", err);
       setError("Erreur lors de la création du compte.");
     }
   };
