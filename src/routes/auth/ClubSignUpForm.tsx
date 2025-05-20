@@ -1,11 +1,15 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { useState, type SetStateAction } from "react";
-import Input from "../../components/Input";
+
 import { auth, db } from "../../lib/firebase";
 import FirestoreService from "../../lib/FirestoreService";
+import storageService from "../../lib/StorageService";
+
 import { generateInviteCode, type Club } from "../../types/Club";
 import { type User } from "../../types/User";
+
+import Input from "../../components/Input";
 
 type ClubSignUpFormProps = {
   setError: React.Dispatch<SetStateAction<string>>;
@@ -18,6 +22,8 @@ const ClubSignUpForm = ({ setError }: ClubSignUpFormProps) => {
   const [instagramUrl, setInstagramUrl] = useState<string>("");
   const [adminFirstname, setAdminFirstname] = useState<string>("");
   const [adminLastName, setAdminLastname] = useState<string>("");
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [logoPreviewUrl, setLogoPreviewUrl] = useState<string | null>(null);
 
   const clubService = new FirestoreService<Club>("clubs");
   const usersService = new FirestoreService<User>("users");
@@ -38,6 +44,16 @@ const ClubSignUpForm = ({ setError }: ClubSignUpFormProps) => {
   async function handleClubCreation(): Promise<string> {
     try {
       const inviteCode = generateInviteCode();
+      const id = clubService.generateId();
+      let logoPath = "";
+
+      if (logoFile) {
+        logoPath = await storageService.upload(
+          `clubs/${id}/public/logo.png`,
+          logoFile
+        );
+      }
+
       const club: Club = {
         name: clubName,
         address,
@@ -46,8 +62,8 @@ const ClubSignUpForm = ({ setError }: ClubSignUpFormProps) => {
           instagramUrl,
         },
         inviteCode,
+        logoPath,
       };
-      const id = clubService.generateId();
       await clubService.create(id, club);
       return id;
     } catch (error) {
@@ -106,6 +122,28 @@ const ClubSignUpForm = ({ setError }: ClubSignUpFormProps) => {
         className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         required
       />
+      <div className="flex flex-col items-center">
+        <label className="block font-medium mb-1">Logo du club</label>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => {
+            if (e.target.files?.[0]) {
+              const file = e.target.files[0];
+              setLogoFile(file);
+              setLogoPreviewUrl(URL.createObjectURL(file));
+            }
+          }}
+          className="block w-full text-sm text-gray-700 border border-gray-300 rounded-md p-2"
+        />
+        {logoPreviewUrl && (
+          <img
+            src={logoPreviewUrl}
+            alt="Preview du logo"
+            className="mt-2 max-h-32 object-contain"
+          />
+        )}
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
         <Input
           label="Lien facebook"
