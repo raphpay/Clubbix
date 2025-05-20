@@ -1,24 +1,26 @@
-import type { WebsitePage } from "./WebsitePage";
-
 export type Club = {
   id?: string;
   name: string;
-  description: string;
-  logoPath?: string;
+  inviteCode: string;
   address: string;
-  socials: Socials;
-  settings?: Settings;
-  adminIds?: string[];
-  websitePage?: WebsitePage;
+  socialAccounts?: SocialAccounts;
+  logoPath?: string;
+  members?: string[];
 };
 
-export type Socials = {
-  facebook: string;
-  instagram: string;
+export type SocialAccounts = {
+  facebookUrl?: string;
+  instagramUrl?: string;
 };
 
-export type Settings = {
-  allowOnlineRegistration?: boolean;
-  membershipFee?: number;
-  requireCertificate?: boolean;
-};
+export function generateInviteCode(length: number = 8): string {
+  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let inviteCode = "";
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    inviteCode += characters[randomIndex];
+  }
+
+  return inviteCode;
+}
