@@ -1,9 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
+import { useClubStore } from "../../stores/useClubStore";
+
+import FirestoreService from "../../lib/FirestoreService";
+
+import type { User } from "../../types/User";
+
 import ButtonPrimary from "../../components/ButtonPrimary";
 import ButtonSecondary from "../../components/ButtonSecondary";
 import Header from "../../components/Header";
-import { useAuth } from "../../hooks/useAuth";
 import ClubSignUpForm from "./ClubSignUpForm";
 import PersonalSignUpForm from "./PersonalSignUpForm";
 
@@ -14,8 +20,24 @@ const SignUp = () => {
   const [error, setError] = useState("");
   const [mode, setMode] = useState<"create" | "join">("create");
 
+  const userService = new FirestoreService<User>("users");
+  const { setCurrentClubId } = useClubStore();
+
+  async function handleUserSetup(uid: string) {
+    const fetchedUser = await userService.read(uid);
+    if (fetchedUser) {
+      setCurrentClubId(fetchedUser?.clubId);
+      navigate("/admin/dashboard");
+    }
+  }
+
   useEffect(() => {
-    if (!loading && user) navigate("/admin/dashboard");
+    const fetchUser = async () => {
+      if (!loading && user) {
+        await handleUserSetup(user.uid);
+      }
+    };
+    fetchUser();
   }, [user, loading]);
 
   return (
