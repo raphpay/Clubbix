@@ -19,7 +19,7 @@ const Header = () => {
   }
 
   function goToStartUp() {
-    navigate("/startup");
+    navigate("/signup");
   }
 
   return (
