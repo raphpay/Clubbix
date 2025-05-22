@@ -6,6 +6,18 @@ export type Club = {
   socialAccounts?: SocialAccounts;
   logoPath?: string;
   members?: string[];
+  websitePageId?: string;
+};
+
+export type ClubUpdateInput = {
+  id?: string;
+  name?: string;
+  inviteCode?: string;
+  address?: string;
+  socialAccounts?: SocialAccounts;
+  logoPath?: string;
+  members?: string[];
+  websitePageId?: string;
 };
 
 export type SocialAccounts = {

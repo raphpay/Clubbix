@@ -1,5 +1,6 @@
 export type WebsitePage = {
   id?: string;
+  clubId: string;
   title: string;
   description: string;
   activities: Activity[];

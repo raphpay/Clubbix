@@ -27,7 +27,7 @@ const LoginPage = () => {
   async function handleUserSetup(uid: string) {
     const fetchedUser = await userService.read(uid);
     if (fetchedUser) {
-      setCurrentClubId(fetchedUser?.clubId);
+      setCurrentClubId(fetchedUser.clubId);
       navigate("/admin/dashboard");
     }
   }
