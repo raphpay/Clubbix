@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import ButtonPrimary from "../../components/ButtonPrimary";
 import ButtonSecondary from "../../components/ButtonSecondary";
+import { downloadFile } from "../../lib/downloadFile";
 import FirestoreService from "../../lib/FirebaseService";
 import { useClubStore } from "../../stores/useClubStore";
 import { useClubWebsiteStore } from "../../stores/useClubWebsiteStore";
@@ -30,6 +31,12 @@ const ClubWebsite = () => {
     setInstagramLink,
     setFacebookLink,
     setActivities,
+    setLogoPath,
+    setLogoFile,
+    setLogoUrl,
+    setHeroImagePath,
+    setHeroImageFile,
+    setHeroImageUrl,
   } = useClubWebsiteStore();
 
   const { currentClubId } = useClubStore();
@@ -111,14 +118,14 @@ const ClubWebsite = () => {
   useEffect(() => {
     if (club) {
       setClubName(club.name);
-      // if (club.logoPath) {
-      //   setLogoPath(club.logoPath);
-      //   downloadFile(club.logoPath, "logo.png").then((file) => {
-      //     const url = URL.createObjectURL(file);
-      //     setLogoUrl(url);
-      //     setLogoFile(file);
-      //   });
-      // }
+      if (club.logoPath) {
+        setLogoPath(club.logoPath);
+        downloadFile(club.logoPath, "logo.png").then((file) => {
+          const url = URL.createObjectURL(file);
+          setLogoUrl(url);
+          setLogoFile(file);
+        });
+      }
     }
   }, [club]);
 
@@ -126,16 +133,16 @@ const ClubWebsite = () => {
     if (websitePage) {
       setHeroTitle(websitePage.title);
       setHeroDescription(websitePage.description);
-      // if (websitePage.heroImagePath) {
-      //   setHeroImagePath(websitePage.heroImagePath);
-      //   downloadFile(websitePage.heroImagePath, "heroImage.png").then(
-      //     (file) => {
-      //       const url = URL.createObjectURL(file);
-      //       setHeroImageUrl(url);
-      //       setHeroImageFile(file);
-      //     }
-      //   );
-      // }
+      if (websitePage.heroImagePath) {
+        setHeroImagePath(websitePage.heroImagePath);
+        downloadFile(websitePage.heroImagePath, "heroImage.png").then(
+          (file) => {
+            const url = URL.createObjectURL(file);
+            setHeroImageUrl(url);
+            setHeroImageFile(file);
+          }
+        );
+      }
       setEmail(websitePage.contact.email);
       setPhone(websitePage.contact.phone);
       setInstagramLink(websitePage.contact.socials.instagram);

@@ -1,6 +1,5 @@
 import { Bike, Dumbbell, Mountain, PersonStanding } from "lucide-react";
 import Input from "../../components/Input";
-import { useClubStore } from "../../stores/useClubStore";
 import { useClubWebsiteStore } from "../../stores/useClubWebsiteStore";
 import type { Activity } from "../../types/WebsitePage";
 
@@ -25,14 +24,11 @@ const ClubWebsiteForm = () => {
     instagramLink,
     facebookLink,
     activities,
-    sameLogoUploaded,
-    sameHeroImageUploaded,
     setClubName,
     setLogoUrl,
     setHeroTitle,
     setHeroDescription,
     setHeroImageUrl,
-    setHeroImageFile,
     setEmail,
     setPhone,
     setInstagramLink,
@@ -41,8 +37,6 @@ const ClubWebsiteForm = () => {
     setSameLogoUploaded,
     setSameHeroImageUploaded,
   } = useClubWebsiteStore();
-
-  const { currentClub } = useClubStore();
 
   const handleActivityChange = (
     index: number,
@@ -69,38 +63,38 @@ const ClubWebsiteForm = () => {
     setActivities(newActivities);
   }
 
-  // function onFileChange(type: "hero" | "logo", currentFile: File) {
-  //   if (type === "hero") {
-  //     if (
-  //       currentFile &&
-  //       heroImageFile &&
-  //       currentFile.name === heroImageFile.name &&
-  //       currentFile.size === heroImageFile.size
-  //     ) {
-  //       setSameHeroImageUploaded(true);
-  //       return;
-  //     }
+  function onFileChange(type: "hero" | "logo", currentFile: File) {
+    if (type === "hero") {
+      if (
+        currentFile &&
+        heroImageFile &&
+        currentFile.name === heroImageFile.name &&
+        currentFile.size === heroImageFile.size
+      ) {
+        setSameHeroImageUploaded(true);
+        return;
+      }
 
-  //     setSameHeroImageUploaded(false);
-  //     const url = URL.createObjectURL(currentFile);
-  //     setHeroImageUrl(url); // Update Zustand
-  //   } else {
-  //     // Optional: avoid redundant state update
-  //     if (
-  //       currentFile &&
-  //       logoFile &&
-  //       currentFile.name === logoFile.name &&
-  //       currentFile.size === logoFile.size
-  //     ) {
-  //       setSameLogoUploaded(true);
-  //       return;
-  //     }
+      setSameHeroImageUploaded(false);
+      const url = URL.createObjectURL(currentFile);
+      setHeroImageUrl(url); // Update Zustand
+    } else {
+      // Optional: avoid redundant state update
+      if (
+        currentFile &&
+        logoFile &&
+        currentFile.name === logoFile.name &&
+        currentFile.size === logoFile.size
+      ) {
+        setSameLogoUploaded(true);
+        return;
+      }
 
-  //     setSameLogoUploaded(false);
-  //     const url = URL.createObjectURL(currentFile);
-  //     setLogoUrl(url); // Update Zustand
-  //   }
-  // }
+      setSameLogoUploaded(false);
+      const url = URL.createObjectURL(currentFile);
+      setLogoUrl(url); // Update Zustand
+    }
+  }
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white rounded-xl shadow space-y-6">
@@ -118,7 +112,7 @@ const ClubWebsiteForm = () => {
       </div>
 
       {/* Logo URL */}
-      {/* <div>
+      <div>
         <label className="block font-semibold mb-1">Logo</label>
         <input
           type="file"
@@ -133,7 +127,7 @@ const ClubWebsiteForm = () => {
         {logoUrl && (
           <img src={logoUrl} alt="" className="mt-2 h-16 object-contain" />
         )}
-      </div> */}
+      </div>
 
       {/* Activities */}
       <div>
@@ -230,7 +224,7 @@ const ClubWebsiteForm = () => {
       </div>
 
       {/* Hero Background Image */}
-      {/* <div>
+      <div>
         <label className="block font-semibold">
           Image de fond de la bannière principale
         </label>
@@ -247,7 +241,7 @@ const ClubWebsiteForm = () => {
         {heroImageUrl && (
           <img src={heroImageUrl} alt="" className="mt-2 h-16 object-contain" />
         )}
-      </div> */}
+      </div>
 
       {/* Contact */}
       <label className="block font-semibold">Informations de contact</label>
