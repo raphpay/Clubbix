@@ -51,12 +51,6 @@ const ClubWebsiteForm = () => {
   ) => {
     const newActivities = [...activities];
     newActivities[index][field] = value;
-    console.log(
-      newActivities[index][field],
-      index,
-      field,
-      newActivities[index][field]
-    );
     setActivities(newActivities);
   };
 
@@ -66,7 +60,6 @@ const ClubWebsiteForm = () => {
       title: "",
       description: "",
     };
-    console.log("new", [...activities, newActivity]);
     setActivities([...activities, newActivity]);
   }
 

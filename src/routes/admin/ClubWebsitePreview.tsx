@@ -11,6 +11,8 @@ const ClubWebsitePreview = () => {
     heroTitle,
     heroDescription,
     activities,
+    email,
+    phone,
   } = useClubWebsiteStore();
 
   const iconMap = {
@@ -72,22 +74,35 @@ const ClubWebsitePreview = () => {
       </section>
 
       {/* Start Activities section */}
-      <section className="py-6">
-        <div className={`grid gap-4 ${colClass}`}>
-          {activities.map((activity, index) => {
-            const IconComponent = iconMap[activity.icon]; // TODO: Correct the warning
-            return (
-              <PresentationWithIcon
-                id={index}
-                icon={<IconComponent />}
-                title={activity.title}
-                description={activity.description}
-              />
-            );
-          })}
-        </div>
-      </section>
+      {activities.length > 0 && (
+        <section className="py-6">
+          <h2 className="text-3xl font-bold mb-4">Ce que l'on propose</h2>
+          <div className={`grid gap-4 ${colClass}`}>
+            {activities.map((activity, index) => {
+              const IconComponent = iconMap[activity.icon]; // TODO: Correct the warning
+              return (
+                <PresentationWithIcon
+                  id={index}
+                  icon={<IconComponent />}
+                  title={activity.title}
+                  description={activity.description}
+                />
+              );
+            })}
+          </div>
+        </section>
+      )}
       {/* End Activities section */}
+
+      {/* Start Footer */}
+      <footer className="text-sm text-white pb-6 bg-gray-400 flex flex-col py-2">
+        <div className="flex flex-col justify-center">
+          {email && <p>Email de contact: {email}</p>}
+          {phone && <p>Numéro de contact: {phone}</p>}
+        </div>
+        © {new Date().getFullYear()} Clubbix. Tous droits réservés.
+      </footer>
+      {/* End Footer */}
     </div>
   );
 };
