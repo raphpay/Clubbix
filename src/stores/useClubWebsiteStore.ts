@@ -23,6 +23,8 @@ type ClubWebsiteStore = {
   instagramLink: string | null;
   facebookLink: string | null;
   activities: Activity[];
+  sameLogoUploaded: Boolean;
+  sameHeroImageUploaded: Boolean;
   setIsEditing: (edit: boolean) => void;
   setClubName: (name: string) => void;
   setLogoPath: (path: string) => void;
@@ -40,6 +42,8 @@ type ClubWebsiteStore = {
   setInstagramLink: (value: string) => void;
   setFacebookLink: (value: string) => void;
   setActivities: (activities: Activity[]) => void;
+  setSameLogoUploaded: (value: Boolean) => void;
+  setSameHeroImageUploaded: (value: Boolean) => void;
 };
 
 export const useClubWebsiteStore = create<ClubWebsiteStore>((set) => ({
@@ -63,6 +67,8 @@ export const useClubWebsiteStore = create<ClubWebsiteStore>((set) => ({
   instagramLink: null,
   facebookLink: null,
   activities: [],
+  sameLogoUploaded: true,
+  sameHeroImageUploaded: true,
   setIsEditing: (edit) => set({ isEditing: edit }),
   setClubName: (name) => set({ clubName: name }),
   setLogoPath: (path) => set({ logoPath: path }),
@@ -85,4 +91,6 @@ export const useClubWebsiteStore = create<ClubWebsiteStore>((set) => ({
   setInstagramLink: (value) => set({ instagramLink: value }),
   setFacebookLink: (value) => set({ facebookLink: value }),
   setActivities: (value) => set({ activities: value }),
+  setSameLogoUploaded: (value) => set({ sameLogoUploaded: value }),
+  setSameHeroImageUploaded: (value) => set({ sameHeroImageUploaded: value }),
 }));

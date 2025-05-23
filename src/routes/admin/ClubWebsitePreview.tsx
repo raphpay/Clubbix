@@ -32,13 +32,13 @@ const ClubWebsitePreview = () => {
       {/* Header */}
       <header className="w-full flex items-center justify-between px-8 py-4 bg-white shadow-md mb-2">
         <div className="flex items-center gap-3">
-          {logoUrl && (
+          {/* {logoUrl && (
             <img
               src={logoUrl}
               alt="Club Logo"
               className="h-10 w-10 object-contain"
             />
-          )}
+          )} */}
           <span className="font-bold text-xl">{clubName}</span>
         </div>
 

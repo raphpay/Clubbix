@@ -2,19 +2,15 @@ import { create } from "zustand";
 import type { WebsitePage } from "../types/WebsitePage";
 
 type WebsitePageStore = {
-  isEditing: boolean;
+  // Properties
   currentWebsitePage: WebsitePage | undefined;
-  currentWebsitePageId: string | undefined;
-  setIsEditing: (value: boolean) => void;
+  // Setters
   setCurrentWebsitePage: (value: WebsitePage | undefined) => void;
-  setCurrentWebsitePageId: (value: string | undefined) => void;
 };
 
 export const useWebsitePageStore = create<WebsitePageStore>((set) => ({
-  isEditing: false,
+  // Properties
   currentWebsitePage: undefined,
-  currentWebsitePageId: undefined,
-  setIsEditing: (value) => set({ isEditing: value }),
+  // Setters
   setCurrentWebsitePage: (value) => set({ currentWebsitePage: value }),
-  setCurrentWebsitePageId: (value) => set({ currentWebsitePageId: value }),
 }));

@@ -1,5 +1,6 @@
 import { Bike, Dumbbell, Mountain, PersonStanding } from "lucide-react";
 import Input from "../../components/Input";
+import { useClubStore } from "../../stores/useClubStore";
 import { useClubWebsiteStore } from "../../stores/useClubWebsiteStore";
 import type { Activity } from "../../types/WebsitePage";
 
@@ -13,28 +14,35 @@ const availableIcons: { name: string; Icon: typeof Bike }[] = [
 const ClubWebsiteForm = () => {
   const {
     clubName,
-    setClubName,
+    logoFile,
     logoUrl,
-    setLogoUrl,
     heroTitle,
-    setHeroTitle,
     heroDescription,
-    setHeroDescription,
+    heroImageFile,
     heroImageUrl,
-    setHeroImageUrl,
-    setLogoFile,
-    setHeroImageFile,
     email,
-    setEmail,
     phone,
-    setPhone,
     instagramLink,
-    setInstagramLink,
     facebookLink,
-    setFacebookLink,
     activities,
+    sameLogoUploaded,
+    sameHeroImageUploaded,
+    setClubName,
+    setLogoUrl,
+    setHeroTitle,
+    setHeroDescription,
+    setHeroImageUrl,
+    setHeroImageFile,
+    setEmail,
+    setPhone,
+    setInstagramLink,
+    setFacebookLink,
     setActivities,
+    setSameLogoUploaded,
+    setSameHeroImageUploaded,
   } = useClubWebsiteStore();
+
+  const { currentClub } = useClubStore();
 
   const handleActivityChange = (
     index: number,
@@ -68,6 +76,39 @@ const ClubWebsiteForm = () => {
     setActivities(newActivities);
   }
 
+  // function onFileChange(type: "hero" | "logo", currentFile: File) {
+  //   if (type === "hero") {
+  //     if (
+  //       currentFile &&
+  //       heroImageFile &&
+  //       currentFile.name === heroImageFile.name &&
+  //       currentFile.size === heroImageFile.size
+  //     ) {
+  //       setSameHeroImageUploaded(true);
+  //       return;
+  //     }
+
+  //     setSameHeroImageUploaded(false);
+  //     const url = URL.createObjectURL(currentFile);
+  //     setHeroImageUrl(url); // Update Zustand
+  //   } else {
+  //     // Optional: avoid redundant state update
+  //     if (
+  //       currentFile &&
+  //       logoFile &&
+  //       currentFile.name === logoFile.name &&
+  //       currentFile.size === logoFile.size
+  //     ) {
+  //       setSameLogoUploaded(true);
+  //       return;
+  //     }
+
+  //     setSameLogoUploaded(false);
+  //     const url = URL.createObjectURL(currentFile);
+  //     setLogoUrl(url); // Update Zustand
+  //   }
+  // }
+
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white rounded-xl shadow space-y-6">
       <h2 className="text-2xl font-bold">Modifier le site du club</h2>
@@ -84,7 +125,7 @@ const ClubWebsiteForm = () => {
       </div>
 
       {/* Logo URL */}
-      <div>
+      {/* <div>
         <label className="block font-semibold mb-1">Logo</label>
         <input
           type="file"
@@ -92,16 +133,14 @@ const ClubWebsiteForm = () => {
           onChange={async (e) => {
             const file = e.target.files?.[0];
             if (!file) return;
-            setLogoFile(file);
-            const url = URL.createObjectURL(file);
-            setLogoUrl(url); // Update Zustand
+            onFileChange("logo", file);
           }}
           className="w-full border rounded px-3 py-2"
         />
         {logoUrl && (
           <img src={logoUrl} alt="" className="mt-2 h-16 object-contain" />
         )}
-      </div>
+      </div> */}
 
       {/* Activities */}
       <div>
@@ -198,7 +237,7 @@ const ClubWebsiteForm = () => {
       </div>
 
       {/* Hero Background Image */}
-      <div>
+      {/* <div>
         <label className="block font-semibold">
           Image de fond de la bannière principale
         </label>
@@ -208,16 +247,14 @@ const ClubWebsiteForm = () => {
           onChange={async (e) => {
             const file = e.target.files?.[0];
             if (!file) return;
-            setHeroImageFile(file);
-            const url = URL.createObjectURL(file);
-            setHeroImageUrl(url); // Update Zustand
+            onFileChange("hero", file);
           }}
           className="w-full border rounded px-3 py-2"
         />
         {heroImageUrl && (
           <img src={heroImageUrl} alt="" className="mt-2 h-16 object-contain" />
         )}
-      </div>
+      </div> */}
 
       {/* Contact */}
       <label className="block font-semibold">Informations de contact</label>

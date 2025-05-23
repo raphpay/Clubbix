@@ -2,8 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import ButtonPrimary from "../../components/ButtonPrimary";
 import ButtonSecondary from "../../components/ButtonSecondary";
-import { downloadFile } from "../../lib/downloadFile";
 import FirestoreService from "../../lib/FirebaseService";
+import { useClubStore } from "../../stores/useClubStore";
 import { useClubWebsiteStore } from "../../stores/useClubWebsiteStore";
 import type { Club } from "../../types/Club";
 import type { WebsitePage } from "../../types/WebsitePage";
@@ -13,10 +13,8 @@ import ClubWebsitePreview from "./ClubWebsitePreview";
 const ClubWebsite = () => {
   const {
     isEditing,
-    logoFile,
     heroTitle,
     heroDescription,
-    heroImageFile,
     clubName,
     email,
     phone,
@@ -40,66 +38,68 @@ const ClubWebsite = () => {
     setActivities,
   } = useClubWebsiteStore();
 
-  const clubId = "6HRbFwNVA2INAaoxAbyu"; // TODO: To be loaded dynamically
+  const { currentClubId } = useClubStore();
+
   const clubCollection = new FirestoreService<Club>(`clubs/`);
   const websitePageCollection = new FirestoreService<WebsitePage>(
-    `clubs/${clubId}/websitePage`
+    `clubs/${currentClubId}/websitePage`
   );
 
   async function saveChanges() {
-    // TODO: Find a way to not save the logo each time a save is done
-    // if (logoFile) {
-    //   console.log("logo");
-    //   const logoPath = `clubs/${clubId}/logo.jpg`;
-    //   await uploadImage(logoFile, logoPath);
-    //   await clubCollection.update(clubId, { logoPath });
-    // }
+    if (currentClubId) {
+      // TODO: Find a way to not save the images each time a save is done
+      // if (logoFile && !sameLogoUploaded) {
+      //   const logoPath = `clubs/${currentClubId}/public/logo.png`;
+      //   await uploadImage(logoFile, logoPath);
+      //   await clubCollection.update(currentClubId, { logoPath });
+      // }
 
-    // if (heroImageFile) {
-    //   console.log("hero");
-    //   const heroImagePath = `clubs/${clubId}/websitePage/default/heroImage.jpg`;
-    //   await uploadImage(heroImageFile, heroImagePath);
-    //   await websitePageCollection.update("default", { heroImagePath });
-    // }
+      // console.log("if", heroImageFile, sameHeroImageUploaded);
+      // if (heroImageFile && !sameHeroImageUploaded) {
+      //   const heroImagePath = `clubs/${currentClubId}/websitePage/default/heroImage.png`;
+      //   await uploadImage(heroImageFile, heroImagePath);
+      //   await websitePageCollection.update("default", { heroImagePath });
+      // }
 
-    try {
-      await clubCollection.update(clubId, {
-        name: clubName ?? "",
-      });
-      const websitePage: WebsitePage = {
-        id: "default",
-        title: heroTitle ?? "",
-        description: heroDescription ?? "",
-        activities,
-        pricing: [],
-        teamMembers: [],
-        ridersShowcase: [],
-        contact: {
-          email: email ?? "",
-          phone: phone ?? "",
-          socials: {
-            instagram: instagramLink ?? "",
-            facebook: facebookLink ?? "",
+      try {
+        await clubCollection.update(currentClubId, {
+          name: clubName ?? "",
+        });
+        const websitePage: WebsitePage = {
+          id: "default",
+          clubId: currentClubId ?? "no-club-id",
+          title: heroTitle ?? "",
+          description: heroDescription ?? "",
+          activities,
+          pricing: [],
+          teamMembers: [],
+          ridersShowcase: [],
+          contact: {
+            email: email ?? "",
+            phone: phone ?? "",
+            socials: {
+              instagram: instagramLink ?? "",
+              facebook: facebookLink ?? "",
+            },
           },
-        },
-      };
-      console.log("new", websitePage);
-      const clubData = await clubCollection.read(clubId);
-      if (clubData?.websitePage) {
-        await websitePageCollection.update("default", websitePage);
-      } else {
-        console.log("create");
-        await websitePageCollection.create("default", websitePage);
+        };
+
+        const clubData = await clubCollection.read(currentClubId);
+        if (clubData?.websitePageId) {
+          await websitePageCollection.update("default", websitePage);
+        } else {
+          await websitePageCollection.create("default", websitePage);
+        }
+      } catch (error) {
+        console.log("Error updating data", error);
       }
-    } catch (error) {
-      console.log("Error updating data", error);
     }
   }
 
   const { data: club } = useQuery<Club>({
-    queryKey: ["club", clubId],
+    queryKey: ["club", currentClubId],
     queryFn: async () => {
-      const result = await clubCollection.read(clubId);
+      const result = await clubCollection.read(currentClubId ?? "");
       if (!result) throw new Error("Club not found");
       return result;
     },
@@ -117,14 +117,14 @@ const ClubWebsite = () => {
   useEffect(() => {
     if (club) {
       setClubName(club.name);
-      if (club.logoPath) {
-        setLogoPath(club.logoPath);
-        downloadFile(club.logoPath, "logo.jpg").then((file) => {
-          const url = URL.createObjectURL(file);
-          setLogoUrl(url);
-          setLogoFile(file);
-        });
-      }
+      // if (club.logoPath) {
+      //   setLogoPath(club.logoPath);
+      //   downloadFile(club.logoPath, "logo.png").then((file) => {
+      //     const url = URL.createObjectURL(file);
+      //     setLogoUrl(url);
+      //     setLogoFile(file);
+      //   });
+      // }
     }
   }, [club]);
 
@@ -132,16 +132,16 @@ const ClubWebsite = () => {
     if (websitePage) {
       setHeroTitle(websitePage.title);
       setHeroDescription(websitePage.description);
-      if (websitePage.heroImagePath) {
-        setHeroImagePath(websitePage.heroImagePath);
-        downloadFile(websitePage.heroImagePath, "heroImage.jpg").then(
-          (file) => {
-            const url = URL.createObjectURL(file);
-            setHeroImageUrl(url);
-            setHeroImageFile(file);
-          }
-        );
-      }
+      // if (websitePage.heroImagePath) {
+      //   setHeroImagePath(websitePage.heroImagePath);
+      //   downloadFile(websitePage.heroImagePath, "heroImage.png").then(
+      //     (file) => {
+      //       const url = URL.createObjectURL(file);
+      //       setHeroImageUrl(url);
+      //       setHeroImageFile(file);
+      //     }
+      //   );
+      // }
       setEmail(websitePage.contact.email);
       setPhone(websitePage.contact.phone);
       setInstagramLink(websitePage.contact.socials.instagram);
