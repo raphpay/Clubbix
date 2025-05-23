@@ -5,10 +5,10 @@ import type { Club } from "../types/Club";
 type ClubStore = {
   currentClubId: string | null;
   currentClub: Club | undefined;
-  clubLogoPath: string | null;
+  clubLogoPath: string | undefined;
   setCurrentClubId: (value: string | null) => void;
   setCurrentClub: (value: Club | undefined) => void;
-  setClubLogoPath: (value: string | null) => void;
+  setClubLogoPath: (value: string | undefined) => void;
 };
 
 export const useClubStore = create<ClubStore>()(
@@ -16,7 +16,7 @@ export const useClubStore = create<ClubStore>()(
     (set) => ({
       currentClubId: null,
       currentClub: undefined,
-      clubLogoPath: null,
+      clubLogoPath: undefined,
       setCurrentClubId: (value) => set({ currentClubId: value }),
       setCurrentClub: (value) => set({ currentClub: value }),
       setClubLogoPath: (value) => set({ clubLogoPath: value }),

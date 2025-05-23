@@ -68,7 +68,10 @@ const ClubWebsitePageForm = () => {
     }
   }
 
-  async function updateWebsitePage() {}
+  async function updateWebsitePage() {
+    if (club?.websitePageId) {
+    }
+  }
 
   async function fetchClubInfo() {
     if (club) {
