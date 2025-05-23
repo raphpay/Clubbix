@@ -1,6 +1,6 @@
 import Header from "../../../components/Header";
 import { useDashboardStore } from "../../../stores/useDashboardStore";
-import EditableClubWebsitePage from "../EditableClubWebsitePage";
+import ClubWebsite from "../ClubWebsite";
 import Events from "../events/Events";
 import MembersList from "../members/Members";
 import Trainings from "../trainings/Trainings";
@@ -20,7 +20,7 @@ const DashboardContent = () => {
     case "trainings":
       return <Trainings />;
     case "website":
-      return <EditableClubWebsitePage />;
+      return <ClubWebsite />;
     default:
       return <div>Not Found</div>;
   }

@@ -10,7 +10,7 @@ import type { WebsitePage } from "../../types/WebsitePage";
 import ClubWebsiteForm from "./ClubWebsiteForm";
 import ClubWebsitePreview from "./ClubWebsitePreview";
 
-const EditableClubWebsitePage = () => {
+const ClubWebsite = () => {
   const {
     isEditing,
     logoFile,
@@ -166,4 +166,4 @@ const EditableClubWebsitePage = () => {
   );
 };
 
-export default EditableClubWebsitePage;
+export default ClubWebsite;
