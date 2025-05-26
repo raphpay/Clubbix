@@ -10,14 +10,26 @@ const ClubWebsiteForm = () => {
       {/* Basic info */}
       <ClubWebsiteFormInfo />
 
+      {/* Separator */}
+      <div className="h-[2px] w-full bg-black/50"></div>
+
       {/* Logo URL */}
       <ClubWebsiteFormLogo />
+
+      {/* Separator */}
+      <div className="h-[2px] w-full bg-black/50"></div>
 
       {/* Activities */}
       <ClubWebsiteFormActivities />
 
+      {/* Separator */}
+      <div className="h-[2px] w-full bg-black/50"></div>
+
       {/* Hero */}
       <ClubWebsiteFormHero />
+
+      {/* Separator */}
+      <div className="h-[2px] w-full bg-black/50"></div>
 
       {/* Contact */}
       <ClubWebsiteFormContact />
