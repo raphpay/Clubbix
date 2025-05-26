@@ -1,28 +1,34 @@
-type InputProps = {
+type NumberInputProps = {
   label: string;
-  value: string;
-  type?: string;
+  value: number;
+  canBeNegative?: boolean;
   placeholder: string;
   onChange: (e: any) => void;
   required?: boolean;
 };
 
-const Input = ({
+const NumberInput = ({
   label,
   value,
-  type = "text",
   placeholder,
   onChange,
   required = false,
-}: InputProps) => {
+  canBeNegative = false,
+}: NumberInputProps) => {
   return (
     <div className="w-full text-left">
       <label className="text-gray-500">{label}</label>
       <input
-        type={type}
+        type={"number"}
+        min={canBeNegative ? "-1000000" : "0"}
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        onKeyUp={(event) => {
+          if (!/[0-9]/.test(event.key)) {
+            event.preventDefault();
+          }
+        }}
         className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         required={required}
       />
@@ -30,4 +36,4 @@ const Input = ({
   );
 };
 
-export default Input;
+export default NumberInput;

@@ -3,6 +3,7 @@ import ClubWebsiteFormContact from "../../components/websitePage/form/ClubWebsit
 import ClubWebsiteFormHero from "../../components/websitePage/form/ClubWebsiteFormHero";
 import ClubWebsiteFormInfo from "../../components/websitePage/form/ClubWebsiteFormInfo";
 import ClubWebsiteFormLogo from "../../components/websitePage/form/ClubWebsiteFormLogo";
+import ClubWebsiteFormPricing from "../../components/websitePage/form/ClubWebsiteFormPricing";
 
 const ClubWebsiteForm = () => {
   return (
@@ -27,6 +28,11 @@ const ClubWebsiteForm = () => {
 
       {/* Hero */}
       <ClubWebsiteFormHero />
+
+      {/* Separator */}
+      <div className="h-[2px] w-full bg-black/50"></div>
+
+      <ClubWebsiteFormPricing />
 
       {/* Separator */}
       <div className="h-[2px] w-full bg-black/50"></div>

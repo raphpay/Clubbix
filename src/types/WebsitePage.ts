@@ -18,11 +18,13 @@ export type Activity = {
 };
 
 export type PricingPlan = {
-  id: string;
+  id?: string;
   title: string;
-  description: string;
-  price: number;
+  description?: string;
+  pricePerMonth?: number;
+  pricePerYear?: number;
   features: string[];
+  featured: boolean;
 };
 
 export type RiderShowcase = {

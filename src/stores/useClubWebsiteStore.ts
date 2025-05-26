@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Activity } from "../types/WebsitePage";
+import type { Activity, PricingPlan } from "../types/WebsitePage";
 
 type NavLink = {
   label: string;
@@ -25,6 +25,7 @@ type ClubWebsiteStore = {
   activities: Activity[];
   sameLogoUploaded: Boolean;
   sameHeroImageUploaded: Boolean;
+  pricingPlans: PricingPlan[];
   setIsEditing: (edit: boolean) => void;
   setClubName: (name: string) => void;
   setLogoPath: (path: string) => void;
@@ -44,6 +45,7 @@ type ClubWebsiteStore = {
   setActivities: (activities: Activity[]) => void;
   setSameLogoUploaded: (value: Boolean) => void;
   setSameHeroImageUploaded: (value: Boolean) => void;
+  setPricingPlans: (value: PricingPlan[]) => void;
 };
 
 export const useClubWebsiteStore = create<ClubWebsiteStore>((set) => ({
@@ -69,6 +71,7 @@ export const useClubWebsiteStore = create<ClubWebsiteStore>((set) => ({
   activities: [],
   sameLogoUploaded: true,
   sameHeroImageUploaded: true,
+  pricingPlans: [],
   setIsEditing: (edit) => set({ isEditing: edit }),
   setClubName: (name) => set({ clubName: name }),
   setLogoPath: (path) => set({ logoPath: path }),
@@ -93,4 +96,5 @@ export const useClubWebsiteStore = create<ClubWebsiteStore>((set) => ({
   setActivities: (value) => set({ activities: value }),
   setSameLogoUploaded: (value) => set({ sameLogoUploaded: value }),
   setSameHeroImageUploaded: (value) => set({ sameHeroImageUploaded: value }),
+  setPricingPlans: (value) => set({ pricingPlans: value }),
 }));

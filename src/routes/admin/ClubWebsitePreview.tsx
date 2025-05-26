@@ -2,6 +2,7 @@ import ClubWebsitePreviewActivities from "../../components/websitePage/preview/C
 import ClubWebsitePreviewFooter from "../../components/websitePage/preview/ClubWebsitePreviewFooter";
 import ClubWebsitePreviewHeader from "../../components/websitePage/preview/ClubWebsitePreviewHeader";
 import ClubWebsitePreviewHero from "../../components/websitePage/preview/ClubWebsitePreviewHero";
+import ClubWebsitePreviewPricingPlans from "../../components/websitePage/preview/ClubWebsitePreviewPricingPlans";
 
 const ClubWebsitePreview = () => {
   return (
@@ -11,6 +12,8 @@ const ClubWebsitePreview = () => {
       <ClubWebsitePreviewHero />
 
       <ClubWebsitePreviewActivities />
+
+      <ClubWebsitePreviewPricingPlans />
 
       <ClubWebsitePreviewFooter />
     </div>

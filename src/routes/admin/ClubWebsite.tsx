@@ -22,6 +22,7 @@ const ClubWebsite = () => {
     instagramLink,
     facebookLink,
     activities,
+    pricingPlans,
     setIsEditing,
     setClubName,
     setHeroTitle,
@@ -37,6 +38,7 @@ const ClubWebsite = () => {
     setHeroImagePath,
     setHeroImageFile,
     setHeroImageUrl,
+    setPricingPlans,
   } = useClubWebsiteStore();
 
   const { currentClubId } = useClubStore();
@@ -72,7 +74,7 @@ const ClubWebsite = () => {
           title: heroTitle ?? "",
           description: heroDescription ?? "",
           activities,
-          pricing: [],
+          pricing: pricingPlans,
           teamMembers: [],
           ridersShowcase: [],
           contact: {
@@ -148,6 +150,7 @@ const ClubWebsite = () => {
       setInstagramLink(websitePage.contact.socials.instagram);
       setFacebookLink(websitePage.contact.socials.facebook);
       setActivities(websitePage.activities ?? []);
+      setPricingPlans(websitePage.pricing ?? []);
     }
   }, [websitePage]);
 
