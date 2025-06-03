@@ -6,8 +6,12 @@ import ButtonDanger from "../../../components/ButtonDanger";
 import ButtonPrimary from "../../../components/ButtonPrimary";
 import Input from "../../../components/Input";
 import NumberInput from "../../../components/inputs/NumberInput";
+
 import FirestoreService from "../../../lib/FirebaseService";
+import storageService from "../../../lib/StorageService";
+
 import { useClubStore } from "../../../stores/useClubStore";
+
 import {
   TreasuryStatus,
   TreasuryType,
@@ -42,6 +46,8 @@ const FinanceEntryModal = ({
   const [status, setStatus] = useState<TreasuryStatus>(TreasuryStatus.paid);
   const [category, setCategory] = useState<string>("");
   const [entryDate, setEntryDate] = useState<string>(new Date().toDateString());
+  const [receiptFile, setReceiptFile] = useState<File | null>(null);
+  const [receiptPreview, setReceiptPreview] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,12 +66,14 @@ const FinanceEntryModal = ({
   async function updateEntry() {
     if (currentClubId && entry) {
       try {
+        const filePath = await uploadReceipt(entry.id);
         const updatedEntry: TreasuryUpdateInput = {
           label,
           amount,
           category,
           status,
           date: Timestamp.fromDate(new Date(entryDate)),
+          documentPath: filePath,
         };
         await treasuryCollection.update(entry.id, updatedEntry);
         resetFields();
@@ -79,6 +87,7 @@ const FinanceEntryModal = ({
     if (currentClubId) {
       try {
         const id = treasuryCollection.generateId();
+        const filePath = await uploadReceipt(id);
         const newEntry: Treasury = {
           id,
           type,
@@ -89,6 +98,7 @@ const FinanceEntryModal = ({
           date: Timestamp.fromDate(new Date(entryDate)),
           createdAt: Timestamp.fromDate(new Date()),
           clubId: currentClubId,
+          documentPath: filePath,
         };
         await treasuryCollection.create(id, newEntry);
         resetFields();
@@ -98,12 +108,30 @@ const FinanceEntryModal = ({
     }
   }
 
+  async function uploadReceipt(entryId: string): Promise<string | undefined> {
+    try {
+      let filePath: string | undefined = undefined;
+      if (receiptFile) {
+        const extension = receiptFile.name.split(".").pop();
+        filePath = await storageService.upload(
+          `clubs/${currentClubId}/treasury/${entryId}/receipt.${extension}`,
+          receiptFile
+        );
+      }
+      return filePath;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   function resetFields() {
     setLabel("");
     setAmount(0);
     setCategory("");
     setStatus(TreasuryStatus.paid);
     setEntryDate(new Date().toDateString());
+    setReceiptFile(null);
+    setReceiptPreview(null);
   }
 
   async function eraseEntry(entry?: Treasury) {
@@ -203,6 +231,41 @@ const FinanceEntryModal = ({
                   <option value="expense">Dépense</option>
                   <option value="revenue">Revenu</option>
                 </select>
+              </div>
+              <div>
+                <label className="block text-sm text-texte-secondaire mb-1">
+                  Justificatif (PDF ou image)
+                </label>
+                <input
+                  type="file"
+                  accept="image/*,.pdf"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const url = URL.createObjectURL(file);
+                      setReceiptPreview(url);
+                      setReceiptFile(file);
+                    }
+                  }}
+                  className="w-full p-3 border border-gray-300 rounded-md bg-white"
+                />
+                {receiptPreview && (
+                  <div className="mt-3">
+                    {receiptPreview.endsWith(".pdf") ? (
+                      <img
+                        src="/icons/pdf-icon.png"
+                        alt="PDF preview"
+                        className="h-12"
+                      />
+                    ) : (
+                      <img
+                        src={receiptPreview}
+                        alt="Preview"
+                        className="max-h-48 rounded border"
+                      />
+                    )}
+                  </div>
+                )}
               </div>
             </form>
             <div className="flex justify-end space-x-2">

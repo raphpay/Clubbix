@@ -7,7 +7,7 @@ export type Treasury = {
   amount: number;
   date: Timestamp;
   category: string;
-  documentUrl?: string;
+  documentPath?: string;
   status: TreasuryStatus;
   clubId: string;
   createdAt: Timestamp;
@@ -19,7 +19,7 @@ export type TreasuryUpdateInput = {
   amount?: number;
   date?: Timestamp;
   category?: string;
-  documentUrl?: string;
+  documentPath?: string;
   status?: TreasuryStatus;
 };
 
