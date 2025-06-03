@@ -23,7 +23,9 @@ const ClubWebsitePreviewHeader = () => {
             <a
               key={index}
               href={link.href}
-              className="hover:text-blue-600 transition"
+              className={`flex items-center gap-2 p-2 rounded-md transition-colors duration-200 hover:bg-blue-300 ${
+                index === 0 ? "bg-blue-100 text-blue-500" : "text-gray-700"
+              }`}
             >
               {link.label}
             </a>
