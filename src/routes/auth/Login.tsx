@@ -1,11 +1,17 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
+import { useClubStore } from "../../stores/useClubStore";
+
 import Header from "../../components/Header";
 import Input from "../../components/Input";
 import PasswordInput from "../../components/PasswordInput";
-import { useAuth } from "../../hooks/useAuth";
+
 import { auth } from "../../lib/firebase";
+import FirestoreService from "../../lib/FirestoreService";
+
+import type { User } from "../../types/User";
 
 const LoginPage = () => {
   const { user, loading } = useAuth();
@@ -14,8 +20,25 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  const userService = new FirestoreService<User>("users");
+
+  const { setCurrentClubId } = useClubStore();
+
+  async function handleUserSetup(uid: string) {
+    const fetchedUser = await userService.read(uid);
+    if (fetchedUser) {
+      setCurrentClubId(fetchedUser.clubId);
+      navigate("/admin/dashboard");
+    }
+  }
+
   useEffect(() => {
-    if (!loading && user) navigate("/admin/dashboard");
+    const fetchUser = async () => {
+      if (!loading && user) {
+        await handleUserSetup(user.uid);
+      }
+    };
+    fetchUser();
   }, [user, loading]);
 
   const handleLogin = async (e: React.FormEvent) => {

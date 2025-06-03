@@ -1,10 +1,13 @@
 import { create } from "zustand";
-import type { Activity } from "../types/WebsitePage";
+import type { Activity, PricingPlan } from "../types/WebsitePage";
 
 type NavLink = {
   label: string;
   href: string;
 };
+
+type TimeRange = { open: string; close: string };
+type Schedule = { [day: string]: TimeRange[] };
 
 type ClubWebsiteStore = {
   isEditing: boolean;
@@ -23,6 +26,10 @@ type ClubWebsiteStore = {
   instagramLink: string | null;
   facebookLink: string | null;
   activities: Activity[];
+  sameLogoUploaded: Boolean;
+  sameHeroImageUploaded: Boolean;
+  pricingPlans: PricingPlan[];
+  schedule: Schedule;
   setIsEditing: (edit: boolean) => void;
   setClubName: (name: string) => void;
   setLogoPath: (path: string) => void;
@@ -40,6 +47,18 @@ type ClubWebsiteStore = {
   setInstagramLink: (value: string) => void;
   setFacebookLink: (value: string) => void;
   setActivities: (activities: Activity[]) => void;
+  setSameLogoUploaded: (value: Boolean) => void;
+  setSameHeroImageUploaded: (value: Boolean) => void;
+  setPricingPlans: (value: PricingPlan[]) => void;
+  setSchedule: (schedule: Schedule) => void;
+  addTimeRange: (day: string) => void;
+  updateTimeRange: (
+    day: string,
+    index: number,
+    key: "open" | "close",
+    value: string
+  ) => void;
+  removeTimeRange: (day: string, index: number) => void;
 };
 
 export const useClubWebsiteStore = create<ClubWebsiteStore>((set) => ({
@@ -63,6 +82,10 @@ export const useClubWebsiteStore = create<ClubWebsiteStore>((set) => ({
   instagramLink: null,
   facebookLink: null,
   activities: [],
+  sameLogoUploaded: true,
+  sameHeroImageUploaded: true,
+  pricingPlans: [],
+  schedule: {},
   setIsEditing: (edit) => set({ isEditing: edit }),
   setClubName: (name) => set({ clubName: name }),
   setLogoPath: (path) => set({ logoPath: path }),
@@ -85,4 +108,37 @@ export const useClubWebsiteStore = create<ClubWebsiteStore>((set) => ({
   setInstagramLink: (value) => set({ instagramLink: value }),
   setFacebookLink: (value) => set({ facebookLink: value }),
   setActivities: (value) => set({ activities: value }),
+  setSameLogoUploaded: (value) => set({ sameLogoUploaded: value }),
+  setSameHeroImageUploaded: (value) => set({ sameHeroImageUploaded: value }),
+  setPricingPlans: (value) => set({ pricingPlans: value }),
+  setSchedule: (value) => set({ schedule: value }),
+  addTimeRange: (day) =>
+    set((state) => ({
+      schedule: {
+        ...state.schedule,
+        [day]: [...(state.schedule[day] || []), { open: "", close: "" }],
+      },
+    })),
+  updateTimeRange: (day, index, key, value) =>
+    set((state) => {
+      const updated = [...(state.schedule[day] || [])];
+      updated[index][key] = value;
+      return {
+        schedule: {
+          ...state.schedule,
+          [day]: updated,
+        },
+      };
+    }),
+  removeTimeRange: (day, index) =>
+    set((state) => {
+      const updated = [...(state.schedule[day] || [])];
+      updated.splice(index, 1);
+      return {
+        schedule: {
+          ...state.schedule,
+          [day]: updated,
+        },
+      };
+    }),
 }));
