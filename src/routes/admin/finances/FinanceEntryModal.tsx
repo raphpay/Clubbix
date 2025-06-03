@@ -232,41 +232,45 @@ const FinanceEntryModal = ({
                   <option value="revenue">Revenu</option>
                 </select>
               </div>
-              <div>
-                <label className="block text-sm text-texte-secondaire mb-1">
-                  Justificatif (PDF ou image)
-                </label>
-                <input
-                  type="file"
-                  accept="image/*,.pdf"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      const url = URL.createObjectURL(file);
-                      setReceiptPreview(url);
-                      setReceiptFile(file);
-                    }
-                  }}
-                  className="w-full p-3 border border-gray-300 rounded-md bg-white"
-                />
-                {receiptPreview && (
-                  <div className="mt-3">
-                    {receiptPreview.endsWith(".pdf") ? (
-                      <img
-                        src="/icons/pdf-icon.png"
-                        alt="PDF preview"
-                        className="h-12"
-                      />
-                    ) : (
-                      <img
-                        src={receiptPreview}
-                        alt="Preview"
-                        className="max-h-48 rounded border"
-                      />
-                    )}
-                  </div>
-                )}
-              </div>
+
+              {/* Input */}
+              {!entry && (
+                <div className="mb-4">
+                  <label className="block text-sm text-texte-secondaire mb-1">
+                    Justificatif (PDF ou image)
+                  </label>
+                  <input
+                    type="file"
+                    accept="image/*,.pdf"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        const url = URL.createObjectURL(file);
+                        setReceiptPreview(url);
+                        setReceiptFile(file);
+                      }
+                    }}
+                    className="w-full p-3 border border-gray-300 rounded-md bg-white"
+                  />
+                  {receiptPreview && (
+                    <div className="mt-3">
+                      {receiptPreview.endsWith(".pdf") ? (
+                        <img
+                          src="/icons/pdf-icon.png"
+                          alt="PDF preview"
+                          className="h-12"
+                        />
+                      ) : (
+                        <img
+                          src={receiptPreview}
+                          alt="Preview"
+                          className="max-h-48 rounded border"
+                        />
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
             </form>
             <div className="flex justify-end space-x-2">
               <ButtonClose action={onClose} title={"Fermer"} />
