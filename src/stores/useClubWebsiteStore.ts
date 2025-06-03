@@ -50,6 +50,7 @@ type ClubWebsiteStore = {
   setSameLogoUploaded: (value: Boolean) => void;
   setSameHeroImageUploaded: (value: Boolean) => void;
   setPricingPlans: (value: PricingPlan[]) => void;
+  setSchedule: (schedule: Schedule) => void;
   addTimeRange: (day: string) => void;
   updateTimeRange: (
     day: string,
@@ -110,6 +111,7 @@ export const useClubWebsiteStore = create<ClubWebsiteStore>((set) => ({
   setSameLogoUploaded: (value) => set({ sameLogoUploaded: value }),
   setSameHeroImageUploaded: (value) => set({ sameHeroImageUploaded: value }),
   setPricingPlans: (value) => set({ pricingPlans: value }),
+  setSchedule: (value) => set({ schedule: value }),
   addTimeRange: (day) =>
     set((state) => ({
       schedule: {

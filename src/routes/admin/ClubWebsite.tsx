@@ -46,6 +46,7 @@ const ClubWebsite = () => {
     setHeroImageFile,
     setHeroImageUrl,
     setPricingPlans,
+    setSchedule,
   } = useClubWebsiteStore();
 
   const { currentClubId } = useClubStore();
@@ -159,6 +160,7 @@ const ClubWebsite = () => {
       setFacebookLink(websitePage.contact.socials.facebook);
       setActivities(websitePage.activities ?? []);
       setPricingPlans(websitePage.pricing ?? []);
+      setSchedule(websitePage.schedule ?? {});
     }
   }, [websitePage]);
 
