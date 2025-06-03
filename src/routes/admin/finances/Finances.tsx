@@ -19,6 +19,16 @@ const Finances = () => {
     `clubs/${currentClubId}/treasury`
   );
 
+  const { data: treasuries } = useQuery<Treasury[]>({
+    queryKey: ["treasuries", currentClubId],
+    queryFn: async () => {
+      const result = await loadEntries();
+      if (!result) throw new Error("Treasuries not found");
+      return result;
+    },
+    enabled: !!currentClubId,
+  });
+
   const [totalBalance, setTotalBalance] = useState<number>(0);
   const [monthBalance, setMonthBalance] = useState<number>(0);
   const [unpaid, setUnpaid] = useState<number>(0);
@@ -31,6 +41,20 @@ const Finances = () => {
   const [selectedEntry, setSelectedEntry] = useState<Treasury | undefined>(
     undefined
   );
+
+  const filteredEntries = treasuries?.filter((entry) => {
+    const matchesName = entry.label
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+
+    const matchesPayment =
+      statusFilter === "all" ||
+      (statusFilter === "paid" && entry.status === "paid") ||
+      (statusFilter === "unpaid" && entry.status === "unpaid") ||
+      (statusFilter === "refund" && entry.status === "refund");
+
+    return matchesName && matchesPayment;
+  });
 
   function displayModal(entry?: Treasury, displayErase: boolean = false) {
     setShowModal(true);
@@ -134,16 +158,6 @@ const Finances = () => {
     }
   }
 
-  const { data: treasuries } = useQuery<Treasury[]>({
-    queryKey: ["treasuries", currentClubId],
-    queryFn: async () => {
-      const result = await loadEntries();
-      if (!result) throw new Error("Treasuries not found");
-      return result;
-    },
-    enabled: !!currentClubId,
-  });
-
   useEffect(() => {
     calculateTotalBalance();
     calculateMonthlyBalance();
@@ -208,8 +222,8 @@ const Finances = () => {
             </tr>
           </thead>
           <tbody className="text-sm">
-            {treasuries &&
-              treasuries.map((entry, idx) => (
+            {filteredEntries &&
+              filteredEntries.map((entry, idx) => (
                 <tr
                   key={idx}
                   className="border-t border-gray-100 hover:bg-gray-50"
@@ -234,10 +248,10 @@ const Finances = () => {
                   </td>
                 </tr>
               ))}
-            {treasuries && treasuries.length === 0 && (
+            {filteredEntries && filteredEntries.length === 0 && (
               <tr>
                 <td colSpan={7} className="px-4 py-6 text-center text-gray-400">
-                  Aucun membre trouvé.
+                  Aucune entrée trouvée.
                 </td>
               </tr>
             )}
