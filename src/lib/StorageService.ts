@@ -1,4 +1,3 @@
-// File: src/lib/storageService.ts
 import {
   deleteObject,
   getDownloadURL,
@@ -6,6 +5,12 @@ import {
   ref,
   uploadBytes,
 } from "firebase/storage";
+
+// Example usage
+// import storageService from "@/lib/storageService";
+
+// await storageService.upload("clubs/clubId/logo.jpg", file);
+// const url = await storageService.getDownloadUrl("clubs/clubId/logo.jpg");
 
 class StorageService {
   private storage = getStorage();
@@ -44,9 +49,3 @@ class StorageService {
 }
 
 export default new StorageService();
-
-// Example usage
-// import storageService from "@/lib/storageService";
-
-// await storageService.upload("clubs/clubId/logo.jpg", file);
-// const url = await storageService.getDownloadUrl("clubs/clubId/logo.jpg");
