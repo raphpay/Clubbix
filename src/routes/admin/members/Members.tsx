@@ -92,6 +92,7 @@ const MembersList = () => {
     }
   }
 
+  // TODO: To be changed to useQuery
   async function loadMembers() {
     try {
       const snapshot = await getDocs(

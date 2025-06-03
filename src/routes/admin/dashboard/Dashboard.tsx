@@ -2,6 +2,7 @@ import Header from "../../../components/Header";
 import { useDashboardStore } from "../../../stores/useDashboardStore";
 import ClubWebsite from "../ClubWebsite";
 import Events from "../events/Events";
+import Finances from "../finances/Finances";
 import MembersList from "../members/Members";
 import Trainings from "../trainings/Trainings";
 import DashboardHome from "./DashboardHome";
@@ -19,6 +20,8 @@ const DashboardContent = () => {
       return <Events />;
     case "trainings":
       return <Trainings />;
+    case "finances":
+      return <Finances />;
     case "website":
       return <ClubWebsite />;
     default:
