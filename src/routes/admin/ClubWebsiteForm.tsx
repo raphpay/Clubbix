@@ -4,6 +4,7 @@ import ClubWebsiteFormHero from "../../components/websitePage/form/ClubWebsiteFo
 import ClubWebsiteFormInfo from "../../components/websitePage/form/ClubWebsiteFormInfo";
 import ClubWebsiteFormLogo from "../../components/websitePage/form/ClubWebsiteFormLogo";
 import ClubWebsiteFormPricing from "../../components/websitePage/form/ClubWebsiteFormPricing";
+import ClubWebsiteFormSchedule from "../../components/websitePage/form/ClubWebsiteFormSchedule";
 
 const ClubWebsiteForm = () => {
   return (
@@ -16,6 +17,11 @@ const ClubWebsiteForm = () => {
 
       {/* Logo URL */}
       <ClubWebsiteFormLogo />
+
+      {/* Separator */}
+      <div className="h-[2px] w-full bg-black/50"></div>
+
+      <ClubWebsiteFormSchedule />
 
       {/* Separator */}
       <div className="h-[2px] w-full bg-black/50"></div>

@@ -1,3 +1,5 @@
+import type { Schedule } from "./Schedule";
+
 export type WebsitePage = {
   id?: string;
   clubId: string;
@@ -9,6 +11,7 @@ export type WebsitePage = {
   ridersShowcase: RiderShowcase[];
   contact: Contact;
   heroImagePath?: string;
+  schedule?: Schedule;
 };
 
 export type Activity = {

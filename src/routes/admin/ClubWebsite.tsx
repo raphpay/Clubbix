@@ -29,6 +29,7 @@ const ClubWebsite = () => {
     facebookLink,
     activities,
     pricingPlans,
+    schedule,
     setIsEditing,
     setClubName,
     setHeroTitle,
@@ -91,6 +92,7 @@ const ClubWebsite = () => {
               facebook: facebookLink ?? "",
             },
           },
+          schedule: schedule,
         };
 
         const clubData = await clubCollection.read(currentClubId);
