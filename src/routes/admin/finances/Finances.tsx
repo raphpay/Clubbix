@@ -1,15 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
+import { Download, PencilLine } from "lucide-react";
 import { useEffect, useState } from "react";
+
 import ButtonPrimary from "../../../components/ButtonPrimary";
 import ButtonSecondary from "../../../components/ButtonSecondary";
 import Card from "../../../components/Card";
+
 import FirestoreService from "../../../lib/FirebaseService";
+import storageService from "../../../lib/StorageService";
 import { useClubStore } from "../../../stores/useClubStore";
 import {
   TreasuryStatus,
   TreasuryType,
   type Treasury,
 } from "../../../types/Treasury";
+
 import FinanceEntryModal from "./FinanceEntryModal";
 
 const Finances = () => {
@@ -158,6 +163,24 @@ const Finances = () => {
     }
   }
 
+  async function downloadReceipt(entry: Treasury) {
+    try {
+      if (!entry.documentPath) {
+        console.error("No receipt file associated with this entry.");
+        return;
+      }
+      const url = await storageService.getDownloadUrl(entry.documentPath);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "justificatif";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("Error downloading receipt:", error);
+    }
+  }
+
   useEffect(() => {
     calculateTotalBalance();
     calculateMonthlyBalance();
@@ -218,7 +241,7 @@ const Finances = () => {
               <th className="px-4 py-3">Statut</th>
               <th className="px-4 py-3">Catégorie</th>
               <th className="px-4 py-3">Date</th>
-              <th className="px-4 py-3 text-right">Actions</th>
+              <th className="px-4 py-3 text-center">Actions</th>
             </tr>
           </thead>
           <tbody className="text-sm">
@@ -238,13 +261,21 @@ const Finances = () => {
                   <td className="px-4 py-3  ">
                     {entry.date.toDate().toDateString()}
                   </td>
-                  <td className="px-4 py-3 text-right">
+                  <td className="px-4 py-3 text-center">
                     <button
                       onClick={() => displayModal(entry, true)}
-                      className="text-blue-500 font-semibold hover:underline"
+                      className="text-blue-500 cursor-pointer"
                     >
-                      Voir / Modifier →
+                      <PencilLine />
                     </button>
+                    {entry.documentPath && (
+                      <button
+                        onClick={() => downloadReceipt(entry)}
+                        className="text-blue-500 mx-2 cursor-pointer"
+                      >
+                        <Download />
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}
