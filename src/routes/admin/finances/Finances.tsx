@@ -46,41 +46,42 @@ const Finances = () => {
 
   function exportToCSV() {
     // Prepare the members data to include in the CSV
-    // const csvHeaders = [
-    //   "Nom",
-    //   "Email",
-    //   "Téléphone",
-    //   "Naissance",
-    //   "Rôle",
-    //   "Paiement",
-    // ];
-    // // Map over the filtered members and generate CSV rows
-    // const csvRows = filteredMembers.map((member) => [
-    //   `${member.firstName} ${member.lastName}`,
-    //   member.email,
-    //   member.phone,
-    //   new Date(member.birthDate).toLocaleDateString(),
-    //   member.role,
-    //   member.paid ? "Payé" : "Non payé",
-    // ]);
-    // // Combine headers and rows
-    // const csvContent = [
-    //   csvHeaders.join(","),
-    //   ...csvRows.map((row) => row.join(",")),
-    // ].join("\n");
-    // // Create a downloadable Blob for the CSV
-    // const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    // // Create a link and trigger a download
-    // const link = document.createElement("a");
-    // if (link.download !== undefined) {
-    //   const url = URL.createObjectURL(blob);
-    //   link.setAttribute("href", url);
-    //   link.setAttribute("download", "members.csv");
-    //   link.style.visibility = "hidden";
-    //   document.body.appendChild(link);
-    //   link.click();
-    //   document.body.removeChild(link);
-    // }
+    const csvHeaders = [
+      "Montant",
+      "Description",
+      "Statut",
+      "Catégorie",
+      "Date",
+    ];
+
+    if (treasuries) {
+      // Map over the filtered members and generate CSV rows
+      const csvRows = treasuries.map((entry) => [
+        entry.amount,
+        entry.label,
+        entry.status,
+        entry.category,
+        entry.date.toDate().toLocaleDateString(),
+      ]);
+      // Combine headers and rows
+      const csvContent = [
+        csvHeaders.join(","),
+        ...csvRows.map((row) => row.join(",")),
+      ].join("\n");
+      // Create a downloadable Blob for the CSV
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      // Create a link and trigger a download
+      const link = document.createElement("a");
+      if (link.download !== undefined) {
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", "members.csv");
+        link.style.visibility = "hidden";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    }
   }
 
   function calculateTotalBalance() {
@@ -172,7 +173,7 @@ const Finances = () => {
         {/* Search by name */}
         <input
           type="text"
-          placeholder="Rechercher par nom"
+          placeholder="Rechercher par description"
           className="p-3 border border-gray-300 rounded-md"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
@@ -201,6 +202,7 @@ const Finances = () => {
               <th className="px-4 py-3">Montant</th>
               <th className="px-4 py-3">Description</th>
               <th className="px-4 py-3">Statut</th>
+              <th className="px-4 py-3">Catégorie</th>
               <th className="px-4 py-3">Date</th>
               <th className="px-4 py-3 text-right">Actions</th>
             </tr>
@@ -218,6 +220,7 @@ const Finances = () => {
                   </td>
                   <td className="px-4 py-3 text-left">{entry.label}</td>
                   <td className="px-4 py-3  ">{entry.status}</td>
+                  <td className="px-4 py-3  ">{entry.category}</td>
                   <td className="px-4 py-3  ">
                     {entry.date.toDate().toDateString()}
                   </td>
