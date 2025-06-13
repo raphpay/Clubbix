@@ -5,6 +5,14 @@ import {
   getAuthErrorMessage,
   registerWithEmailAndPassword,
 } from "../services/auth";
+import {
+  checkClubNameExists,
+  createClub,
+  createUserProfile,
+  generateInviteCode,
+  joinClub,
+  uploadClubLogo,
+} from "../services/firestore";
 import { useRegistrationStore } from "../store/useRegistrationStore";
 import LabelInput from "./inputs/LabelInput";
 
@@ -15,14 +23,24 @@ const RegistrationForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
 
-  const validateInitialStep = () => {
+  const validateInitialStep = async () => {
     const newErrors: Record<string, string> = {};
-    if (role === "admin" && !formData.clubName) {
-      newErrors.clubName = "Club name is required";
+
+    if (role === "admin") {
+      if (!formData.clubName) {
+        newErrors.clubName = "Club name is required";
+      } else {
+        const exists = await checkClubNameExists(formData.clubName);
+        if (exists) {
+          newErrors.clubName = "This club name is already taken";
+        }
+      }
     }
+
     if (role === "member" && !formData.inviteCode) {
       newErrors.inviteCode = "Invite code is required";
     }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -43,9 +61,9 @@ const RegistrationForm = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleInitialSubmit = (e: React.FormEvent) => {
+  const handleInitialSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (validateInitialStep()) {
+    if (await validateInitialStep()) {
       setStep("details");
     }
   };
@@ -57,17 +75,72 @@ const RegistrationForm = () => {
     if (validateDetailsStep()) {
       setIsLoading(true);
       try {
+        // Register user with Firebase Auth
         const userCredential = await registerWithEmailAndPassword(
           formData.email,
           formData.password
         );
+        const userId = userCredential.user.uid;
 
-        console.log("Registration successful:", userCredential.user.uid);
+        if (role === "admin") {
+          // Upload club logo if provided
+          let logoUrl: string | undefined;
+          if (formData.logo) {
+            logoUrl = await uploadClubLogo(
+              formData.clubName?.toLowerCase().replace(/\s+/g, "-") ??
+                "no-name",
+              formData.logo
+            );
+          }
 
-        // TODO: Create a user profile in your database with the additional info
-        // TODO: Handle club creation for admin or club joining for member
-        // TODO: Reset form and show success message
-        // TODO: Redirect to a success page or dashboard
+          // Create club
+          const clubId = await createClub({
+            name: formData.clubName!,
+            logoUrl,
+            createdBy: userId,
+            inviteCode: generateInviteCode(),
+            members: [userId],
+            formattedName: formData
+              .clubName!.toLowerCase()
+              .replace(/\s+/g, "-"),
+          });
+
+          // Create user profile
+          await createUserProfile(userId, {
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            email: formData.email,
+            role: "admin",
+            clubId,
+          });
+        } else {
+          // Join existing club
+          const clubId = await joinClub(userId, formData.inviteCode!);
+
+          // Create user profile
+          await createUserProfile(userId, {
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            email: formData.email,
+            role: "member",
+            clubId,
+          });
+        }
+
+        // Reset form
+        setFormData({
+          clubName: "",
+          inviteCode: "",
+          firstName: "",
+          lastName: "",
+          email: "",
+          logo: null,
+          password: "",
+        });
+
+        // TODO: redirect
+        // TODO: Add navigation to success page or dashboard
+        console.log("Registration successful:", userId);
       } catch (error) {
         setAuthError(getAuthErrorMessage(error));
       } finally {
