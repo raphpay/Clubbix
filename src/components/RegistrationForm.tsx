@@ -1,6 +1,10 @@
 import { Switch } from "@headlessui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
+import {
+  getAuthErrorMessage,
+  registerWithEmailAndPassword,
+} from "../services/auth";
 import { useRegistrationStore } from "../store/useRegistrationStore";
 import LabelInput from "./inputs/LabelInput";
 
@@ -8,6 +12,8 @@ const RegistrationForm = () => {
   const { role, step, formData, setRole, setStep, setFormData } =
     useRegistrationStore();
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
 
   const validateInitialStep = () => {
     const newErrors: Record<string, string> = {};
@@ -44,11 +50,29 @@ const RegistrationForm = () => {
     }
   };
 
-  const handleDetailsSubmit = (e: React.FormEvent) => {
+  const handleDetailsSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setAuthError(null);
+
     if (validateDetailsStep()) {
-      // Handle final form submission
-      console.log("Form submitted:", formData);
+      setIsLoading(true);
+      try {
+        const userCredential = await registerWithEmailAndPassword(
+          formData.email,
+          formData.password
+        );
+
+        console.log("Registration successful:", userCredential.user.uid);
+
+        // TODO: Create a user profile in your database with the additional info
+        // TODO: Handle club creation for admin or club joining for member
+        // TODO: Reset form and show success message
+        // TODO: Redirect to a success page or dashboard
+      } catch (error) {
+        setAuthError(getAuthErrorMessage(error));
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -152,19 +176,33 @@ const RegistrationForm = () => {
           type="password"
         />
 
+        {authError && (
+          <div className="rounded-md bg-red-50 p-4">
+            <div className="flex">
+              <div className="ml-3">
+                <h3 className="text-sm font-medium text-red-800">
+                  {authError}
+                </h3>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="flex justify-between">
           <button
             type="button"
             onClick={() => setStep("initial")}
             className="py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            disabled={isLoading}
           >
             Back
           </button>
           <button
             type="submit"
-            className="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            className="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={isLoading}
           >
-            Register
+            {isLoading ? "Registering..." : "Register"}
           </button>
         </div>
       </form>
