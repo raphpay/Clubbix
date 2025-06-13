@@ -2,6 +2,7 @@ import { Switch } from "@headlessui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
 import { useRegistrationStore } from "../store/useRegistrationStore";
+import LabelInput from "./inputs/LabelInput";
 
 const RegistrationForm = () => {
   const { role, step, formData, setRole, setStep, setFormData } =
@@ -66,43 +67,19 @@ const RegistrationForm = () => {
     >
       <form onSubmit={handleInitialSubmit} className="space-y-6">
         {role === "admin" ? (
-          <div>
-            <label
-              htmlFor="clubName"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Club Name
-            </label>
-            <input
-              type="text"
-              id="clubName"
-              value={formData.clubName}
-              onChange={(e) => setFormData({ clubName: e.target.value })}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-1"
-            />
-            {errors.clubName && (
-              <p className="mt-1 text-sm text-red-600">{errors.clubName}</p>
-            )}
-          </div>
+          <LabelInput
+            label="Club Name"
+            value={formData.clubName || ""}
+            errors={errors.clubName}
+            onChange={(value) => setFormData({ clubName: value })}
+          />
         ) : (
-          <div>
-            <label
-              htmlFor="inviteCode"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Invite Code
-            </label>
-            <input
-              type="text"
-              id="inviteCode"
-              value={formData.inviteCode}
-              onChange={(e) => setFormData({ inviteCode: e.target.value })}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-1"
-            />
-            {errors.inviteCode && (
-              <p className="mt-1 text-sm text-red-600">{errors.inviteCode}</p>
-            )}
-          </div>
+          <LabelInput
+            label="Invite Code"
+            value={formData.inviteCode || ""}
+            errors={errors.inviteCode}
+            onChange={(value) => setFormData({ inviteCode: value })}
+          />
         )}
         <div>
           <button
@@ -144,82 +121,36 @@ const RegistrationForm = () => {
         )}
 
         <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label
-              htmlFor="firstName"
-              className="block text-sm font-medium text-gray-700"
-            >
-              First Name
-            </label>
-            <input
-              type="text"
-              id="firstName"
-              value={formData.firstName}
-              onChange={(e) => setFormData({ firstName: e.target.value })}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            />
-            {errors.firstName && (
-              <p className="mt-1 text-sm text-red-600">{errors.firstName}</p>
-            )}
-          </div>
-
-          <div>
-            <label
-              htmlFor="lastName"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Last Name
-            </label>
-            <input
-              type="text"
-              id="lastName"
-              value={formData.lastName}
-              onChange={(e) => setFormData({ lastName: e.target.value })}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            />
-            {errors.lastName && (
-              <p className="mt-1 text-sm text-red-600">{errors.lastName}</p>
-            )}
-          </div>
-        </div>
-
-        <div>
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            value={formData.email}
-            onChange={(e) => setFormData({ email: e.target.value })}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          <LabelInput
+            label="First Name"
+            value={formData.firstName || ""}
+            errors={errors.firstName}
+            onChange={(value) => setFormData({ firstName: value })}
           />
-          {errors.email && (
-            <p className="mt-1 text-sm text-red-600">{errors.email}</p>
-          )}
+
+          <LabelInput
+            label="Last Name"
+            value={formData.lastName || ""}
+            errors={errors.lastName}
+            onChange={(value) => setFormData({ lastName: value })}
+          />
         </div>
 
-        <div>
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Password
-          </label>
-          <input
-            type="password"
-            id="password"
-            value={formData.password}
-            onChange={(e) => setFormData({ password: e.target.value })}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-          />
-          {errors.password && (
-            <p className="mt-1 text-sm text-red-600">{errors.password}</p>
-          )}
-        </div>
+        <LabelInput
+          label="Email"
+          value={formData.email || ""}
+          errors={errors.email}
+          onChange={(value) => setFormData({ email: value })}
+          type="email"
+        />
+
+        <LabelInput
+          label="Password"
+          value={formData.password || ""}
+          errors={errors.password}
+          onChange={(value) => setFormData({ password: value })}
+          type="password"
+        />
 
         <div className="flex justify-between">
           <button
