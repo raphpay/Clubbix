@@ -1,6 +1,7 @@
 import { Switch } from "@headlessui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "../components/ui/Button";
 import {
   getAuthErrorMessage,
@@ -282,6 +283,15 @@ const RegistrationForm = () => {
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
           Create your account
         </h2>
+        <p className="mt-2 text-center text-sm text-gray-600">
+          Or{" "}
+          <Link
+            to="/login"
+            className="font-medium text-indigo-600 hover:text-indigo-500"
+          >
+            sign in to your existing account
+          </Link>
+        </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
