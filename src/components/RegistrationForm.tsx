@@ -1,6 +1,7 @@
 import { Switch } from "@headlessui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
+import { Button } from "../components/ui/Button";
 import {
   getAuthErrorMessage,
   registerWithEmailAndPassword,
@@ -179,12 +180,9 @@ const RegistrationForm = () => {
           />
         )}
         <div>
-          <button
-            type="submit"
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
+          <Button type="submit" variant="primary" fullWidth>
             Continue
-          </button>
+          </Button>
         </div>
       </form>
     </motion.div>
@@ -262,21 +260,17 @@ const RegistrationForm = () => {
         )}
 
         <div className="flex justify-between">
-          <button
-            type="button"
+          <Button
             onClick={() => setStep("initial")}
-            className="py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            variant="outline"
+            size="lg"
             disabled={isLoading}
           >
             Back
-          </button>
-          <button
-            type="submit"
-            className="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={isLoading}
-          >
+          </Button>
+          <Button variant="primary" size="lg" disabled={isLoading}>
             {isLoading ? "Registering..." : "Register"}
-          </button>
+          </Button>
         </div>
       </form>
     </motion.div>
