@@ -1,23 +1,46 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "../components/ui/Button";
+import { logout } from "../services/auth";
 
 const AdminDashboard: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate("/login");
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100">
-      <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-        <div className="mt-6">
-          <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-            <div className="px-4 py-5 sm:p-6">
-              <h3 className="text-lg leading-6 font-medium text-gray-900">
-                Welcome to your admin dashboard
-              </h3>
-              <div className="mt-2 max-w-xl text-sm text-gray-500">
-                <p>Manage your clubs and members from here.</p>
-              </div>
+      <nav className="bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between h-16">
+            <div className="flex items-center">
+              <h1 className="text-xl font-semibold">Admin Dashboard</h1>
+            </div>
+            <div className="flex items-center">
+              <Button variant="outline" onClick={handleLogout}>
+                Logout
+              </Button>
             </div>
           </div>
         </div>
-      </div>
+      </nav>
+
+      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <div className="px-4 py-6 sm:px-0">
+          <div className="border-4 border-dashed border-gray-200 rounded-lg h-96">
+            <p className="text-center mt-8 text-gray-500">
+              Welcome to your admin dashboard
+            </p>
+          </div>
+        </div>
+      </main>
     </div>
   );
 };

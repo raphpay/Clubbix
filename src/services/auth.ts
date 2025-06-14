@@ -1,9 +1,12 @@
 import {
   AuthError,
   createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
   UserCredential,
 } from "firebase/auth";
-import { auth } from "../config/firebase";
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "../config/firebase";
 
 export interface AuthErrorResponse {
   code: string;
@@ -20,8 +23,12 @@ export const getAuthErrorMessage = (error: AuthError): string => {
       return "Email/password accounts are not enabled. Please contact support.";
     case "auth/weak-password":
       return "Password is too weak. Please use a stronger password (at least 6 characters).";
+    case "auth/user-not-found":
+      return "No account found with this email. Please check your email or sign up.";
+    case "auth/wrong-password":
+      return "Incorrect password. Please try again.";
     default:
-      return "An error occurred during registration. Please try again.";
+      return "An error occurred. Please try again.";
   }
 };
 
@@ -39,4 +46,38 @@ export const registerWithEmailAndPassword = async (
   } catch (error) {
     throw error as AuthError;
   }
+};
+
+export const loginWithEmailAndPassword = async (
+  email: string,
+  password: string
+): Promise<UserCredential> => {
+  try {
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    return userCredential;
+  } catch (error) {
+    throw error as AuthError;
+  }
+};
+
+export const logout = async (): Promise<void> => {
+  try {
+    await signOut(auth);
+  } catch (error) {
+    throw error as AuthError;
+  }
+};
+
+export const getUserRole = async (
+  userId: string
+): Promise<"admin" | "member"> => {
+  const userDoc = await getDoc(doc(db, "users", userId));
+  if (!userDoc.exists()) {
+    throw new Error("User not found");
+  }
+  return userDoc.data().role;
 };

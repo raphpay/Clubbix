@@ -1,7 +1,7 @@
 import { Switch } from "@headlessui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/Button";
 import {
   getAuthErrorMessage,
@@ -24,6 +24,7 @@ const RegistrationForm = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const validateInitialStep = async () => {
     const newErrors: Record<string, string> = {};
@@ -140,9 +141,8 @@ const RegistrationForm = () => {
           password: "",
         });
 
-        // TODO: redirect
-        // TODO: Add navigation to success page or dashboard
-        console.log("Registration successful:", userId);
+        // Redirect to dashboard
+        navigate(role === "admin" ? "/admin/dashboard" : "/member/dashboard");
       } catch (error) {
         setAuthError(getAuthErrorMessage(error));
       } finally {
