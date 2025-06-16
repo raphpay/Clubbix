@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Footer } from "../components/layout/Footer";
 import { Navbar } from "../components/layout/Navbar";
 import { Section } from "../components/layout/Section";
+import { SEO } from "../components/layout/SEO";
 
 const LandingPage: React.FC = () => {
   const navItems = [
@@ -74,6 +75,12 @@ const LandingPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEO
+        title="Clubbix - All-in-one platform for club management"
+        description="Create and manage your club's digital presence with Clubbix. Build beautiful websites, manage members, and grow your community with our all-in-one platform."
+        image="/images/og-image.jpg"
+        url="https://clubbix.io"
+      />
       <Navbar items={navItems} logo={logo} ctaButtons={ctaButtons} />
 
       {/* Hero Section */}
