@@ -1,8 +1,8 @@
-import { Menu, User } from "lucide-react";
+import { Menu } from "lucide-react";
 import React from "react";
 import { useClub } from "../../hooks/useClub";
+import { ProfileButton } from "../common/ProfileButton";
 import LanguageSwitcher from "../LanguageSwitcher";
-import { Logo } from "../ui/Logo";
 
 interface DashboardNavbarProps {
   onMenuClick: () => void;
@@ -22,10 +22,10 @@ const DashboardNavbar: React.FC<DashboardNavbarProps> = ({ onMenuClick }) => {
             >
               <Menu className="w-6 h-6" />
             </button>
-            <div className="flex justify-center items-center">
-              <Logo />
+            <div className="flex items-center">
+              <img src="/logo.png" alt="Clubbix" className="h-8 mr-3" />
               {club && (
-                <span className="text-lg font-semibold text-gray-800 pl-2">
+                <span className="text-lg font-semibold text-gray-800">
                   {club.name}
                 </span>
               )}
@@ -34,9 +34,7 @@ const DashboardNavbar: React.FC<DashboardNavbarProps> = ({ onMenuClick }) => {
 
           <div className="flex items-center space-x-4">
             <LanguageSwitcher />
-            <button className="flex items-center p-2 text-gray-600 rounded-lg hover:bg-gray-100">
-              <User className="w-6 h-6" />
-            </button>
+            <ProfileButton />
           </div>
         </div>
       </div>
