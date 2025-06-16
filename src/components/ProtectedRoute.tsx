@@ -11,14 +11,14 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
   requiredRole,
 }) => {
-  const { isAuthenticated, userRole } = useAuth();
+  const { user } = useAuth();
   const location = useLocation();
 
-  if (!isAuthenticated) {
+  if (!user) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  if (requiredRole && userRole !== requiredRole) {
+  if (requiredRole && user.role !== requiredRole) {
     return <Navigate to="/" replace />;
   }
 

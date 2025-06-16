@@ -6,8 +6,10 @@ import {
   BrowserRouter as Router,
   Routes,
 } from "react-router-dom";
+import DashboardLayout from "./components/layout/DashboardLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider, useAuth } from "./context/AuthContext";
+import { ClubProvider } from "./contexts/ClubContext";
 
 // Pages
 import RegistrationForm from "./components/RegistrationForm";
@@ -20,54 +22,65 @@ import NotFoundPage from "./pages/NotFoundPage";
 
 // Component to handle authenticated user redirects
 const AuthenticatedRedirect: React.FC = () => {
-  const { isAuthenticated, userRole } = useAuth();
+  const { user } = useAuth();
 
-  if (!isAuthenticated) {
+  if (!user) {
     return <Navigate to="/" replace />;
   }
 
-  return <Navigate to={`/${userRole}/dashboard`} replace />;
+  return (
+    <Navigate
+      to={`/${user.role === "admin" ? "admin" : "member"}/dashboard`}
+      replace
+    />
+  );
 };
 
 const App: React.FC = () => {
   return (
     <HelmetProvider>
       <AuthProvider>
-        <Router>
-          <Routes>
-            {/* Public routes */}
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<RegistrationForm />} />
+        <ClubProvider>
+          <Router>
+            <Routes>
+              {/* Public routes */}
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/signup" element={<RegistrationForm />} />
 
-            {/* Protected routes */}
-            <Route
-              path="/admin/dashboard"
-              element={
-                <ProtectedRoute requiredRole="admin">
-                  <AdminDashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/member/dashboard"
-              element={
-                <ProtectedRoute requiredRole="member">
-                  <MemberDashboard />
-                </ProtectedRoute>
-              }
-            />
+              {/* Protected routes */}
+              <Route
+                path="/admin/dashboard/*"
+                element={
+                  <ProtectedRoute requiredRole="admin">
+                    <DashboardLayout>
+                      <AdminDashboard />
+                    </DashboardLayout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/member/dashboard/*"
+                element={
+                  <ProtectedRoute requiredRole="member">
+                    <DashboardLayout>
+                      <MemberDashboard />
+                    </DashboardLayout>
+                  </ProtectedRoute>
+                }
+              />
 
-            {/* Club routes */}
-            <Route path="/clubs/:slug" element={<ClubPage />} />
+              {/* Club routes */}
+              <Route path="/clubs/:slug" element={<ClubPage />} />
 
-            {/* Auth redirect */}
-            <Route path="/dashboard" element={<AuthenticatedRedirect />} />
+              {/* Auth redirect */}
+              <Route path="/dashboard" element={<AuthenticatedRedirect />} />
 
-            {/* 404 route */}
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
-        </Router>
+              {/* 404 route */}
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </Router>
+        </ClubProvider>
       </AuthProvider>
     </HelmetProvider>
   );

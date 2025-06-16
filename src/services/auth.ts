@@ -5,13 +5,25 @@ import {
   signOut,
   UserCredential,
 } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, Timestamp } from "firebase/firestore";
 import { auth, db } from "../config/firebase";
 
 export interface AuthErrorResponse {
   code: string;
   message: string;
 }
+
+export interface User {
+  uid: string;
+  email: string;
+  role: UserRole;
+  clubId: string;
+  firstName: string;
+  lastName: string;
+  createdAt: Timestamp;
+}
+
+export type UserRole = "member" | "admin";
 
 export const getAuthErrorMessage = (error: AuthError): string => {
   switch (error.code) {
@@ -72,6 +84,7 @@ export const logout = async (): Promise<void> => {
   }
 };
 
+// TODO: Remove this function
 export const getUserRole = async (
   userId: string
 ): Promise<"admin" | "member"> => {
@@ -80,4 +93,12 @@ export const getUserRole = async (
     throw new Error("User not found");
   }
   return userDoc.data().role;
+};
+
+export const getUser = async (userId: string): Promise<User> => {
+  const userDoc = await getDoc(doc(db, "users", userId));
+  if (!userDoc.exists()) {
+    throw new Error("User not found");
+  }
+  return userDoc.data() as User;
 };

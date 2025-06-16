@@ -1,0 +1,56 @@
+import { Calendar, Dumbbell, Users, Wallet } from "lucide-react";
+import React from "react";
+import { NavLink } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+
+interface SidebarProps {
+  isOpen: boolean;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
+  const { user } = useAuth();
+  const isAdmin = user?.role === "admin";
+
+  const adminNavItems = [
+    { path: "/dashboard/members", icon: Users, label: "Members" },
+    { path: "/dashboard/treasury", icon: Wallet, label: "Treasury" },
+    { path: "/dashboard/events", icon: Calendar, label: "Events" },
+  ];
+
+  const memberNavItems = [
+    { path: "/dashboard/trainings", icon: Dumbbell, label: "Trainings" },
+    { path: "/dashboard/events", icon: Calendar, label: "Events" },
+  ];
+
+  const navItems = isAdmin ? adminNavItems : memberNavItems;
+
+  return (
+    <aside
+      className={`fixed left-0 top-16 z-40 h-[calc(100vh-64px)] w-64 bg-white border-r border-gray-200 transition-transform duration-300 transform ${
+        isOpen ? "translate-x-0" : "-translate-x-full"
+      } lg:translate-x-0`}
+    >
+      <div className="h-full px-3 py-4 overflow-y-auto">
+        <ul className="space-y-2">
+          {navItems.map((item) => (
+            <li key={item.path}>
+              <NavLink
+                to={item.path}
+                className={({ isActive }) =>
+                  `flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 ${
+                    isActive ? "bg-gray-100" : ""
+                  }`
+                }
+              >
+                <item.icon className="w-6 h-6 mr-3" />
+                <span>{item.label}</span>
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </aside>
+  );
+};
+
+export default Sidebar;

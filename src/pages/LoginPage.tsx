@@ -5,7 +5,7 @@ import { Button } from "../components/ui/Button";
 import { useAuth } from "../context/AuthContext";
 import {
   getAuthErrorMessage,
-  getUserRole,
+  getUser,
   loginWithEmailAndPassword,
 } from "../services/auth";
 
@@ -17,8 +17,8 @@ const LoginPage: React.FC = () => {
     password: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [isLoading, setIsLoading] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,24 +38,22 @@ const LoginPage: React.FC = () => {
       return;
     }
 
-    setIsLoading(true);
+    setLoading(true);
     try {
       const userCredential = await loginWithEmailAndPassword(
         formData.email,
         formData.password
       );
 
-      console.log("userCredential", userCredential);
-
-      // Get user role and redirect accordingly
-      const role = await getUserRole(userCredential.user.uid);
-      login(role);
-      navigate(role === "admin" ? "/admin/dashboard" : "/member/dashboard");
+      // Get user and redirect accordingly
+      const user = await getUser(userCredential.user.uid);
+      login(user);
+      navigate(`/${user.role === "admin" ? "admin" : "member"}/dashboard`);
     } catch (error) {
       console.log("error", error);
       setAuthError(getAuthErrorMessage(error));
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
@@ -114,9 +112,9 @@ const LoginPage: React.FC = () => {
                 type="submit"
                 variant="primary"
                 fullWidth
-                disabled={isLoading}
+                disabled={loading}
               >
-                {isLoading ? "Signing in..." : "Sign in"}
+                {loading ? "Signing in..." : "Sign in"}
               </Button>
             </div>
           </form>
