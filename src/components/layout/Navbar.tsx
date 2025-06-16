@@ -17,12 +17,14 @@ interface NavbarProps {
   items: NavItem[];
   logo?: React.ReactNode;
   ctaButtons?: CTAButton[];
+  children?: React.ReactNode;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   items,
   logo,
   ctaButtons = [],
+  children,
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -57,18 +59,21 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
           </div>
 
-          {/* CTA Buttons */}
-          {ctaButtons.length > 0 && (
-            <div className="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-4">
-              {ctaButtons.map((cta, index) => (
-                <Link key={index} to={cta.href}>
-                  <Button variant={cta.variant || "primary"} size="sm">
-                    {cta.label}
-                  </Button>
-                </Link>
-              ))}
-            </div>
-          )}
+          {/* CTA Buttons and Additional Content */}
+          <div className="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-4">
+            {children}
+            {ctaButtons.length > 0 && (
+              <>
+                {ctaButtons.map((cta, index) => (
+                  <Link key={index} to={cta.href}>
+                    <Button variant={cta.variant || "primary"} size="sm">
+                      {cta.label}
+                    </Button>
+                  </Link>
+                ))}
+              </>
+            )}
+          </div>
 
           {/* Mobile menu button */}
           <div className="flex items-center sm:hidden">
@@ -130,6 +135,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 {item.label}
               </button>
             ))}
+            {children && <div className="mt-4 px-4">{children}</div>}
             {ctaButtons.length > 0 && (
               <div className="mt-4 px-4 space-y-3">
                 {ctaButtons.map((cta, index) => (

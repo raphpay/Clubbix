@@ -1,53 +1,60 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import LanguageSwitcher from "../components/LanguageSwitcher";
 import { Footer } from "../components/layout/Footer";
 import { Navbar } from "../components/layout/Navbar";
 import { Section } from "../components/layout/Section";
 import { SEO } from "../components/layout/SEO";
 
 const LandingPage: React.FC = () => {
+  const { t } = useTranslation("landing");
+
   const navItems = [
-    { label: "Features", href: "#features" },
-    { label: "Pricing", href: "#pricing" },
-    { label: "Testimonials", href: "#testimonials" },
-    { label: "FAQ", href: "#faq" },
+    { label: t("nav.features"), href: "#features" },
+    { label: t("nav.pricing"), href: "#pricing" },
+    { label: t("nav.testimonials"), href: "#testimonials" },
+    { label: t("nav.faq"), href: "#faq" },
   ];
 
   const ctaButtons = [
-    { label: "Login", href: "/login", variant: "outline" as const },
-    { label: "Sign Up", href: "/signup", variant: "primary" as const },
+    { label: t("cta.login"), href: "/login", variant: "outline" as const },
+    { label: t("cta.signup"), href: "/signup", variant: "primary" as const },
   ];
 
   const logo = <h1 className="text-2xl font-bold text-indigo-600">Clubbix</h1>;
 
   const footerSections = [
     {
-      title: "Product",
+      title: t("footer.sections.product.title"),
       links: [
-        { label: "Features", href: "#features" },
-        { label: "Pricing", href: "#pricing" },
-        { label: "Book a Demo", href: "/demo" },
+        {
+          label: t("footer.sections.product.links.features"),
+          href: "#features",
+        },
+        { label: t("footer.sections.product.links.pricing"), href: "#pricing" },
+        { label: t("footer.sections.product.links.demo"), href: "/demo" },
       ],
     },
     {
-      title: "Support",
+      title: t("footer.sections.support.title"),
       links: [
-        { label: "Help Center", href: "/help" },
-        { label: "Contact Us", href: "/contact" },
+        { label: t("footer.sections.support.links.help"), href: "/help" },
+        { label: t("footer.sections.support.links.contact"), href: "/contact" },
       ],
     },
     {
-      title: "Legal",
+      title: t("footer.sections.legal.title"),
       links: [
-        { label: "Privacy Policy", href: "/privacy" },
-        { label: "Terms of Service", href: "/terms" },
+        { label: t("footer.sections.legal.links.privacy"), href: "/privacy" },
+        { label: t("footer.sections.legal.links.terms"), href: "/terms" },
       ],
     },
     {
-      title: "Company",
+      title: t("footer.sections.company.title"),
       links: [
-        { label: "About Us", href: "/about" },
-        { label: "Blog", href: "/blog" },
+        { label: t("footer.sections.company.links.about"), href: "/about" },
+        { label: t("footer.sections.company.links.blog"), href: "/blog" },
       ],
     },
   ];
@@ -81,20 +88,21 @@ const LandingPage: React.FC = () => {
         image="/images/og-image.jpg"
         url="https://clubbix.io"
       />
-      <Navbar items={navItems} logo={logo} ctaButtons={ctaButtons} />
+      <Navbar items={navItems} logo={logo} ctaButtons={ctaButtons}>
+        <LanguageSwitcher />
+      </Navbar>
 
       {/* Hero Section */}
       <Section background="white" className="pt-20">
         <div className="text-center">
           <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-            <span className="block">Create and manage</span>
+            <span className="block">{t("hero.title.line1")}</span>
             <span className="block text-indigo-600">
-              your club's digital presence
+              {t("hero.title.line2")}
             </span>
           </h1>
           <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
-            All-in-one platform for clubs to build their website, manage
-            members, and grow their community.
+            {t("hero.subtitle")}
           </p>
           <div className="mt-5 sm:mt-8 sm:flex sm:justify-center">
             <div className="rounded-md shadow">
@@ -102,7 +110,7 @@ const LandingPage: React.FC = () => {
                 to="/signup"
                 className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"
               >
-                Create Your Club Site
+                {t("hero.buttons.createSite")}
               </Link>
             </div>
             <div className="mt-3 sm:mt-0 sm:ml-3">
@@ -110,7 +118,7 @@ const LandingPage: React.FC = () => {
                 to="/demo"
                 className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10"
               >
-                Book a Demo
+                {t("hero.buttons.bookDemo")}
               </Link>
             </div>
           </div>
@@ -120,31 +128,27 @@ const LandingPage: React.FC = () => {
       {/* Features Section */}
       <Section
         id="features"
-        title="Everything you need to run your club"
-        subtitle="Powerful features to help you manage and grow your club"
+        title={t("features.title")}
+        subtitle={t("features.subtitle")}
         background="gray"
       >
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
           {[
             {
-              title: "Custom Website Builder",
-              description:
-                "Create a beautiful, responsive website for your club in minutes.",
+              title: t("features.items.website.title"),
+              description: t("features.items.website.description"),
             },
             {
-              title: "Member Management",
-              description:
-                "Easily manage members, track dues, and handle communications.",
+              title: t("features.items.members.title"),
+              description: t("features.items.members.description"),
             },
             {
-              title: "Event Calendar",
-              description:
-                "Schedule and promote events with built-in RSVP functionality.",
+              title: t("features.items.calendar.title"),
+              description: t("features.items.calendar.description"),
             },
             {
-              title: "Payment Processing",
-              description:
-                "Accept membership dues and event payments securely online.",
+              title: t("features.items.payments.title"),
+              description: t("features.items.payments.description"),
             },
           ].map((feature) => (
             <div
@@ -165,32 +169,29 @@ const LandingPage: React.FC = () => {
       {/* Pricing Section */}
       <Section
         id="pricing"
-        title="Simple, transparent pricing"
-        subtitle="Choose the plan that's right for your club"
+        title={t("pricing.title")}
+        subtitle={t("pricing.subtitle")}
         background="white"
       >
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:max-w-4xl lg:mx-auto">
           {[
             {
-              name: "Starter",
-              price: "$29",
-              features: [
-                "Up to 50 members",
-                "Basic website builder",
-                "Event calendar",
-                "Email support",
-              ],
+              name: t("pricing.plans.starter.name"),
+              price: t("pricing.plans.starter.price"),
+              period: t("pricing.plans.starter.period"),
+              features: t("pricing.plans.starter.features", {
+                returnObjects: true,
+              }) as string[],
+              cta: t("pricing.plans.starter.cta"),
             },
             {
-              name: "Professional",
-              price: "$79",
-              features: [
-                "Up to 200 members",
-                "Advanced website builder",
-                "Member management",
-                "Payment processing",
-                "Priority support",
-              ],
+              name: t("pricing.plans.professional.name"),
+              price: t("pricing.plans.professional.price"),
+              period: t("pricing.plans.professional.period"),
+              features: t("pricing.plans.professional.features", {
+                returnObjects: true,
+              }) as string[],
+              cta: t("pricing.plans.professional.cta"),
             },
           ].map((plan) => (
             <div
@@ -206,19 +207,19 @@ const LandingPage: React.FC = () => {
                     {plan.price}
                   </span>
                   <span className="text-base font-medium text-gray-500">
-                    /month
+                    {plan.period}
                   </span>
                 </p>
                 <Link
                   to="/signup"
                   className="mt-8 block w-full bg-indigo-600 border border-transparent rounded-md py-2 text-sm font-semibold text-white text-center hover:bg-indigo-700"
                 >
-                  Get started
+                  {plan.cta}
                 </Link>
               </div>
               <div className="pt-6 pb-8 px-6">
                 <ul className="space-y-4">
-                  {plan.features.map((feature) => (
+                  {plan.features.map((feature: string) => (
                     <li key={feature} className="flex items-start">
                       <div className="flex-shrink-0">
                         <svg
@@ -248,28 +249,25 @@ const LandingPage: React.FC = () => {
       {/* Testimonials Section */}
       <Section
         id="testimonials"
-        title="Trusted by clubs worldwide"
+        title={t("testimonials.title")}
         background="gray"
       >
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {[
             {
-              quote:
-                "Clubbix has transformed how we manage our club. The website builder is intuitive and the member management features are exactly what we needed.",
-              author: "Sarah Johnson",
-              role: "Club President",
+              quote: t("testimonials.items.testimonial1.quote"),
+              author: t("testimonials.items.testimonial1.author"),
+              role: t("testimonials.items.testimonial1.role"),
             },
             {
-              quote:
-                "The event calendar and RSVP system has made organizing our club activities so much easier. Highly recommended!",
-              author: "Michael Chen",
-              role: "Event Coordinator",
+              quote: t("testimonials.items.testimonial2.quote"),
+              author: t("testimonials.items.testimonial2.author"),
+              role: t("testimonials.items.testimonial2.role"),
             },
             {
-              quote:
-                "Our membership has grown by 40% since we started using Clubbix. The platform is perfect for clubs of any size.",
-              author: "Emily Rodriguez",
-              role: "Membership Director",
+              quote: t("testimonials.items.testimonial3.quote"),
+              author: t("testimonials.items.testimonial3.author"),
+              role: t("testimonials.items.testimonial3.role"),
             },
           ].map((testimonial) => (
             <div
@@ -289,28 +287,24 @@ const LandingPage: React.FC = () => {
       </Section>
 
       {/* FAQ Section */}
-      <Section id="faq" title="Frequently Asked Questions" background="white">
+      <Section id="faq" title={t("faq.title")} background="white">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
           {[
             {
-              question: "How easy is it to get started?",
-              answer:
-                "Getting started is simple! Sign up, choose a template, and customize it to match your club's branding. You can have a professional website up and running in under an hour.",
+              question: t("faq.items.start.question"),
+              answer: t("faq.items.start.answer"),
             },
             {
-              question: "Can I try before I buy?",
-              answer:
-                "Yes! We offer a 14-day free trial with full access to all features. No credit card required.",
+              question: t("faq.items.trial.question"),
+              answer: t("faq.items.trial.answer"),
             },
             {
-              question: "What kind of support do you offer?",
-              answer:
-                "We provide email support for all plans, with priority support for Professional plan subscribers. We also have an extensive knowledge base and video tutorials.",
+              question: t("faq.items.support.question"),
+              answer: t("faq.items.support.answer"),
             },
             {
-              question: "Can I upgrade or downgrade my plan?",
-              answer:
-                "Yes, you can change your plan at any time. Changes will be reflected in your next billing cycle.",
+              question: t("faq.items.upgrade.question"),
+              answer: t("faq.items.upgrade.answer"),
             },
           ].map((faq) => (
             <div key={faq.question}>
@@ -328,7 +322,7 @@ const LandingPage: React.FC = () => {
         sections={footerSections}
         logo={logo}
         socialLinks={socialLinks}
-        copyright={`© ${new Date().getFullYear()} Clubbix. All rights reserved.`}
+        copyright={t("footer.copyright", { year: new Date().getFullYear() })}
       />
     </div>
   );
