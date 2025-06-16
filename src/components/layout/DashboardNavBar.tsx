@@ -2,6 +2,7 @@ import { Menu, User } from "lucide-react";
 import React from "react";
 import { useClub } from "../../hooks/useClub";
 import LanguageSwitcher from "../LanguageSwitcher";
+import { Logo } from "../ui/Logo";
 
 interface DashboardNavbarProps {
   onMenuClick: () => void;
@@ -21,10 +22,10 @@ const DashboardNavbar: React.FC<DashboardNavbarProps> = ({ onMenuClick }) => {
             >
               <Menu className="w-6 h-6" />
             </button>
-            <div className="flex items-center">
-              <img src="/logo.png" alt="Clubbix" className="h-8 mr-3" />
+            <div className="flex justify-center items-center">
+              <Logo />
               {club && (
-                <span className="text-lg font-semibold text-gray-800">
+                <span className="text-lg font-semibold text-gray-800 pl-2">
                   {club.name}
                 </span>
               )}
