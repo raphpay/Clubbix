@@ -12,14 +12,14 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
   const isAdmin = user?.role === "admin";
 
   const adminNavItems = [
-    { path: "/dashboard/members", icon: Users, label: "Members" },
-    { path: "/dashboard/treasury", icon: Wallet, label: "Treasury" },
-    { path: "/dashboard/events", icon: Calendar, label: "Events" },
+    { path: "/admin/dashboard/members", icon: Users, label: "Members" },
+    { path: "/admin/dashboard/treasury", icon: Wallet, label: "Treasury" },
+    { path: "/admin/dashboard/events", icon: Calendar, label: "Events" },
   ];
 
   const memberNavItems = [
-    { path: "/dashboard/trainings", icon: Dumbbell, label: "Trainings" },
-    { path: "/dashboard/events", icon: Calendar, label: "Events" },
+    { path: "/member/dashboard/trainings", icon: Dumbbell, label: "Trainings" },
+    { path: "/member/dashboard/events", icon: Calendar, label: "Events" },
   ];
 
   const navItems = isAdmin ? adminNavItems : memberNavItems;

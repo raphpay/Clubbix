@@ -15,10 +15,13 @@ import { ClubProvider } from "./contexts/ClubContext";
 import RegistrationForm from "./components/RegistrationForm";
 import AdminDashboard from "./pages/AdminDashboard";
 import ClubPage from "./pages/ClubPage";
+import EventsPage from "./pages/EventsPage";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import MemberDashboard from "./pages/MemberDashboard";
+import MembersPage from "./pages/MembersPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import TreasuryPage from "./pages/TreasuryPage";
 
 // Component to handle authenticated user redirects
 const AuthenticatedRedirect: React.FC = () => {
@@ -50,15 +53,19 @@ const App: React.FC = () => {
 
               {/* Protected routes */}
               <Route
-                path="/admin/dashboard/*"
+                path="/admin/dashboard"
                 element={
                   <ProtectedRoute requiredRole="admin">
-                    <DashboardLayout>
-                      <AdminDashboard />
-                    </DashboardLayout>
+                    <DashboardLayout />
                   </ProtectedRoute>
                 }
-              />
+              >
+                <Route index element={<AdminDashboard />} />
+                <Route path="treasury" element={<TreasuryPage />} />
+                <Route path="members" element={<MembersPage />} />
+                <Route path="events" element={<EventsPage />} />
+              </Route>
+
               <Route
                 path="/member/dashboard/*"
                 element={
