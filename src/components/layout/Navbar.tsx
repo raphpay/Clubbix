@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "../ui/Button";
 
 interface NavItem {
@@ -18,8 +19,17 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ items, logo, cta }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const handleNavClick = (href: string) => {
+    if (href.startsWith("#")) {
+      const element = document.getElementById(href.substring(1));
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  };
+
   return (
-    <nav className="bg-white shadow-sm">
+    <nav className="bg-white shadow-sm fixed w-full top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex">
@@ -29,13 +39,13 @@ export const Navbar: React.FC<NavbarProps> = ({ items, logo, cta }) => {
             {/* Desktop Navigation */}
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
               {items.map((item) => (
-                <a
+                <button
                   key={item.href}
-                  href={item.href}
+                  onClick={() => handleNavClick(item.href)}
                   className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900 hover:text-blue-600"
                 >
                   {item.label}
-                </a>
+                </button>
               ))}
             </div>
           </div>
@@ -43,9 +53,11 @@ export const Navbar: React.FC<NavbarProps> = ({ items, logo, cta }) => {
           {/* CTA Button */}
           {cta && (
             <div className="hidden sm:ml-6 sm:flex sm:items-center">
-              <Button variant="primary" size="sm">
-                {cta.label}
-              </Button>
+              <Link to={cta.href}>
+                <Button variant="primary" size="sm">
+                  {cta.label}
+                </Button>
+              </Link>
             </div>
           )}
 
@@ -98,19 +110,24 @@ export const Navbar: React.FC<NavbarProps> = ({ items, logo, cta }) => {
         <div className="sm:hidden">
           <div className="pt-2 pb-3 space-y-1">
             {items.map((item) => (
-              <a
+              <button
                 key={item.href}
-                href={item.href}
-                className="block pl-3 pr-4 py-2 text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50"
+                onClick={() => {
+                  handleNavClick(item.href);
+                  setIsMenuOpen(false);
+                }}
+                className="block w-full text-left pl-3 pr-4 py-2 text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50"
               >
                 {item.label}
-              </a>
+              </button>
             ))}
             {cta && (
               <div className="mt-4 px-4">
-                <Button variant="primary" fullWidth>
-                  {cta.label}
-                </Button>
+                <Link to={cta.href}>
+                  <Button variant="primary" fullWidth>
+                    {cta.label}
+                  </Button>
+                </Link>
               </div>
             )}
           </div>

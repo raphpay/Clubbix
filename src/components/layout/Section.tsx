@@ -8,6 +8,7 @@ interface SectionProps {
   className?: string;
   background?: "white" | "gray" | "primary";
   fullWidth?: boolean;
+  id?: string;
 }
 
 const getBackgroundClasses = (
@@ -30,12 +31,16 @@ export const Section: React.FC<SectionProps> = ({
   className = "",
   background = "white",
   fullWidth = false,
+  id,
 }) => {
   const backgroundClasses = getBackgroundClasses(background);
   const widthClasses = fullWidth ? "w-full" : "max-w-7xl mx-auto";
 
   return (
-    <section className={`py-12 sm:py-16 ${backgroundClasses} ${className}`}>
+    <section
+      id={id}
+      className={`py-12 sm:py-16 ${backgroundClasses} ${className}`}
+    >
       <div className={`px-4 sm:px-6 lg:px-8 ${widthClasses}`}>
         {(title || subtitle) && (
           <div className="text-center mb-12">

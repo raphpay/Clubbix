@@ -1,14 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Footer } from "../components/layout/Footer";
+import { Navbar } from "../components/layout/Navbar";
+import { Section } from "../components/layout/Section";
 
 const LandingPage: React.FC = () => {
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  };
+  const navItems = [
+    { label: "Features", href: "#features" },
+    { label: "Pricing", href: "#pricing" },
+    { label: "Testimonials", href: "#testimonials" },
+    { label: "FAQ", href: "#faq" },
+  ];
+
+  const logo = <h1 className="text-2xl font-bold text-indigo-600">Clubbix</h1>;
 
   const footerSections = [
     {
@@ -63,355 +67,261 @@ const LandingPage: React.FC = () => {
     },
   ];
 
-  const logo = <h1 className="text-2xl font-bold text-indigo-600">Clubbix</h1>;
-
   return (
     <div className="min-h-screen bg-white">
-      {/* Navigation */}
-      <nav className="bg-white shadow-sm fixed w-full top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16 items-center">
-            <div className="flex-shrink-0">
-              <h1 className="text-2xl font-bold text-indigo-600">Clubbix</h1>
+      <Navbar
+        items={navItems}
+        logo={logo}
+        cta={{ label: "Sign Up", href: "/signup" }}
+      />
+
+      {/* Hero Section */}
+      <Section background="white" className="pt-20">
+        <div className="text-center">
+          <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
+            <span className="block">Create and manage</span>
+            <span className="block text-indigo-600">
+              your club's digital presence
+            </span>
+          </h1>
+          <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
+            All-in-one platform for clubs to build their website, manage
+            members, and grow their community.
+          </p>
+          <div className="mt-5 sm:mt-8 sm:flex sm:justify-center">
+            <div className="rounded-md shadow">
+              <Link
+                to="/signup"
+                className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"
+              >
+                Create Your Club Site
+              </Link>
             </div>
-            <div className="hidden md:block">
-              <div className="ml-10 flex items-center space-x-4">
-                <button
-                  onClick={() => scrollToSection("features")}
-                  className="text-gray-700 hover:text-indigo-600 px-3 py-2"
-                >
-                  Features
-                </button>
-                <button
-                  onClick={() => scrollToSection("pricing")}
-                  className="text-gray-700 hover:text-indigo-600 px-3 py-2"
-                >
-                  Pricing
-                </button>
-                <button
-                  onClick={() => scrollToSection("testimonials")}
-                  className="text-gray-700 hover:text-indigo-600 px-3 py-2"
-                >
-                  Testimonials
-                </button>
-                <button
-                  onClick={() => scrollToSection("faq")}
-                  className="text-gray-700 hover:text-indigo-600 px-3 py-2"
-                >
-                  FAQ
-                </button>
-                <Link
-                  to="/login"
-                  className="text-gray-700 hover:text-indigo-600 px-3 py-2"
-                >
-                  Login
-                </Link>
+            <div className="mt-3 sm:mt-0 sm:ml-3">
+              <Link
+                to="/demo"
+                className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10"
+              >
+                Book a Demo
+              </Link>
+            </div>
+          </div>
+        </div>
+      </Section>
+
+      {/* Features Section */}
+      <Section
+        id="features"
+        title="Everything you need to run your club"
+        subtitle="Powerful features to help you manage and grow your club"
+        background="gray"
+      >
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+          {[
+            {
+              title: "Custom Website Builder",
+              description:
+                "Create a beautiful, responsive website for your club in minutes.",
+            },
+            {
+              title: "Member Management",
+              description:
+                "Easily manage members, track dues, and handle communications.",
+            },
+            {
+              title: "Event Calendar",
+              description:
+                "Schedule and promote events with built-in RSVP functionality.",
+            },
+            {
+              title: "Payment Processing",
+              description:
+                "Accept membership dues and event payments securely online.",
+            },
+          ].map((feature) => (
+            <div
+              key={feature.title}
+              className="bg-white p-6 rounded-lg shadow-sm"
+            >
+              <h3 className="text-lg font-medium text-gray-900">
+                {feature.title}
+              </h3>
+              <p className="mt-2 text-base text-gray-500">
+                {feature.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      {/* Pricing Section */}
+      <Section
+        id="pricing"
+        title="Simple, transparent pricing"
+        subtitle="Choose the plan that's right for your club"
+        background="white"
+      >
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:max-w-4xl lg:mx-auto">
+          {[
+            {
+              name: "Starter",
+              price: "$29",
+              features: [
+                "Up to 50 members",
+                "Basic website builder",
+                "Event calendar",
+                "Email support",
+              ],
+            },
+            {
+              name: "Professional",
+              price: "$79",
+              features: [
+                "Up to 200 members",
+                "Advanced website builder",
+                "Member management",
+                "Payment processing",
+                "Priority support",
+              ],
+            },
+          ].map((plan) => (
+            <div
+              key={plan.name}
+              className="bg-white border border-gray-200 rounded-lg shadow-sm divide-y divide-gray-200"
+            >
+              <div className="p-6">
+                <h3 className="text-lg font-medium text-gray-900">
+                  {plan.name}
+                </h3>
+                <p className="mt-8">
+                  <span className="text-4xl font-extrabold text-gray-900">
+                    {plan.price}
+                  </span>
+                  <span className="text-base font-medium text-gray-500">
+                    /month
+                  </span>
+                </p>
                 <Link
                   to="/signup"
-                  className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700"
+                  className="mt-8 block w-full bg-indigo-600 border border-transparent rounded-md py-2 text-sm font-semibold text-white text-center hover:bg-indigo-700"
                 >
-                  Sign Up
+                  Get started
                 </Link>
               </div>
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      {/* Add padding-top to account for fixed header */}
-      <div className="pt-16">
-        {/* Hero Section */}
-        <div className="relative bg-white overflow-hidden">
-          <div className="max-w-7xl mx-auto">
-            <div className="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
-              <main className="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
-                <div className="sm:text-center lg:text-left">
-                  <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-                    <span className="block">Create and manage</span>
-                    <span className="block text-indigo-600">
-                      your club's digital presence
-                    </span>
-                  </h1>
-                  <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
-                    All-in-one platform for clubs to build their website, manage
-                    members, and grow their community.
-                  </p>
-                  <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
-                    <div className="rounded-md shadow">
-                      <Link
-                        to="/signup"
-                        className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"
-                      >
-                        Create Your Club Site
-                      </Link>
-                    </div>
-                    <div className="mt-3 sm:mt-0 sm:ml-3">
-                      <Link
-                        to="/demo"
-                        className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10"
-                      >
-                        Book a Demo
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </main>
-            </div>
-          </div>
-        </div>
-
-        {/* Features Section */}
-        <div id="features" className="py-12 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="lg:text-center">
-              <h2 className="text-base text-indigo-600 font-semibold tracking-wide uppercase">
-                Features
-              </h2>
-              <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-                Everything you need to run your club
-              </p>
-            </div>
-
-            <div className="mt-10">
-              <div className="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
-                {[
-                  {
-                    title: "Custom Website Builder",
-                    description:
-                      "Create a beautiful, responsive website for your club in minutes.",
-                  },
-                  {
-                    title: "Member Management",
-                    description:
-                      "Easily manage members, track dues, and handle communications.",
-                  },
-                  {
-                    title: "Event Calendar",
-                    description:
-                      "Schedule and promote events with built-in RSVP functionality.",
-                  },
-                  {
-                    title: "Payment Processing",
-                    description:
-                      "Accept membership dues and event payments securely online.",
-                  },
-                ].map((feature) => (
-                  <div key={feature.title} className="relative">
-                    <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
-                      {/* Icon placeholder */}
-                    </div>
-                    <div className="ml-16">
-                      <h3 className="text-lg leading-6 font-medium text-gray-900">
-                        {feature.title}
-                      </h3>
-                      <p className="mt-2 text-base text-gray-500">
-                        {feature.description}
-                      </p>
-                    </div>
-                  </div>
-                ))}
+              <div className="pt-6 pb-8 px-6">
+                <ul className="space-y-4">
+                  {plan.features.map((feature) => (
+                    <li key={feature} className="flex items-start">
+                      <div className="flex-shrink-0">
+                        <svg
+                          className="h-6 w-6 text-green-500"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      </div>
+                      <p className="ml-3 text-base text-gray-500">{feature}</p>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
-          </div>
+          ))}
         </div>
+      </Section>
 
-        {/* Pricing Section */}
-        <div id="pricing" className="bg-white py-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center">
-              <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
-                Simple, transparent pricing
-              </h2>
-              <p className="mt-4 text-lg text-gray-500">
-                Choose the plan that's right for your club
-              </p>
-            </div>
-
-            <div className="mt-10 space-y-4 sm:mt-16 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-6 lg:max-w-4xl lg:mx-auto">
-              {[
-                {
-                  name: "Starter",
-                  price: "$29",
-                  features: [
-                    "Up to 50 members",
-                    "Basic website builder",
-                    "Event calendar",
-                    "Email support",
-                  ],
-                },
-                {
-                  name: "Professional",
-                  price: "$79",
-                  features: [
-                    "Up to 200 members",
-                    "Advanced website builder",
-                    "Member management",
-                    "Payment processing",
-                    "Priority support",
-                  ],
-                },
-              ].map((plan) => (
-                <div
-                  key={plan.name}
-                  className="border border-gray-200 rounded-lg shadow-sm divide-y divide-gray-200"
-                >
-                  <div className="p-6">
-                    <h3 className="text-lg font-medium text-gray-900">
-                      {plan.name}
-                    </h3>
-                    <p className="mt-8">
-                      <span className="text-4xl font-extrabold text-gray-900">
-                        {plan.price}
-                      </span>
-                      <span className="text-base font-medium text-gray-500">
-                        /month
-                      </span>
-                    </p>
-                    <Link
-                      to="/signup"
-                      className="mt-8 block w-full bg-indigo-600 border border-transparent rounded-md py-2 text-sm font-semibold text-white text-center hover:bg-indigo-700"
-                    >
-                      Get started
-                    </Link>
-                  </div>
-                  <div className="pt-6 pb-8 px-6">
-                    <ul className="space-y-4">
-                      {plan.features.map((feature) => (
-                        <li key={feature} className="flex items-start">
-                          <div className="flex-shrink-0">
-                            <svg
-                              className="h-6 w-6 text-green-500"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M5 13l4 4L19 7"
-                              />
-                            </svg>
-                          </div>
-                          <p className="ml-3 text-base text-gray-500">
-                            {feature}
-                          </p>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Testimonials Section */}
-        <div id="testimonials" className="bg-gray-50 py-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center">
-              <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
-                Trusted by clubs worldwide
-              </h2>
-            </div>
-            <div className="mt-10">
-              <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-                {[
-                  {
-                    quote:
-                      "Clubbix has transformed how we manage our club. The website builder is intuitive and the member management features are exactly what we needed.",
-                    author: "Sarah Johnson",
-                    role: "Club President",
-                  },
-                  {
-                    quote:
-                      "The event calendar and RSVP system has made organizing our club activities so much easier. Highly recommended!",
-                    author: "Michael Chen",
-                    role: "Event Coordinator",
-                  },
-                  {
-                    quote:
-                      "Our membership has grown by 40% since we started using Clubbix. The platform is perfect for clubs of any size.",
-                    author: "Emily Rodriguez",
-                    role: "Membership Director",
-                  },
-                ].map((testimonial) => (
-                  <div
-                    key={testimonial.author}
-                    className="bg-white rounded-lg shadow-lg p-6"
-                  >
-                    <p className="text-gray-600 italic">
-                      "{testimonial.quote}"
-                    </p>
-                    <div className="mt-4">
-                      <p className="text-base font-medium text-gray-900">
-                        {testimonial.author}
-                      </p>
-                      <p className="text-sm text-gray-500">
-                        {testimonial.role}
-                      </p>
-                    </div>
-                  </div>
-                ))}
+      {/* Testimonials Section */}
+      <Section
+        id="testimonials"
+        title="Trusted by clubs worldwide"
+        background="gray"
+      >
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {[
+            {
+              quote:
+                "Clubbix has transformed how we manage our club. The website builder is intuitive and the member management features are exactly what we needed.",
+              author: "Sarah Johnson",
+              role: "Club President",
+            },
+            {
+              quote:
+                "The event calendar and RSVP system has made organizing our club activities so much easier. Highly recommended!",
+              author: "Michael Chen",
+              role: "Event Coordinator",
+            },
+            {
+              quote:
+                "Our membership has grown by 40% since we started using Clubbix. The platform is perfect for clubs of any size.",
+              author: "Emily Rodriguez",
+              role: "Membership Director",
+            },
+          ].map((testimonial) => (
+            <div
+              key={testimonial.author}
+              className="bg-white rounded-lg shadow-lg p-6"
+            >
+              <p className="text-gray-600 italic">"{testimonial.quote}"</p>
+              <div className="mt-4">
+                <p className="text-base font-medium text-gray-900">
+                  {testimonial.author}
+                </p>
+                <p className="text-sm text-gray-500">{testimonial.role}</p>
               </div>
             </div>
-          </div>
+          ))}
         </div>
+      </Section>
 
-        {/* FAQ Section */}
-        <div id="faq" className="bg-white py-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center">
-              <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
-                Frequently Asked Questions
-              </h2>
+      {/* FAQ Section */}
+      <Section id="faq" title="Frequently Asked Questions" background="white">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+          {[
+            {
+              question: "How easy is it to get started?",
+              answer:
+                "Getting started is simple! Sign up, choose a template, and customize it to match your club's branding. You can have a professional website up and running in under an hour.",
+            },
+            {
+              question: "Can I try before I buy?",
+              answer:
+                "Yes! We offer a 14-day free trial with full access to all features. No credit card required.",
+            },
+            {
+              question: "What kind of support do you offer?",
+              answer:
+                "We provide email support for all plans, with priority support for Professional plan subscribers. We also have an extensive knowledge base and video tutorials.",
+            },
+            {
+              question: "Can I upgrade or downgrade my plan?",
+              answer:
+                "Yes, you can change your plan at any time. Changes will be reflected in your next billing cycle.",
+            },
+          ].map((faq) => (
+            <div key={faq.question}>
+              <h3 className="text-lg font-medium text-gray-900">
+                {faq.question}
+              </h3>
+              <p className="mt-2 text-base text-gray-500">{faq.answer}</p>
             </div>
-            <div className="mt-10">
-              <dl className="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-12">
-                {[
-                  {
-                    question: "How easy is it to get started?",
-                    answer:
-                      "Getting started is simple! Sign up, choose a template, and customize it to match your club's branding. You can have a professional website up and running in under an hour.",
-                  },
-                  {
-                    question: "Can I try before I buy?",
-                    answer:
-                      "Yes! We offer a 14-day free trial with full access to all features. No credit card required.",
-                  },
-                  {
-                    question: "What kind of support do you offer?",
-                    answer:
-                      "We provide email support for all plans, with priority support for Professional plan subscribers. We also have an extensive knowledge base and video tutorials.",
-                  },
-                  {
-                    question: "Can I upgrade or downgrade my plan?",
-                    answer:
-                      "Yes, you can change your plan at any time. Changes will be reflected in your next billing cycle.",
-                  },
-                ].map((faq) => (
-                  <div key={faq.question}>
-                    <dt className="text-lg leading-6 font-medium text-gray-900">
-                      {faq.question}
-                    </dt>
-                    <dd className="mt-2 text-base text-gray-500">
-                      {faq.answer}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
-          </div>
+          ))}
         </div>
+      </Section>
 
-        {/* Footer */}
-        <Footer
-          sections={footerSections}
-          logo={logo}
-          socialLinks={socialLinks}
-          copyright={`© ${new Date().getFullYear()} Clubbix. All rights reserved.`}
-        />
-      </div>
+      {/* Footer */}
+      <Footer
+        sections={footerSections}
+        logo={logo}
+        socialLinks={socialLinks}
+        copyright={`© ${new Date().getFullYear()} Clubbix. All rights reserved.`}
+      />
     </div>
   );
 };
