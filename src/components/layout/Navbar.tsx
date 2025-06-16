@@ -7,16 +7,23 @@ interface NavItem {
   href: string;
 }
 
+interface CTAButton {
+  label: string;
+  href: string;
+  variant?: "primary" | "secondary" | "outline";
+}
+
 interface NavbarProps {
   items: NavItem[];
   logo?: React.ReactNode;
-  cta?: {
-    label: string;
-    href: string;
-  };
+  ctaButtons?: CTAButton[];
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ items, logo, cta }) => {
+export const Navbar: React.FC<NavbarProps> = ({
+  items,
+  logo,
+  ctaButtons = [],
+}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleNavClick = (href: string) => {
@@ -29,7 +36,7 @@ export const Navbar: React.FC<NavbarProps> = ({ items, logo, cta }) => {
   };
 
   return (
-    <nav className="bg-white shadow-sm fixed w-full top-0 z-50">
+    <nav className="bg-white shadow-sm fixed w-full top-0 z-50 mb-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex">
@@ -50,14 +57,16 @@ export const Navbar: React.FC<NavbarProps> = ({ items, logo, cta }) => {
             </div>
           </div>
 
-          {/* CTA Button */}
-          {cta && (
-            <div className="hidden sm:ml-6 sm:flex sm:items-center">
-              <Link to={cta.href}>
-                <Button variant="primary" size="sm">
-                  {cta.label}
-                </Button>
-              </Link>
+          {/* CTA Buttons */}
+          {ctaButtons.length > 0 && (
+            <div className="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-4">
+              {ctaButtons.map((cta, index) => (
+                <Link key={index} to={cta.href}>
+                  <Button variant={cta.variant || "primary"} size="sm">
+                    {cta.label}
+                  </Button>
+                </Link>
+              ))}
             </div>
           )}
 
@@ -121,13 +130,15 @@ export const Navbar: React.FC<NavbarProps> = ({ items, logo, cta }) => {
                 {item.label}
               </button>
             ))}
-            {cta && (
-              <div className="mt-4 px-4">
-                <Link to={cta.href}>
-                  <Button variant="primary" fullWidth>
-                    {cta.label}
-                  </Button>
-                </Link>
+            {ctaButtons.length > 0 && (
+              <div className="mt-4 px-4 space-y-3">
+                {ctaButtons.map((cta, index) => (
+                  <Link key={index} to={cta.href}>
+                    <Button variant={cta.variant || "primary"} fullWidth>
+                      {cta.label}
+                    </Button>
+                  </Link>
+                ))}
               </div>
             )}
           </div>

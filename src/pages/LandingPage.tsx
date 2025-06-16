@@ -12,6 +12,11 @@ const LandingPage: React.FC = () => {
     { label: "FAQ", href: "#faq" },
   ];
 
+  const ctaButtons = [
+    { label: "Login", href: "/login", variant: "outline" as const },
+    { label: "Sign Up", href: "/signup", variant: "primary" as const },
+  ];
+
   const logo = <h1 className="text-2xl font-bold text-indigo-600">Clubbix</h1>;
 
   const footerSections = [
@@ -69,11 +74,7 @@ const LandingPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      <Navbar
-        items={navItems}
-        logo={logo}
-        cta={{ label: "Sign Up", href: "/signup" }}
-      />
+      <Navbar items={navItems} logo={logo} ctaButtons={ctaButtons} />
 
       {/* Hero Section */}
       <Section background="white" className="pt-20">
@@ -84,7 +85,7 @@ const LandingPage: React.FC = () => {
               your club's digital presence
             </span>
           </h1>
-          <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
+          <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
             All-in-one platform for clubs to build their website, manage
             members, and grow their community.
           </p>
