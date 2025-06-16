@@ -19,6 +19,8 @@ import MembersPage from "./pages/dashboard/admin/MembersPage";
 import TreasuryPage from "./pages/dashboard/admin/TreasuryPage";
 import EventsPage from "./pages/dashboard/EventsPage";
 import MemberDashboard from "./pages/dashboard/member/MemberDashboard";
+import MemberEventsPage from "./pages/dashboard/member/MemberEventsPage";
+import TrainingPage from "./pages/dashboard/member/TrainingPage";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -70,12 +72,14 @@ const App: React.FC = () => {
                 path="/member/dashboard/*"
                 element={
                   <ProtectedRoute requiredRole="member">
-                    <DashboardLayout>
-                      <MemberDashboard />
-                    </DashboardLayout>
+                    <DashboardLayout />
                   </ProtectedRoute>
                 }
-              />
+              >
+                <Route index element={<MemberDashboard />} />
+                <Route path="trainings" element={<TrainingPage />} />
+                <Route path="events" element={<MemberEventsPage />} />
+              </Route>
 
               {/* Club routes */}
               <Route path="/clubs/:slug" element={<ClubPage />} />
