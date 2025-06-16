@@ -1,4 +1,5 @@
 import React from "react";
+import { HelmetProvider } from "react-helmet-async";
 import {
   Navigate,
   Route,
@@ -28,46 +29,48 @@ const AuthenticatedRedirect: React.FC = () => {
   return <Navigate to={`/${userRole}/dashboard`} replace />;
 };
 
-function App() {
+const App: React.FC = () => {
   return (
-    <AuthProvider>
-      <Router>
-        <Routes>
-          {/* Public routes */}
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<RegistrationForm />} />
+    <HelmetProvider>
+      <AuthProvider>
+        <Router>
+          <Routes>
+            {/* Public routes */}
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<RegistrationForm />} />
 
-          {/* Protected routes */}
-          <Route
-            path="/admin/dashboard"
-            element={
-              <ProtectedRoute requiredRole="admin">
-                <AdminDashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/member/dashboard"
-            element={
-              <ProtectedRoute requiredRole="member">
-                <MemberDashboard />
-              </ProtectedRoute>
-            }
-          />
+            {/* Protected routes */}
+            <Route
+              path="/admin/dashboard"
+              element={
+                <ProtectedRoute requiredRole="admin">
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/member/dashboard"
+              element={
+                <ProtectedRoute requiredRole="member">
+                  <MemberDashboard />
+                </ProtectedRoute>
+              }
+            />
 
-          {/* Club routes */}
-          <Route path="/clubs/:slug" element={<ClubPage />} />
+            {/* Club routes */}
+            <Route path="/clubs/:slug" element={<ClubPage />} />
 
-          {/* Auth redirect */}
-          <Route path="/dashboard" element={<AuthenticatedRedirect />} />
+            {/* Auth redirect */}
+            <Route path="/dashboard" element={<AuthenticatedRedirect />} />
 
-          {/* 404 route */}
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </Router>
-    </AuthProvider>
+            {/* 404 route */}
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </Router>
+      </AuthProvider>
+    </HelmetProvider>
   );
-}
+};
 
 export default App;
