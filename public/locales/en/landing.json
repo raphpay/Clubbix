@@ -1,0 +1,151 @@
+{
+  "nav": {
+    "features": "Features",
+    "pricing": "Pricing",
+    "testimonials": "Testimonials",
+    "faq": "FAQ"
+  },
+  "cta": {
+    "login": "Login",
+    "signup": "Sign Up"
+  },
+  "hero": {
+    "title": {
+      "line1": "Create and manage",
+      "line2": "your club's digital presence"
+    },
+    "subtitle": "All-in-one platform for clubs to build their website, manage members, and grow their community.",
+    "buttons": {
+      "createSite": "Create Your Club Site",
+      "bookDemo": "Book a Demo"
+    }
+  },
+  "features": {
+    "title": "Everything you need to run your club",
+    "subtitle": "Powerful features to help you manage and grow your club",
+    "items": {
+      "website": {
+        "title": "Custom Website Builder",
+        "description": "Create a beautiful, responsive website for your club in minutes."
+      },
+      "members": {
+        "title": "Member Management",
+        "description": "Easily manage members, track dues, and handle communications."
+      },
+      "calendar": {
+        "title": "Event Calendar",
+        "description": "Schedule and promote events with built-in RSVP functionality."
+      },
+      "payments": {
+        "title": "Payment Processing",
+        "description": "Accept membership dues and event payments securely online."
+      }
+    }
+  },
+  "pricing": {
+    "title": "Simple, transparent pricing",
+    "subtitle": "Choose the plan that's right for your club",
+    "plans": {
+      "starter": {
+        "name": "Starter",
+        "price": "$29",
+        "period": "/month",
+        "features": [
+          "Up to 50 members",
+          "Basic website builder",
+          "Event calendar",
+          "Email support"
+        ],
+        "cta": "Get started"
+      },
+      "professional": {
+        "name": "Professional",
+        "price": "$79",
+        "period": "/month",
+        "features": [
+          "Up to 200 members",
+          "Advanced website builder",
+          "Member management",
+          "Payment processing",
+          "Priority support"
+        ],
+        "cta": "Get started"
+      }
+    }
+  },
+  "testimonials": {
+    "title": "Trusted by clubs worldwide",
+    "items": {
+      "testimonial1": {
+        "quote": "Clubbix has transformed how we manage our club. The website builder is intuitive and the member management features are exactly what we needed.",
+        "author": "Sarah Johnson",
+        "role": "Club President"
+      },
+      "testimonial2": {
+        "quote": "The event calendar and RSVP system has made organizing our club activities so much easier. Highly recommended!",
+        "author": "Michael Chen",
+        "role": "Event Coordinator"
+      },
+      "testimonial3": {
+        "quote": "Our membership has grown by 40% since we started using Clubbix. The platform is perfect for clubs of any size.",
+        "author": "Emily Rodriguez",
+        "role": "Membership Director"
+      }
+    }
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "items": {
+      "start": {
+        "question": "How easy is it to get started?",
+        "answer": "Getting started is simple! Sign up, choose a template, and customize it to match your club's branding. You can have a professional website up and running in under an hour."
+      },
+      "trial": {
+        "question": "Can I try before I buy?",
+        "answer": "Yes! We offer a 14-day free trial with full access to all features. No credit card required."
+      },
+      "support": {
+        "question": "What kind of support do you offer?",
+        "answer": "We provide email support for all plans, with priority support for Professional plan subscribers. We also have an extensive knowledge base and video tutorials."
+      },
+      "upgrade": {
+        "question": "Can I upgrade or downgrade my plan?",
+        "answer": "Yes, you can change your plan at any time. Changes will be reflected in your next billing cycle."
+      }
+    }
+  },
+  "footer": {
+    "sections": {
+      "product": {
+        "title": "Product",
+        "links": {
+          "features": "Features",
+          "pricing": "Pricing",
+          "demo": "Book a Demo"
+        }
+      },
+      "support": {
+        "title": "Support",
+        "links": {
+          "help": "Help Center",
+          "contact": "Contact Us"
+        }
+      },
+      "legal": {
+        "title": "Legal",
+        "links": {
+          "privacy": "Privacy Policy",
+          "terms": "Terms of Service"
+        }
+      },
+      "company": {
+        "title": "Company",
+        "links": {
+          "about": "About Us",
+          "blog": "Blog"
+        }
+      }
+    },
+    "copyright": "© {{year}} Clubbix. All rights reserved."
+  }
+}

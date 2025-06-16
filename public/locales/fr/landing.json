@@ -1,0 +1,151 @@
+{
+  "nav": {
+    "features": "Fonctionnalités",
+    "pricing": "Tarifs",
+    "testimonials": "Témoignages",
+    "faq": "FAQ"
+  },
+  "cta": {
+    "login": "Connexion",
+    "signup": "S'inscrire"
+  },
+  "hero": {
+    "title": {
+      "line1": "Créez et gérez",
+      "line2": "la présence numérique de votre club"
+    },
+    "subtitle": "Plateforme tout-en-un pour les clubs afin de construire leur site web, gérer leurs membres et développer leur communauté.",
+    "buttons": {
+      "createSite": "Créer votre site de club",
+      "bookDemo": "Réserver une démo"
+    }
+  },
+  "features": {
+    "title": "Tout ce dont vous avez besoin pour gérer votre club",
+    "subtitle": "Fonctionnalités puissantes pour vous aider à gérer et développer votre club",
+    "items": {
+      "website": {
+        "title": "Créateur de site web personnalisé",
+        "description": "Créez un site web beau et responsive pour votre club en quelques minutes."
+      },
+      "members": {
+        "title": "Gestion des membres",
+        "description": "Gérez facilement les membres, suivez les cotisations et gérez les communications."
+      },
+      "calendar": {
+        "title": "Calendrier d'événements",
+        "description": "Planifiez et promouvez des événements avec une fonctionnalité de RSVP intégrée."
+      },
+      "payments": {
+        "title": "Traitement des paiements",
+        "description": "Acceptez les cotisations et les paiements d'événements en toute sécurité en ligne."
+      }
+    }
+  },
+  "pricing": {
+    "title": "Tarification simple et transparente",
+    "subtitle": "Choisissez le forfait adapté à votre club",
+    "plans": {
+      "starter": {
+        "name": "Débutant",
+        "price": "29€",
+        "period": "/mois",
+        "features": [
+          "Jusqu'à 50 membres",
+          "Créateur de site web basique",
+          "Calendrier d'événements",
+          "Support par email"
+        ],
+        "cta": "Commencer"
+      },
+      "professional": {
+        "name": "Professionnel",
+        "price": "79€",
+        "period": "/mois",
+        "features": [
+          "Jusqu'à 200 membres",
+          "Créateur de site web avancé",
+          "Gestion des membres",
+          "Traitement des paiements",
+          "Support prioritaire"
+        ],
+        "cta": "Commencer"
+      }
+    }
+  },
+  "testimonials": {
+    "title": "Approuvé par des clubs du monde entier",
+    "items": {
+      "testimonial1": {
+        "quote": "Clubbix a transformé notre façon de gérer notre club. Le créateur de site web est intuitif et les fonctionnalités de gestion des membres sont exactement ce dont nous avions besoin.",
+        "author": "Sarah Johnson",
+        "role": "Présidente du club"
+      },
+      "testimonial2": {
+        "quote": "Le calendrier d'événements et le système de RSVP ont rendu l'organisation de nos activités de club tellement plus facile. Je recommande vivement !",
+        "author": "Michael Chen",
+        "role": "Coordinateur d'événements"
+      },
+      "testimonial3": {
+        "quote": "Notre nombre de membres a augmenté de 40% depuis que nous utilisons Clubbix. La plateforme est parfaite pour les clubs de toutes tailles.",
+        "author": "Emily Rodriguez",
+        "role": "Directrice des adhésions"
+      }
+    }
+  },
+  "faq": {
+    "title": "Questions fréquemment posées",
+    "items": {
+      "start": {
+        "question": "Est-ce facile de commencer ?",
+        "answer": "C'est très simple ! Inscrivez-vous, choisissez un modèle et personnalisez-le selon l'identité de votre club. Vous pouvez avoir un site web professionnel en moins d'une heure."
+      },
+      "trial": {
+        "question": "Puis-je essayer avant d'acheter ?",
+        "answer": "Oui ! Nous proposons un essai gratuit de 14 jours avec accès à toutes les fonctionnalités. Aucune carte de crédit requise."
+      },
+      "support": {
+        "question": "Quel type de support proposez-vous ?",
+        "answer": "Nous fournissons un support par email pour tous les forfaits, avec un support prioritaire pour les abonnés au forfait Professionnel. Nous avons également une base de connaissances complète et des tutoriels vidéo."
+      },
+      "upgrade": {
+        "question": "Puis-je changer de forfait ?",
+        "answer": "Oui, vous pouvez changer de forfait à tout moment. Les changements seront reflétés dans votre prochain cycle de facturation."
+      }
+    }
+  },
+  "footer": {
+    "sections": {
+      "product": {
+        "title": "Produit",
+        "links": {
+          "features": "Fonctionnalités",
+          "pricing": "Tarifs",
+          "demo": "Réserver une démo"
+        }
+      },
+      "support": {
+        "title": "Support",
+        "links": {
+          "help": "Centre d'aide",
+          "contact": "Contactez-nous"
+        }
+      },
+      "legal": {
+        "title": "Légal",
+        "links": {
+          "privacy": "Politique de confidentialité",
+          "terms": "Conditions d'utilisation"
+        }
+      },
+      "company": {
+        "title": "Entreprise",
+        "links": {
+          "about": "À propos",
+          "blog": "Blog"
+        }
+      }
+    },
+    "copyright": "© {{year}} Clubbix. Tous droits réservés."
+  }
+}

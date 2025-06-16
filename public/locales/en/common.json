@@ -1,0 +1,13 @@
+{
+  "welcome": "Welcome to Clubbix",
+  "login": "Login",
+  "signup": "Sign Up",
+  "logout": "Logout",
+  "email": "Email",
+  "password": "Password",
+  "forgotPassword": "Forgot Password?",
+  "rememberMe": "Remember Me",
+  "dontHaveAccount": "Don't have an account?",
+  "alreadyHaveAccount": "Already have an account?",
+  "language": "Language"
+}
