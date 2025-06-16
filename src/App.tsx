@@ -13,15 +13,15 @@ import { ClubProvider } from "./contexts/ClubContext";
 
 // Pages
 import RegistrationForm from "./components/RegistrationForm";
-import AdminDashboard from "./pages/AdminDashboard";
 import ClubPage from "./pages/ClubPage";
-import EventsPage from "./pages/EventsPage";
+import AdminDashboard from "./pages/dashboard/admin/AdminDashboard";
+import MembersPage from "./pages/dashboard/admin/MembersPage";
+import TreasuryPage from "./pages/dashboard/admin/TreasuryPage";
+import EventsPage from "./pages/dashboard/EventsPage";
+import MemberDashboard from "./pages/dashboard/member/MemberDashboard";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
-import MemberDashboard from "./pages/MemberDashboard";
-import MembersPage from "./pages/MembersPage";
 import NotFoundPage from "./pages/NotFoundPage";
-import TreasuryPage from "./pages/TreasuryPage";
 
 // Component to handle authenticated user redirects
 const AuthenticatedRedirect: React.FC = () => {
