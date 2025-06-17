@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import DeleteMemberModal from "../../../components/members/DeleteMemberModal";
 import MemberForm from "../../../components/members/MemberForm";
 import MemberList from "../../../components/members/MemberList";
@@ -11,6 +12,7 @@ import {
 } from "../../../services/firestore";
 
 const MembersPage: React.FC = () => {
+  const { t } = useTranslation("members");
   const { club } = useClub();
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -47,7 +49,7 @@ const MembersPage: React.FC = () => {
       setError(null);
     } catch (err) {
       console.error("Error saving member:", err);
-      setError("Failed to save member");
+      setError(t("page.error.save"));
     }
   };
 
@@ -60,14 +62,16 @@ const MembersPage: React.FC = () => {
       setError(null);
     } catch (err) {
       console.error("Error deleting member:", err);
-      setError("Failed to delete member");
+      setError(t("page.error.delete"));
     }
   };
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-gray-900">Members</h1>
+        <h1 className="text-2xl font-semibold text-gray-900">
+          {t("page.title")}
+        </h1>
       </div>
 
       {error && (
@@ -128,7 +132,9 @@ const MembersPage: React.FC = () => {
               <div className="sm:flex sm:items-start">
                 <div className="mt-3 text-center sm:mt-0 sm:text-left w-full">
                   <h3 className="text-lg font-medium leading-6 text-gray-900">
-                    {selectedMember ? "Edit Member" : "Add Member"}
+                    {selectedMember
+                      ? t("form.title.edit")
+                      : t("form.title.add")}
                   </h3>
                   <div className="mt-4">
                     <MemberForm

@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { UserData } from "../../services/firestore";
 import { Button } from "../ui/Button";
 
@@ -15,6 +16,8 @@ const DeleteMemberModal: React.FC<DeleteMemberModalProps> = ({
   onCancel,
   isOpen,
 }) => {
+  const { t } = useTranslation("members");
+
   if (!isOpen) return null;
 
   return (
@@ -49,12 +52,14 @@ const DeleteMemberModal: React.FC<DeleteMemberModalProps> = ({
             </div>
             <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
               <h3 className="text-lg font-medium leading-6 text-gray-900">
-                Remove Member
+                {t("deleteModal.title")}
               </h3>
               <div className="mt-2">
                 <p className="text-sm text-gray-500">
-                  Are you sure you want to remove {member.firstName}{" "}
-                  {member.lastName} from the club? This action cannot be undone.
+                  {t("deleteModal.message", {
+                    firstName: member.firstName,
+                    lastName: member.lastName,
+                  })}
                 </p>
               </div>
             </div>
@@ -66,7 +71,7 @@ const DeleteMemberModal: React.FC<DeleteMemberModalProps> = ({
               onClick={onConfirm}
               className="w-full sm:ml-3 sm:w-auto bg-red-600 hover:bg-red-700 focus:ring-red-500"
             >
-              Remove
+              {t("deleteModal.buttons.confirm")}
             </Button>
             <Button
               type="button"
@@ -74,7 +79,7 @@ const DeleteMemberModal: React.FC<DeleteMemberModalProps> = ({
               onClick={onCancel}
               className="mt-3 w-full sm:mt-0 sm:w-auto"
             >
-              Cancel
+              {t("deleteModal.buttons.cancel")}
             </Button>
           </div>
         </div>

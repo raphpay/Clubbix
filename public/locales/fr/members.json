@@ -1,0 +1,77 @@
+{
+  "page": {
+    "title": "Membres",
+    "loading": "Chargement des membres...",
+    "error": {
+      "load": "Échec du chargement des membres",
+      "save": "Échec de l'enregistrement du membre",
+      "delete": "Échec de la suppression du membre"
+    }
+  },
+  "list": {
+    "title": "Membres",
+    "addButton": "Ajouter un membre",
+    "table": {
+      "name": "Nom",
+      "email": "Email",
+      "role": "Rôle",
+      "actions": "Actions"
+    },
+    "roles": {
+      "admin": "Administrateur",
+      "member": "Membre"
+    }
+  },
+  "form": {
+    "title": {
+      "add": "Ajouter un membre",
+      "edit": "Modifier le membre"
+    },
+    "fields": {
+      "firstName": {
+        "label": "Prénom",
+        "error": "Le prénom est requis"
+      },
+      "lastName": {
+        "label": "Nom",
+        "error": "Le nom est requis"
+      },
+      "email": {
+        "label": "Email",
+        "error": {
+          "required": "L'email est requis",
+          "invalid": "Format d'email invalide"
+        }
+      },
+      "role": {
+        "label": "Rôle",
+        "options": {
+          "admin": "Administrateur",
+          "member": "Membre"
+        }
+      }
+    },
+    "buttons": {
+      "cancel": "Annuler",
+      "save": "Enregistrer",
+      "saving": "Enregistrement...",
+      "update": "Mettre à jour le membre",
+      "add": "Ajouter le membre"
+    },
+    "error": "Échec de l'enregistrement du membre"
+  },
+  "deleteModal": {
+    "title": "Supprimer le membre",
+    "message": "Êtes-vous sûr de vouloir supprimer {{firstName}} {{lastName}} du club ? Cette action ne peut pas être annulée.",
+    "buttons": {
+      "cancel": "Annuler",
+      "confirm": "Supprimer"
+    }
+  },
+  "table": {
+    "name": "Nom",
+    "email": "Email",
+    "role": "Rôle",
+    "actions": "Actions"
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "page": {
+    "title": "Members",
+    "loading": "Loading members...",
+    "error": {
+      "load": "Failed to load members",
+      "save": "Failed to save member",
+      "delete": "Failed to delete member"
+    }
+  },
+  "list": {
+    "title": "Members",
+    "addButton": "Add Member",
+    "table": {
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "actions": "Actions"
+    },
+    "roles": {
+      "admin": "Admin",
+      "member": "Member"
+    },
+    "loading": "Loading members..."
+  },
+  "form": {
+    "title": {
+      "add": "Add Member",
+      "edit": "Edit Member"
+    },
+    "fields": {
+      "firstName": {
+        "label": "First Name",
+        "error": "First name is required"
+      },
+      "lastName": {
+        "label": "Last Name",
+        "error": "Last name is required"
+      },
+      "email": {
+        "label": "Email",
+        "error": {
+          "required": "Email is required",
+          "invalid": "Invalid email format"
+        }
+      },
+      "role": {
+        "label": "Role",
+        "options": {
+          "admin": "Admin",
+          "member": "Member"
+        }
+      }
+    },
+    "buttons": {
+      "cancel": "Cancel",
+      "save": "Save",
+      "saving": "Saving...",
+      "update": "Update Member",
+      "add": "Add Member"
+    },
+    "error": "Failed to save member"
+  },
+  "deleteModal": {
+    "title": "Remove Member",
+    "message": "Are you sure you want to remove {{firstName}} {{lastName}} from the club? This action cannot be undone.",
+    "buttons": {
+      "cancel": "Cancel",
+      "confirm": "Remove"
+    }
+  },
+  "table": {
+    "name": "Name",
+    "email": "Email",
+    "role": "Role",
+    "actions": "Actions"
+  }
+}

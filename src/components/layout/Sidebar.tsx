@@ -1,5 +1,6 @@
 import { Calendar, Dumbbell, Users, Wallet } from "lucide-react";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
@@ -8,18 +9,23 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
+  const { t } = useTranslation("sidebar");
   const { user } = useAuth();
   const isAdmin = user?.role === "admin";
 
   const adminNavItems = [
-    { path: "/admin/dashboard/members", icon: Users, label: "Members" },
-    { path: "/admin/dashboard/treasury", icon: Wallet, label: "Treasury" },
-    { path: "/admin/dashboard/events", icon: Calendar, label: "Events" },
+    { path: "/admin/dashboard/members", icon: Users, label: t("members") },
+    { path: "/admin/dashboard/treasury", icon: Wallet, label: t("treasury") },
+    { path: "/admin/dashboard/events", icon: Calendar, label: t("events") },
   ];
 
   const memberNavItems = [
-    { path: "/member/dashboard/trainings", icon: Dumbbell, label: "Trainings" },
-    { path: "/member/dashboard/events", icon: Calendar, label: "Events" },
+    {
+      path: "/member/dashboard/trainings",
+      icon: Dumbbell,
+      label: t("trainings"),
+    },
+    { path: "/member/dashboard/events", icon: Calendar, label: t("events") },
   ];
 
   const navItems = isAdmin ? adminNavItems : memberNavItems;

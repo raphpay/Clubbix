@@ -1,5 +1,6 @@
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useClub } from "../../hooks/useClub";
 import { UserData, getMembers } from "../../services/firestore";
 import { Button } from "../ui/Button";
@@ -15,6 +16,7 @@ const MemberList: React.FC<MemberListProps> = ({
   onEditMember,
   onDeleteMember,
 }) => {
+  const { t } = useTranslation("members");
   const { club } = useClub();
   const [members, setMembers] = useState<UserData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -30,7 +32,7 @@ const MemberList: React.FC<MemberListProps> = ({
         setMembers(membersData);
         setError(null);
       } catch (err) {
-        setError("Failed to load members");
+        setError(t("error.load"));
         console.error("Error loading members:", err);
       } finally {
         setLoading(false);
@@ -38,7 +40,7 @@ const MemberList: React.FC<MemberListProps> = ({
     };
 
     fetchMembers();
-  }, [club?.id]);
+  }, [club?.id, t]);
 
   if (loading) {
     return (
@@ -55,14 +57,16 @@ const MemberList: React.FC<MemberListProps> = ({
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-lg font-semibold text-gray-900">Members</h2>
+        <h2 className="text-lg font-semibold text-gray-900">
+          {t("list.title")}
+        </h2>
         <Button
           onClick={onAddMember}
           variant="primary"
           className="flex items-center gap-2"
         >
           <Plus className="w-4 h-4" />
-          Add Member
+          {t("list.addButton")}
         </Button>
       </div>
 
@@ -71,16 +75,16 @@ const MemberList: React.FC<MemberListProps> = ({
           <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Name
+                {t("table.name")}
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Email
+                {t("table.email")}
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Role
+                {t("table.role")}
               </th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
+                {t("table.actions")}
               </th>
             </tr>
           </thead>
@@ -103,7 +107,7 @@ const MemberList: React.FC<MemberListProps> = ({
                         : "bg-green-100 text-green-800"
                     }`}
                   >
-                    {member.role}
+                    {t(`list.roles.${member.role}`)}
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

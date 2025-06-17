@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { UserData } from "../../services/firestore";
 import LabelInput from "../inputs/LabelInput";
 import { Button } from "../ui/Button";
@@ -14,6 +15,7 @@ const MemberForm: React.FC<MemberFormProps> = ({
   onSubmit,
   onCancel,
 }) => {
+  const { t } = useTranslation("members");
   const [formData, setFormData] = useState({
     firstName: member?.firstName || "",
     lastName: member?.lastName || "",
@@ -27,15 +29,15 @@ const MemberForm: React.FC<MemberFormProps> = ({
     const newErrors: Record<string, string> = {};
 
     if (!formData.firstName.trim()) {
-      newErrors.firstName = "First name is required";
+      newErrors.firstName = t("form.fields.firstName.error");
     }
     if (!formData.lastName.trim()) {
-      newErrors.lastName = "Last name is required";
+      newErrors.lastName = t("form.fields.lastName.error");
     }
     if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
+      newErrors.email = t("form.fields.email.error.required");
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Invalid email format";
+      newErrors.email = t("form.fields.email.error.invalid");
     }
 
     setErrors(newErrors);
@@ -54,7 +56,7 @@ const MemberForm: React.FC<MemberFormProps> = ({
       await onSubmit(formData);
     } catch (error) {
       console.error("Error submitting form:", error);
-      setErrors({ submit: "Failed to save member" });
+      setErrors({ submit: t("form.error") });
     } finally {
       setIsSubmitting(false);
     }
@@ -64,13 +66,13 @@ const MemberForm: React.FC<MemberFormProps> = ({
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
         <LabelInput
-          label="First Name"
+          label={t("form.fields.firstName.label")}
           value={formData.firstName}
           onChange={(value) => setFormData({ ...formData, firstName: value })}
           errors={errors.firstName}
         />
         <LabelInput
-          label="Last Name"
+          label={t("form.fields.lastName.label")}
           value={formData.lastName}
           onChange={(value) => setFormData({ ...formData, lastName: value })}
           errors={errors.lastName}
@@ -78,7 +80,7 @@ const MemberForm: React.FC<MemberFormProps> = ({
       </div>
 
       <LabelInput
-        label="Email"
+        label={t("form.fields.email.label")}
         type="email"
         value={formData.email}
         onChange={(value) => setFormData({ ...formData, email: value })}
@@ -86,7 +88,9 @@ const MemberForm: React.FC<MemberFormProps> = ({
       />
 
       <div>
-        <label className="block text-sm font-medium text-gray-700">Role</label>
+        <label className="block text-sm font-medium text-gray-700">
+          {t("form.fields.role.label")}
+        </label>
         <select
           value={formData.role}
           onChange={(e) =>
@@ -97,8 +101,8 @@ const MemberForm: React.FC<MemberFormProps> = ({
           }
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
         >
-          <option value="member">Member</option>
-          <option value="admin">Admin</option>
+          <option value="member">{t("form.fields.role.options.member")}</option>
+          <option value="admin">{t("form.fields.role.options.admin")}</option>
         </select>
       </div>
 
@@ -113,10 +117,14 @@ const MemberForm: React.FC<MemberFormProps> = ({
           onClick={onCancel}
           disabled={isSubmitting}
         >
-          Cancel
+          {t("form.buttons.cancel")}
         </Button>
         <Button type="submit" variant="primary" disabled={isSubmitting}>
-          {isSubmitting ? "Saving..." : member ? "Update Member" : "Add Member"}
+          {isSubmitting
+            ? t("form.buttons.saving")
+            : member
+            ? t("form.buttons.update")
+            : t("form.buttons.add")}
         </Button>
       </div>
     </form>
