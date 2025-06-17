@@ -9,12 +9,14 @@ interface MemberListProps {
   onAddMember: () => void;
   onEditMember: (member: UserData) => void;
   onDeleteMember: (member: UserData) => void;
+  reloadKey?: number;
 }
 
 const MemberList: React.FC<MemberListProps> = ({
   onAddMember,
   onEditMember,
   onDeleteMember,
+  reloadKey = 0,
 }) => {
   const { t } = useTranslation("members");
   const { club } = useClub();
@@ -40,7 +42,7 @@ const MemberList: React.FC<MemberListProps> = ({
     };
 
     fetchMembers();
-  }, [club?.id, t]);
+  }, [club?.id, t, reloadKey]);
 
   if (loading) {
     return (

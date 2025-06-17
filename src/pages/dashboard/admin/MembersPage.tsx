@@ -18,6 +18,7 @@ const MembersPage: React.FC = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState<UserData | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
 
   const handleAddMember = () => {
     setSelectedMember(null);
@@ -47,6 +48,7 @@ const MembersPage: React.FC = () => {
       }
       setIsFormOpen(false);
       setError(null);
+      setReloadKey((prev) => prev + 1);
     } catch (err) {
       console.error("Error saving member:", err);
       setError(t("page.error.save"));
@@ -60,6 +62,7 @@ const MembersPage: React.FC = () => {
       await deleteMember(club.id, selectedMember.id);
       setIsDeleteModalOpen(false);
       setError(null);
+      setReloadKey((prev) => prev + 1);
     } catch (err) {
       console.error("Error deleting member:", err);
       setError(t("page.error.delete"));
@@ -89,6 +92,7 @@ const MembersPage: React.FC = () => {
           onAddMember={handleAddMember}
           onEditMember={handleEditMember}
           onDeleteMember={handleDeleteMember}
+          reloadKey={reloadKey}
         />
       </div>
 
