@@ -5,7 +5,11 @@
     "error": {
       "load": "Échec du chargement des entrées de trésorerie",
       "save": "Échec de la sauvegarde de l'entrée de trésorerie",
-      "delete": "Échec de la suppression de l'entrée de trésorerie"
+      "delete": "Échec de la suppression de l'entrée de trésorerie",
+      "export": "Échec de l'exportation des entrées de trésorerie"
+    },
+    "buttons": {
+      "export": "Exporter en CSV"
     }
   },
   "form": {

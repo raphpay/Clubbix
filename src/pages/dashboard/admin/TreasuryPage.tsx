@@ -70,6 +70,56 @@ const TreasuryPage: React.FC = () => {
     setIsDeleteOpen(false);
   };
 
+  const handleExportCSV = () => {
+    try {
+      // Create CSV header
+      const headers = [
+        "Date",
+        "Type",
+        "Amount",
+        "Description",
+        "Category",
+        "Member Name",
+      ].join(",");
+
+      // Create CSV rows
+      const rows = entries.map((entry) => {
+        const date =
+          entry.date instanceof Timestamp
+            ? entry.date.toDate().toLocaleDateString()
+            : new Date(entry.date).toLocaleDateString();
+        const amount = entry.type === "expense" ? -entry.amount : entry.amount;
+        return [
+          date,
+          entry.type,
+          amount,
+          entry.description,
+          entry.category,
+          entry.memberName,
+        ].join(",");
+      });
+
+      // Combine header and rows
+      const csvContent = [headers, ...rows].join("\n");
+
+      // Create and trigger download
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute(
+        "download",
+        `treasury_export_${new Date().toISOString().split("T")[0]}.csv`
+      );
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (err) {
+      setError(t("page.error.export"));
+      console.error(err);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -116,7 +166,7 @@ const TreasuryPage: React.FC = () => {
           />
         </div>
         <div>
-          <TreasuryChart entries={entries} />
+          <TreasuryChart entries={entries} exportCSV={handleExportCSV} />
         </div>
       </div>
 

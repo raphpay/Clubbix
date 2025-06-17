@@ -12,10 +12,12 @@ import {
   Title,
   Tooltip,
 } from "chart.js";
+import { Download } from "lucide-react";
 import React, { useMemo } from "react";
 import { Bar, Line } from "react-chartjs-2";
 import { useTranslation } from "react-i18next";
 import { TreasuryEntry } from "../../services/firestore/treasuryService";
+import { Button } from "../ui/Button";
 
 ChartJS.register(
   CategoryScale,
@@ -30,9 +32,13 @@ ChartJS.register(
 
 interface TreasuryChartProps {
   entries: TreasuryEntry[];
+  exportCSV: () => void;
 }
 
-const TreasuryChart: React.FC<TreasuryChartProps> = ({ entries }) => {
+const TreasuryChart: React.FC<TreasuryChartProps> = ({
+  entries,
+  exportCSV,
+}) => {
   const { t } = useTranslation("treasury");
   const monthlyData = useMemo(() => {
     const months = new Map<string, { income: number; expenses: number }>();
@@ -149,7 +155,13 @@ const TreasuryChart: React.FC<TreasuryChartProps> = ({ entries }) => {
 
   return (
     <div className="bg-white shadow rounded-lg p-6">
-      <h2 className="text-xl font-semibold mb-4">{t("chart.title")}</h2>
+      <div className="flex justify-between items-center">
+        <h2 className="text-xl font-semibold mb-4">{t("chart.title")}</h2>
+        <Button variant="primary" onClick={exportCSV}>
+          <Download className="h-4 w-4 mr-2" />
+          {t("page.buttons.export")}
+        </Button>
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div>

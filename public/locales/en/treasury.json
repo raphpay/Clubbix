@@ -5,7 +5,11 @@
     "error": {
       "load": "Failed to load treasury entries",
       "save": "Failed to save treasury entry",
-      "delete": "Failed to delete treasury entry"
+      "delete": "Failed to delete treasury entry",
+      "export": "Failed to export treasury entries"
+    },
+    "buttons": {
+      "export": "Export to CSV"
     }
   },
   "form": {
