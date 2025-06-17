@@ -1,0 +1,34 @@
+{
+  "title": "Club Website Manager",
+  "basicContent": "Basic Content",
+  "headline": "Headline",
+  "subtext": "Subtext",
+  "bannerImage": "Banner Image",
+  "addImage": "Add Image",
+  "imageCaption": "Image Caption",
+  "gallery": {
+    "title": "Gallery",
+    "captionPrompt": "Enter image caption",
+    "addImage": "Add Image"
+  },
+  "events": "Events",
+  "addEvent": "Add Event",
+  "eventTitle": "Event Title",
+  "eventDescription": "Event Description",
+  "eventDate": "Event Date (YYYY-MM-DD)",
+  "eventImage": "Event Image",
+  "published": "Published",
+  "draft": "Draft",
+  "publish": "Publish",
+  "publishing": "Publishing...",
+  "unpublish": "Unpublish",
+  "edit": "Edit",
+  "loading": "Loading...",
+  "error": {
+    "load": "Failed to load website content",
+    "update": "Failed to update content",
+    "upload": "Failed to upload image",
+    "create": "Failed to create event",
+    "notFound": "Website content not found"
+  }
+}

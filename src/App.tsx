@@ -13,7 +13,8 @@ import { ClubProvider } from "./contexts/ClubContext";
 
 // Pages
 import RegistrationForm from "./components/RegistrationForm";
-import ClubPage from "./pages/ClubPage";
+import ClubWebsite from "./pages/ClubWebsite";
+import ClubWebsiteManager from "./pages/ClubWebsiteManager";
 import AdminDashboard from "./pages/dashboard/admin/AdminDashboard";
 import MembersPage from "./pages/dashboard/admin/MembersPage";
 import TreasuryPage from "./pages/dashboard/admin/TreasuryPage";
@@ -66,6 +67,7 @@ const App: React.FC = () => {
                 <Route path="treasury" element={<TreasuryPage />} />
                 <Route path="members" element={<MembersPage />} />
                 <Route path="events" element={<EventsPage />} />
+                <Route path="website" element={<ClubWebsiteManager />} />
               </Route>
 
               <Route
@@ -82,7 +84,7 @@ const App: React.FC = () => {
               </Route>
 
               {/* Club routes */}
-              <Route path="/clubs/:slug" element={<ClubPage />} />
+              <Route path="/clubs/:clubId" element={<ClubWebsite />} />
 
               {/* Auth redirect */}
               <Route path="/dashboard" element={<AuthenticatedRedirect />} />

@@ -1,6 +1,8 @@
 {
+  "dashboard": "Dashboard",
   "members": "Members",
   "treasury": "Treasury",
   "events": "Events",
-  "trainings": "Trainings"
+  "trainings": "Trainings",
+  "website": "Website"
 }
