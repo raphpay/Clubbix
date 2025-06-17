@@ -2,7 +2,7 @@ import { Calendar, Dumbbell, Globe, Users, Wallet } from "lucide-react";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../hooks/useAuth";
 
 interface SidebarProps {
   isOpen: boolean;

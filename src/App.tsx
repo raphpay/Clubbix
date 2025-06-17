@@ -8,8 +8,9 @@ import {
 } from "react-router-dom";
 import DashboardLayout from "./components/layout/DashboardLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
-import { AuthProvider, useAuth } from "./context/AuthContext";
+import { AuthProvider } from "./context/AuthContext";
 import { ClubProvider } from "./contexts/ClubContext";
+import { useAuth } from "./hooks/useAuth";
 
 // Pages
 import RegistrationForm from "./components/RegistrationForm";
