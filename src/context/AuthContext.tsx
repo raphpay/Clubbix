@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useState } from "react";
+import React, { createContext, ReactNode, useEffect, useState } from "react";
 import { User } from "../services/auth";
 
 interface AuthContextType {
@@ -21,12 +21,22 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const login = (user: User) => {
     setIsAuthenticated(true);
     setUser(user);
+    localStorage.setItem("user", JSON.stringify(user));
   };
 
   const logout = () => {
     setIsAuthenticated(false);
     setUser(null);
+    localStorage.removeItem("user");
   };
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+      setIsAuthenticated(true);
+    }
+  }, []);
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
