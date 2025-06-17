@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
-import { useClub } from "../hooks/useClub";
+import { useParams } from "react-router-dom";
 import { getClubWebsiteContent } from "../services/firestore/clubWebsiteService";
 import { ClubWebsiteContent } from "../services/firestore/types";
 
 const ClubWebsite: React.FC = () => {
   const { t } = useTranslation("website");
-  const { club } = useClub();
+  const { clubId } = useParams<{ clubId: string }>();
   const [content, setContent] = useState<ClubWebsiteContent | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const loadContent = async () => {
-      if (!club?.id) return;
+      if (!clubId) return;
       try {
-        const websiteContent = await getClubWebsiteContent(club.id);
+        const websiteContent = await getClubWebsiteContent(clubId);
         setContent(websiteContent);
       } catch (err) {
         setError(t("error.load"));
@@ -27,7 +27,7 @@ const ClubWebsite: React.FC = () => {
     };
 
     loadContent();
-  }, [club]);
+  }, [clubId]);
 
   if (isLoading) {
     return <div>{t("loading")}</div>;
