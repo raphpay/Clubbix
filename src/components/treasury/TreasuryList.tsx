@@ -1,5 +1,6 @@
 import { Plus } from "lucide-react";
 import React, { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { TreasuryEntry } from "../../services/firestore/treasuryService";
 import { Button } from "../ui/Button";
 
@@ -9,6 +10,7 @@ interface TreasuryListProps {
 }
 
 const TreasuryList: React.FC<TreasuryListProps> = ({ entries, onAddEntry }) => {
+  const { t } = useTranslation("treasury");
   const [filters, setFilters] = useState({
     type: "",
     category: "",
@@ -65,10 +67,10 @@ const TreasuryList: React.FC<TreasuryListProps> = ({ entries, onAddEntry }) => {
   return (
     <div className="bg-white shadow rounded-lg p-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-semibold mb-4">Treasury Entries</h2>
+        <h2 className="text-xl font-semibold mb-4">{t("list.title")}</h2>
         <Button onClick={onAddEntry} variant="primary" className="mb-2">
           <Plus className="w-4 h-4" />
-          Add Entry
+          {t("list.buttons.add")}
         </Button>
       </div>
 
@@ -76,7 +78,7 @@ const TreasuryList: React.FC<TreasuryListProps> = ({ entries, onAddEntry }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Type
+            {t("list.filters.type")}
           </label>
           <select
             name="type"
@@ -84,15 +86,15 @@ const TreasuryList: React.FC<TreasuryListProps> = ({ entries, onAddEntry }) => {
             onChange={handleFilterChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2"
           >
-            <option value="">All</option>
-            <option value="income">Income</option>
-            <option value="expense">Expense</option>
+            <option value="">{t("list.filters.all")}</option>
+            <option value="income">{t("form.types.income")}</option>
+            <option value="expense">{t("form.types.expense")}</option>
           </select>
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Category
+            {t("list.filters.category")}
           </label>
           <select
             name="category"
@@ -100,7 +102,7 @@ const TreasuryList: React.FC<TreasuryListProps> = ({ entries, onAddEntry }) => {
             onChange={handleFilterChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2"
           >
-            <option value="">All</option>
+            <option value="">{t("list.filters.all")}</option>
             {categories.map((category) => (
               <option key={category} value={category}>
                 {category}
@@ -111,7 +113,7 @@ const TreasuryList: React.FC<TreasuryListProps> = ({ entries, onAddEntry }) => {
 
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Member Name
+            {t("list.filters.memberName")}
           </label>
           <input
             type="text"
@@ -119,13 +121,13 @@ const TreasuryList: React.FC<TreasuryListProps> = ({ entries, onAddEntry }) => {
             value={filters.memberName}
             onChange={handleFilterChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2"
-            placeholder="Search by member..."
+            placeholder={t("form.placeholders.memberName")}
           />
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Start Date
+            {t("list.filters.startDate")}
           </label>
           <input
             type="date"
@@ -138,7 +140,7 @@ const TreasuryList: React.FC<TreasuryListProps> = ({ entries, onAddEntry }) => {
 
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            End Date
+            {t("list.filters.endDate")}
           </label>
           <input
             type="date"
@@ -153,13 +155,17 @@ const TreasuryList: React.FC<TreasuryListProps> = ({ entries, onAddEntry }) => {
       {/* Summary */}
       <div className="grid grid-cols-2 gap-4 mb-6">
         <div className="bg-green-50 p-4 rounded-lg">
-          <h3 className="text-sm font-medium text-green-800">Total Income</h3>
+          <h3 className="text-sm font-medium text-green-800">
+            {t("list.summary.totalIncome")}
+          </h3>
           <p className="text-2xl font-semibold text-green-600">
             ${totalIncome.toFixed(2)}
           </p>
         </div>
         <div className="bg-red-50 p-4 rounded-lg">
-          <h3 className="text-sm font-medium text-red-800">Total Expenses</h3>
+          <h3 className="text-sm font-medium text-red-800">
+            {t("list.summary.totalExpenses")}
+          </h3>
           <p className="text-2xl font-semibold text-red-600">
             ${totalExpenses.toFixed(2)}
           </p>
@@ -172,22 +178,22 @@ const TreasuryList: React.FC<TreasuryListProps> = ({ entries, onAddEntry }) => {
           <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Date
+                {t("list.table.date")}
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Type
+                {t("list.table.type")}
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Amount
+                {t("list.table.amount")}
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Description
+                {t("list.table.description")}
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Category
+                {t("list.table.category")}
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Member
+                {t("list.table.member")}
               </th>
             </tr>
           </thead>
@@ -205,7 +211,7 @@ const TreasuryList: React.FC<TreasuryListProps> = ({ entries, onAddEntry }) => {
                         : "bg-red-100 text-red-800"
                     }`}
                   >
-                    {entry.type}
+                    {t(`form.types.${entry.type}`)}
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

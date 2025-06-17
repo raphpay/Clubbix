@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { TreasuryEntry } from "../../services/firestore/treasuryService";
 
 interface TreasuryFormProps {
@@ -10,17 +11,25 @@ const TreasuryForm: React.FC<TreasuryFormProps> = ({
   onAddEntry,
   onCancel,
 }) => {
+  const { t } = useTranslation("treasury");
   const [formData, setFormData] = useState({
     type: "income" as const,
     amount: "",
+    date: new Date().toISOString().split("T")[0],
     description: "",
     category: "",
     memberId: "",
     memberName: "",
-    date: new Date().toISOString().split("T")[0],
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,10 +37,14 @@ const TreasuryForm: React.FC<TreasuryFormProps> = ({
     setError(null);
 
     try {
-      const entryData = {
-        ...formData,
+      const entryData: Omit<TreasuryEntry, "id" | "createdAt"> = {
+        type: formData.type,
         amount: parseFloat(formData.amount),
         date: new Date(formData.date),
+        description: formData.description,
+        category: formData.category,
+        memberId: formData.memberId,
+        memberName: formData.memberName,
       };
 
       onAddEntry(entryData);
@@ -40,27 +53,19 @@ const TreasuryForm: React.FC<TreasuryFormProps> = ({
       setFormData({
         type: "income",
         amount: "",
+        date: new Date().toISOString().split("T")[0],
         description: "",
         category: "",
         memberId: "",
         memberName: "",
-        date: new Date().toISOString().split("T")[0],
       });
 
       onCancel();
     } catch (err) {
-      setError("Failed to add entry");
-      console.error(err);
+      setError(t("page.error.save"));
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   return (
@@ -70,7 +75,7 @@ const TreasuryForm: React.FC<TreasuryFormProps> = ({
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Type
+            {t("form.fields.type")}
           </label>
           <select
             name="type"
@@ -78,14 +83,14 @@ const TreasuryForm: React.FC<TreasuryFormProps> = ({
             onChange={handleChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2"
           >
-            <option value="income">Income</option>
-            <option value="expense">Expense</option>
+            <option value="income">{t("form.types.income")}</option>
+            <option value="expense">{t("form.types.expense")}</option>
           </select>
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Amount
+            {t("form.fields.amount")}
           </label>
           <input
             type="number"
@@ -94,15 +99,14 @@ const TreasuryForm: React.FC<TreasuryFormProps> = ({
             onChange={handleChange}
             required
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2"
-            placeholder="0.00"
+            placeholder={t("form.placeholders.amount")}
             step="0.01"
-            min="0"
           />
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Date
+            {t("form.fields.date")}
           </label>
           <input
             type="date"
@@ -116,7 +120,7 @@ const TreasuryForm: React.FC<TreasuryFormProps> = ({
 
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Description
+            {t("form.fields.description")}
           </label>
           <input
             type="text"
@@ -125,12 +129,13 @@ const TreasuryForm: React.FC<TreasuryFormProps> = ({
             onChange={handleChange}
             required
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2"
+            placeholder={t("form.placeholders.description")}
           />
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Category
+            {t("form.fields.category")}
           </label>
           <input
             type="text"
@@ -138,12 +143,13 @@ const TreasuryForm: React.FC<TreasuryFormProps> = ({
             value={formData.category}
             onChange={handleChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2"
+            placeholder={t("form.placeholders.category")}
           />
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Member Name
+            {t("form.fields.memberName")}
           </label>
           <input
             type="text"
@@ -151,16 +157,26 @@ const TreasuryForm: React.FC<TreasuryFormProps> = ({
             value={formData.memberName}
             onChange={handleChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2"
+            placeholder={t("form.placeholders.memberName")}
           />
         </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50"
-        >
-          {loading ? "Adding..." : "Add Entry"}
-        </button>
+        <div className="flex justify-end space-x-3">
+          <button
+            type="button"
+            onClick={onCancel}
+            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            {t("form.buttons.cancel")}
+          </button>
+          <button
+            type="submit"
+            disabled={loading}
+            className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            {loading ? t("page.loading") : t("form.buttons.submit")}
+          </button>
+        </div>
       </form>
     </div>
   );

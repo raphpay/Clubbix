@@ -3,15 +3,18 @@ import {
   CategoryScale,
   ChartData,
   Chart as ChartJS,
+  CoreScaleOptions,
   Legend,
   LinearScale,
   LineElement,
   PointElement,
+  Scale,
   Title,
   Tooltip,
 } from "chart.js";
 import React, { useMemo } from "react";
 import { Bar, Line } from "react-chartjs-2";
+import { useTranslation } from "react-i18next";
 import { TreasuryEntry } from "../../services/firestore/treasuryService";
 
 ChartJS.register(
@@ -30,6 +33,7 @@ interface TreasuryChartProps {
 }
 
 const TreasuryChart: React.FC<TreasuryChartProps> = ({ entries }) => {
+  const { t } = useTranslation("treasury");
   const monthlyData = useMemo(() => {
     const months = new Map<string, { income: number; expenses: number }>();
 
@@ -85,14 +89,14 @@ const TreasuryChart: React.FC<TreasuryChartProps> = ({ entries }) => {
     labels: monthlyData.map((d) => d.month),
     datasets: [
       {
-        label: "Income",
+        label: t("form.types.income"),
         data: monthlyData.map((d) => d.income),
         borderColor: "rgb(34, 197, 94)",
         backgroundColor: "rgba(34, 197, 94, 0.5)",
         tension: 0.1,
       },
       {
-        label: "Expenses",
+        label: t("form.types.expense"),
         data: monthlyData.map((d) => d.expenses),
         borderColor: "rgb(239, 68, 68)",
         backgroundColor: "rgba(239, 68, 68, 0.5)",
@@ -105,12 +109,12 @@ const TreasuryChart: React.FC<TreasuryChartProps> = ({ entries }) => {
     labels: categoryData.map((d) => d.category),
     datasets: [
       {
-        label: "Income",
+        label: t("form.types.income"),
         data: categoryData.map((d) => d.income),
         backgroundColor: "rgba(34, 197, 94, 0.5)",
       },
       {
-        label: "Expenses",
+        label: t("form.types.expense"),
         data: categoryData.map((d) => d.expenses),
         backgroundColor: "rgba(239, 68, 68, 0.5)",
       },
@@ -125,14 +129,19 @@ const TreasuryChart: React.FC<TreasuryChartProps> = ({ entries }) => {
       },
       title: {
         display: true,
-        text: "Treasury Overview",
+        text: t("chart.title"),
       },
     },
     scales: {
       y: {
         beginAtZero: true,
         ticks: {
-          callback: (value: number) => `$${value.toFixed(2)}`,
+          callback: function (
+            this: Scale<CoreScaleOptions>,
+            tickValue: number | string
+          ) {
+            return `$${Number(tickValue).toFixed(2)}`;
+          },
         },
       },
     },
@@ -140,16 +149,20 @@ const TreasuryChart: React.FC<TreasuryChartProps> = ({ entries }) => {
 
   return (
     <div className="bg-white shadow rounded-lg p-6">
-      <h2 className="text-xl font-semibold mb-4">Treasury Analytics</h2>
+      <h2 className="text-xl font-semibold mb-4">{t("chart.title")}</h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div>
-          <h3 className="text-lg font-medium mb-2">Monthly Trends</h3>
+          <h3 className="text-lg font-medium mb-2">
+            {t("chart.monthlyTrends")}
+          </h3>
           <Line data={monthlyChartData} options={chartOptions} />
         </div>
 
         <div>
-          <h3 className="text-lg font-medium mb-2">Category Breakdown</h3>
+          <h3 className="text-lg font-medium mb-2">
+            {t("chart.categoryBreakdown")}
+          </h3>
           <Bar data={categoryChartData} options={chartOptions} />
         </div>
       </div>

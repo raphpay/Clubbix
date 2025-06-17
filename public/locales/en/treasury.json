@@ -11,6 +11,59 @@
     "title": {
       "add": "Add Treasury Entry",
       "edit": "Edit Treasury Entry"
+    },
+    "fields": {
+      "type": "Type",
+      "amount": "Amount",
+      "date": "Date",
+      "description": "Description",
+      "category": "Category",
+      "memberName": "Member Name"
+    },
+    "types": {
+      "income": "Income",
+      "expense": "Expense"
+    },
+    "buttons": {
+      "submit": "Add Entry",
+      "cancel": "Cancel"
+    },
+    "placeholders": {
+      "amount": "0.00",
+      "description": "Enter description",
+      "category": "Select category",
+      "memberName": "Enter member name"
     }
+  },
+  "list": {
+    "title": "Treasury Entries",
+    "filters": {
+      "type": "Type",
+      "category": "Category",
+      "memberName": "Member Name",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "all": "All"
+    },
+    "summary": {
+      "totalIncome": "Total Income",
+      "totalExpenses": "Total Expenses"
+    },
+    "table": {
+      "date": "Date",
+      "type": "Type",
+      "amount": "Amount",
+      "description": "Description",
+      "category": "Category",
+      "member": "Member"
+    },
+    "buttons": {
+      "add": "Add Entry"
+    }
+  },
+  "chart": {
+    "title": "Treasury Analytics",
+    "monthlyTrends": "Monthly Trends",
+    "categoryBreakdown": "Category Breakdown"
   }
 }
