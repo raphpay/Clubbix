@@ -1,0 +1,91 @@
+{
+  "page": {
+    "title": "Treasury",
+    "loading": "Loading treasury entries...",
+    "error": {
+      "load": "Failed to load treasury entries",
+      "save": "Failed to save treasury entry",
+      "delete": "Failed to delete treasury entry",
+      "export": "Failed to export treasury entries"
+    },
+    "buttons": {
+      "export": "Export to CSV"
+    }
+  },
+  "form": {
+    "title": {
+      "add": "Add Treasury Entry",
+      "edit": "Edit Treasury Entry",
+      "delete": "Delete Treasury Entry"
+    },
+    "fields": {
+      "type": "Type",
+      "amount": "Amount",
+      "date": "Date",
+      "description": "Description",
+      "category": "Category",
+      "memberName": "Member Name"
+    },
+    "types": {
+      "income": "Income",
+      "expense": "Expense"
+    },
+    "buttons": {
+      "submit": "Add Entry",
+      "cancel": "Cancel"
+    },
+    "placeholders": {
+      "amount": "0.00",
+      "description": "Enter description",
+      "category": "Select category",
+      "memberName": "Enter member name"
+    }
+  },
+  "list": {
+    "title": "Treasury Entries",
+    "filters": {
+      "type": "Type",
+      "category": "Category",
+      "memberName": "Member Name",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "all": "All"
+    },
+    "summary": {
+      "totalIncome": "Total Income",
+      "totalExpenses": "Total Expenses"
+    },
+    "table": {
+      "date": "Date",
+      "type": "Type",
+      "amount": "Amount",
+      "description": "Description",
+      "category": "Category",
+      "member": "Member",
+      "actions": "Actions"
+    },
+    "buttons": {
+      "add": "Add Entry"
+    },
+    "actions": {
+      "edit": "Edit Entry",
+      "delete": "Delete Entry",
+      "confirmDelete": "Are you sure you want to delete this entry?",
+      "deleteSuccess": "Entry deleted successfully",
+      "deleteError": "Failed to delete entry"
+    }
+  },
+  "chart": {
+    "title": "Treasury Analytics",
+    "monthlyTrends": "Monthly Trends",
+    "categoryBreakdown": "Category Breakdown"
+  },
+  "deleteModal": {
+    "title": "Delete Treasury Entry",
+    "message": "Are you sure you want to delete this entry?",
+    "buttons": {
+      "confirm": "Delete",
+      "cancel": "Cancel"
+    }
+  }
+}

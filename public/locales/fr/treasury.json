@@ -1,0 +1,91 @@
+{
+  "page": {
+    "title": "Trésorerie",
+    "loading": "Chargement des entrées de trésorerie...",
+    "error": {
+      "load": "Échec du chargement des entrées de trésorerie",
+      "save": "Échec de la sauvegarde de l'entrée de trésorerie",
+      "delete": "Échec de la suppression de l'entrée de trésorerie",
+      "export": "Échec de l'exportation des entrées de trésorerie"
+    },
+    "buttons": {
+      "export": "Exporter en CSV"
+    }
+  },
+  "form": {
+    "title": {
+      "add": "Ajouter une entrée de trésorerie",
+      "edit": "Modifier une entrée de trésorerie",
+      "delete": "Supprimer une entrée de trésorerie"
+    },
+    "fields": {
+      "type": "Type",
+      "amount": "Montant",
+      "date": "Date",
+      "description": "Description",
+      "category": "Catégorie",
+      "memberName": "Nom du membre"
+    },
+    "types": {
+      "income": "Revenu",
+      "expense": "Dépense"
+    },
+    "buttons": {
+      "submit": "Ajouter l'entrée",
+      "cancel": "Annuler"
+    },
+    "placeholders": {
+      "amount": "0,00",
+      "description": "Entrez la description",
+      "category": "Sélectionnez une catégorie",
+      "memberName": "Entrez le nom du membre"
+    }
+  },
+  "list": {
+    "title": "Entrées de trésorerie",
+    "filters": {
+      "type": "Type",
+      "category": "Catégorie",
+      "memberName": "Nom du membre",
+      "startDate": "Date de début",
+      "endDate": "Date de fin",
+      "all": "Tous"
+    },
+    "summary": {
+      "totalIncome": "Revenus totaux",
+      "totalExpenses": "Dépenses totales"
+    },
+    "table": {
+      "date": "Date",
+      "type": "Type",
+      "amount": "Montant",
+      "description": "Description",
+      "category": "Catégorie",
+      "member": "Membre",
+      "actions": "Actions"
+    },
+    "buttons": {
+      "add": "Ajouter une entrée"
+    },
+    "actions": {
+      "edit": "Modifier l'entrée",
+      "delete": "Supprimer l'entrée",
+      "confirmDelete": "Êtes-vous sûr de vouloir supprimer cette entrée ?",
+      "deleteSuccess": "Entrée supprimée avec succès",
+      "deleteError": "Échec de la suppression de l'entrée"
+    }
+  },
+  "chart": {
+    "title": "Analyses de trésorerie",
+    "monthlyTrends": "Tendances mensuelles",
+    "categoryBreakdown": "Répartition par catégorie"
+  },
+  "deleteModal": {
+    "title": "Supprimer une entrée de trésorerie",
+    "message": "Êtes-vous sûr de vouloir supprimer cette entrée ?",
+    "buttons": {
+      "confirm": "Supprimer",
+      "cancel": "Annuler"
+    }
+  }
+}
