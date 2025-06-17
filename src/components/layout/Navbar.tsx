@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "../ui/Button";
+import { Logo } from "../ui/Logo";
 
 interface NavItem {
   label: string;
@@ -15,14 +16,12 @@ interface CTAButton {
 
 interface NavbarProps {
   items: NavItem[];
-  logo?: React.ReactNode;
   ctaButtons?: CTAButton[];
   children?: React.ReactNode;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   items,
-  logo,
   ctaButtons = [],
   children,
 }) => {
@@ -43,7 +42,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="flex justify-between h-16">
           <div className="flex">
             {/* Logo */}
-            <div className="flex-shrink-0 flex items-center">{logo}</div>
+            <Logo />
 
             {/* Desktop Navigation */}
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">

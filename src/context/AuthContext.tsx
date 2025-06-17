@@ -1,32 +1,35 @@
 import React, { createContext, ReactNode, useContext, useState } from "react";
+import { User } from "../services/auth";
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  userRole: "admin" | "member" | null;
-  login: (role: "admin" | "member") => void;
+  user: User | null;
+  login: (user: User) => void;
   logout: () => void;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | undefined>(
+  undefined
+);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userRole, setUserRole] = useState<"admin" | "member" | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
-  const login = (role: "admin" | "member") => {
+  const login = (user: User) => {
     setIsAuthenticated(true);
-    setUserRole(role);
+    setUser(user);
   };
 
   const logout = () => {
     setIsAuthenticated(false);
-    setUserRole(null);
+    setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, userRole, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

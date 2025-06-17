@@ -1,0 +1,17 @@
+import React from "react";
+
+const EventsPage: React.FC = () => {
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-semibold text-gray-900">Events</h1>
+      </div>
+
+      <div className="bg-white shadow rounded-lg p-6">
+        <p className="text-gray-600">Events management content will go here.</p>
+      </div>
+    </div>
+  );
+};
+
+export default EventsPage;

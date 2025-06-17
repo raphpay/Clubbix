@@ -22,8 +22,6 @@ const LandingPage: React.FC = () => {
     { label: t("cta.signup"), href: "/signup", variant: "primary" as const },
   ];
 
-  const logo = <h1 className="text-2xl font-bold text-indigo-600">Clubbix</h1>;
-
   const footerSections = [
     {
       title: t("footer.sections.product.title"),
@@ -88,7 +86,7 @@ const LandingPage: React.FC = () => {
         image="/images/og-image.jpg"
         url="https://clubbix.io"
       />
-      <Navbar items={navItems} logo={logo} ctaButtons={ctaButtons}>
+      <Navbar items={navItems} ctaButtons={ctaButtons}>
         <LanguageSwitcher />
       </Navbar>
 
