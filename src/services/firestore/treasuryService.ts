@@ -1,5 +1,6 @@
 import {
   collection,
+  deleteDoc,
   doc,
   getDocs,
   orderBy,
@@ -100,4 +101,9 @@ export const getTreasurySummary = async (
     totalExpenses,
     balance: totalIncome - totalExpenses,
   };
+};
+
+export const deleteTreasuryEntry = async (clubId: string, entryId: string) => {
+  const entryRef = doc(db, `clubs/${clubId}/treasury/${entryId}`);
+  await deleteDoc(entryRef);
 };

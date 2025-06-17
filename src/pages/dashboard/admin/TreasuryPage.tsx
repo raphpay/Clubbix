@@ -1,12 +1,14 @@
 import { Timestamp } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import DeleteTreasuryModal from "../../../components/treasury/DeleteTreasuryModal";
 import TreasuryChart from "../../../components/treasury/TreasuryChart";
 import TreasuryForm from "../../../components/treasury/TreasuryForm";
 import TreasuryList from "../../../components/treasury/TreasuryList";
 import { useClub } from "../../../hooks/useClub";
 import {
   addTreasuryEntry,
+  deleteTreasuryEntry,
   getTreasuryEntries,
   TreasuryEntry,
 } from "../../../services/firestore/treasuryService";
@@ -21,6 +23,7 @@ const TreasuryPage: React.FC = () => {
     null
   );
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
   useEffect(() => {
     const fetchEntries = async () => {
@@ -60,6 +63,13 @@ const TreasuryPage: React.FC = () => {
     }
   };
 
+  const handleDeleteEntry = async (entry: TreasuryEntry) => {
+    if (!club?.id) return;
+    await deleteTreasuryEntry(club.id, entry.id);
+    setEntries((prev) => prev.filter((e) => e.id !== entry.id));
+    setIsDeleteOpen(false);
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -95,6 +105,14 @@ const TreasuryPage: React.FC = () => {
           <TreasuryList
             entries={entries}
             onAddEntry={() => setIsFormOpen(true)}
+            onEditEntry={(entry) => {
+              setIsFormOpen(true);
+              setSelectedEntry(entry);
+            }}
+            onDeleteEntry={(entry) => {
+              setSelectedEntry(entry);
+              setIsDeleteOpen(true);
+            }}
           />
         </div>
         <div>
@@ -155,6 +173,15 @@ const TreasuryPage: React.FC = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {isDeleteOpen && selectedEntry && (
+        <DeleteTreasuryModal
+          entry={selectedEntry}
+          isOpen={isDeleteOpen}
+          onCancel={() => setIsDeleteOpen(false)}
+          onConfirm={() => handleDeleteEntry(selectedEntry)}
+        />
       )}
     </div>
   );

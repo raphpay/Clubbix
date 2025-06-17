@@ -1,4 +1,4 @@
-import { Plus } from "lucide-react";
+import { Pencil, Plus, Trash2 } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { TreasuryEntry } from "../../services/firestore/treasuryService";
@@ -7,9 +7,16 @@ import { Button } from "../ui/Button";
 interface TreasuryListProps {
   entries: TreasuryEntry[];
   onAddEntry: () => void;
+  onEditEntry: (entry: TreasuryEntry) => void;
+  onDeleteEntry: (entry: TreasuryEntry) => void;
 }
 
-const TreasuryList: React.FC<TreasuryListProps> = ({ entries, onAddEntry }) => {
+const TreasuryList: React.FC<TreasuryListProps> = ({
+  entries,
+  onAddEntry,
+  onEditEntry,
+  onDeleteEntry,
+}) => {
   const { t } = useTranslation("treasury");
   const [filters, setFilters] = useState({
     type: "",
@@ -195,6 +202,9 @@ const TreasuryList: React.FC<TreasuryListProps> = ({ entries, onAddEntry }) => {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 {t("list.table.member")}
               </th>
+              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                {t("list.table.actions")}
+              </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -225,6 +235,24 @@ const TreasuryList: React.FC<TreasuryListProps> = ({ entries, onAddEntry }) => {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {entry.memberName}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <div className="flex justify-end space-x-2">
+                    <button
+                      onClick={() => onEditEntry(entry)}
+                      className="text-indigo-600 hover:text-indigo-900"
+                      title={t("list.actions.edit")}
+                    >
+                      <Pencil className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => onDeleteEntry(entry)}
+                      className="text-red-600 hover:text-red-900"
+                      title={t("list.actions.delete")}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
