@@ -318,7 +318,6 @@ const LandingPage: React.FC = () => {
       {/* Footer */}
       <Footer
         sections={footerSections}
-        logo={logo}
         socialLinks={socialLinks}
         copyright={t("footer.copyright", { year: new Date().getFullYear() })}
       />

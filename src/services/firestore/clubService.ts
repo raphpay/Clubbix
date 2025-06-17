@@ -9,26 +9,8 @@ import {
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { nanoid } from "nanoid";
-import { db, storage } from "../config/firebase";
-
-export interface UserData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  role: "admin" | "member";
-  clubId?: string;
-  createdAt: Date;
-}
-
-export interface ClubData {
-  name: string;
-  formattedName: string;
-  logoUrl?: string;
-  createdBy: string;
-  inviteCode: string;
-  members: string[];
-  createdAt: Date;
-}
+import { db, storage } from "../../config/firebase";
+import { ClubData } from "./types";
 
 export const generateInviteCode = () => {
   return nanoid(8).toUpperCase();
@@ -55,17 +37,6 @@ export const checkClubNameExists = async (
   const q = query(clubsRef, where("formattedName", "==", formattedName));
   const querySnapshot = await getDocs(q);
   return !querySnapshot.empty;
-};
-
-export const createUserProfile = async (
-  userId: string,
-  userData: Omit<UserData, "createdAt">
-): Promise<void> => {
-  const userRef = doc(db, "users", userId);
-  await setDoc(userRef, {
-    ...userData,
-    createdAt: serverTimestamp(),
-  });
 };
 
 export const createClub = async (
