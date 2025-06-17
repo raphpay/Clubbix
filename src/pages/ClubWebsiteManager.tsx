@@ -1,6 +1,8 @@
+import { deleteObject, listAll, ref } from "firebase/storage";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "../components/ui/Button";
+import { storage } from "../config/firebase";
 import { useClub } from "../hooks/useClub";
 import {
   addEvent,
@@ -87,6 +89,15 @@ const ClubWebsiteManager: React.FC = () => {
   const handleBannerImageUpload = async (file: File) => {
     if (!club?.id) return;
     try {
+      // Delete existing banner images
+      const bannerRef = ref(storage, `clubs/${club.id}/website/banner`);
+      const bannerList = await listAll(bannerRef);
+
+      // Delete all existing banner images
+      const deletePromises = bannerList.items.map((item) => deleteObject(item));
+      await Promise.all(deletePromises);
+
+      // Upload new banner image
       const imageUrl = await uploadWebsiteImage(club.id, file, "banner");
       handleContentChange({ bannerImageUrl: imageUrl });
     } catch (err) {
