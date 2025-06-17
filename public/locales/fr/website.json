@@ -30,5 +30,6 @@
     "upload": "Échec du téléchargement de l'image",
     "create": "Échec de la création de l'événement",
     "notFound": "Contenu du site Web non trouvé"
-  }
+  },
+  "seeWebsite": "Voir le site Web"
 }

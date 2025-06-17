@@ -30,5 +30,6 @@
     "upload": "Failed to upload image",
     "create": "Failed to create event",
     "notFound": "Website content not found"
-  }
+  },
+  "seeWebsite": "See website"
 }

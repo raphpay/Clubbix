@@ -176,13 +176,24 @@ const ClubWebsiteManager: React.FC = () => {
         <section className="mb-8">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-semibold mb-4">{t("basicContent")}</h2>
-            <Button
-              variant="outline"
-              onClick={handlePublish}
-              disabled={!hasChanges || isPublishing}
-            >
-              {isPublishing ? t("publishing") : t("publish")}
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                onClick={handlePublish}
+                disabled={!hasChanges || isPublishing}
+              >
+                {isPublishing ? t("publishing") : t("publish")}
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  if (!club?.id) return;
+                  window.open(`/clubs/${club.id}`, "_blank");
+                }}
+              >
+                {t("seeWebsite")}
+              </Button>
+            </div>
           </div>
 
           <div className="space-y-4">
