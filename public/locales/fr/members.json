@@ -58,7 +58,10 @@
       "update": "Mettre à jour le membre",
       "add": "Ajouter le membre"
     },
-    "error": "Échec de l'enregistrement du membre"
+    "error": "Échec de l'enregistrement du membre",
+    "success": {
+      "newMember": "Membre ajouté avec succès ! Un email de réinitialisation de mot de passe a été envoyé à son adresse email."
+    }
   },
   "deleteModal": {
     "title": "Supprimer le membre",

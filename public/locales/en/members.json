@@ -59,7 +59,10 @@
       "update": "Update Member",
       "add": "Add Member"
     },
-    "error": "Failed to save member"
+    "error": "Failed to save member",
+    "success": {
+      "newMember": "Member added successfully! A password reset email has been sent to their email address."
+    }
   },
   "deleteModal": {
     "title": "Remove Member",

@@ -1,5 +1,6 @@
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { db } from "../../config/firebase";
+import { createAuthUser, sendPasswordReset } from "./authService";
 import { UserData } from "./types";
 
 export const createUserProfile = async (
@@ -39,27 +40,56 @@ export const addMember = async (
   clubId: string,
   userData: Omit<UserData, "createdAt">
 ): Promise<string> => {
-  // First create the user profile
-  const userRef = doc(db, "users", userData.email);
-  await setDoc(userRef, {
-    ...userData,
-    createdAt: serverTimestamp(),
-  });
+  try {
+    // Generate a temporary password
+    const tempPassword = Math.random().toString(36).slice(-8);
 
-  // Then add the user to the club's members array
-  const clubRef = doc(db, "clubs", clubId);
-  const clubDoc = await getDoc(clubRef);
-  const clubData = clubDoc.data();
+    // Create the user in Firebase Auth
+    const authUser = await createAuthUser(userData.email, tempPassword);
 
-  await setDoc(
-    clubRef,
-    {
-      members: [...(clubData?.members || []), userData.email],
-    },
-    { merge: true }
-  );
+    // Create the user profile in Firestore
+    const userRef = doc(db, "users", authUser.uid);
+    await setDoc(userRef, {
+      ...userData,
+      createdAt: serverTimestamp(),
+    });
 
-  return userData.email;
+    // Add the user to the club's members array
+    const clubRef = doc(db, "clubs", clubId);
+    const clubDoc = await getDoc(clubRef);
+    const clubData = clubDoc.data();
+
+    await setDoc(
+      clubRef,
+      {
+        members: [...(clubData?.members || []), authUser.uid],
+      },
+      { merge: true }
+    );
+
+    // Send password reset email to the new user
+    await sendPasswordReset(userData.email);
+
+    return authUser.uid;
+  } catch (error: any) {
+    if (error.message === "Email already in use") {
+      // If the user already exists, just add them to the club
+      const clubRef = doc(db, "clubs", clubId);
+      const clubDoc = await getDoc(clubRef);
+      const clubData = clubDoc.data();
+
+      await setDoc(
+        clubRef,
+        {
+          members: [...(clubData?.members || []), userData.email],
+        },
+        { merge: true }
+      );
+
+      return userData.email;
+    }
+    throw error;
+  }
 };
 
 export const updateMember = async (

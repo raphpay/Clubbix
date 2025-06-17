@@ -24,6 +24,7 @@ const MemberForm: React.FC<MemberFormProps> = ({
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -52,8 +53,12 @@ const MemberForm: React.FC<MemberFormProps> = ({
     }
 
     setIsSubmitting(true);
+    setSuccessMessage(null);
     try {
       await onSubmit(formData);
+      if (!member) {
+        setSuccessMessage(t("form.success.newMember"));
+      }
     } catch (error) {
       console.error("Error submitting form:", error);
       setErrors({ submit: t("form.error") });
@@ -64,6 +69,18 @@ const MemberForm: React.FC<MemberFormProps> = ({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {successMessage && (
+        <div className="rounded-md bg-green-50 p-4">
+          <div className="flex">
+            <div className="ml-3">
+              <p className="text-sm font-medium text-green-800">
+                {successMessage}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
         <LabelInput
           label={t("form.fields.firstName.label")}
