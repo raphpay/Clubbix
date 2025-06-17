@@ -1,0 +1,16 @@
+{
+  "page": {
+    "title": "Trésorerie",
+    "loading": "Chargement des entrées de trésorerie...",
+    "error": {
+      "load": "Échec du chargement des entrées de trésorerie",
+      "save": "Échec de la sauvegarde de l'entrée de trésorerie"
+    }
+  },
+  "form": {
+    "title": {
+      "add": "Ajouter une entrée de trésorerie",
+      "edit": "Modifier une entrée de trésorerie"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "page": {
+    "title": "Treasury",
+    "loading": "Loading treasury entries...",
+    "error": {
+      "load": "Failed to load treasury entries",
+      "save": "Failed to save treasury entry"
+    }
+  },
+  "form": {
+    "title": {
+      "add": "Add Treasury Entry",
+      "edit": "Edit Treasury Entry"
+    }
+  }
+}
