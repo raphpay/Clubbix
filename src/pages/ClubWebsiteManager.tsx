@@ -300,7 +300,7 @@ const ClubWebsiteManager: React.FC = () => {
           <div className="space-y-4">
             <div className="mt-4">
               <label className="block text-sm font-medium text-gray-700">
-                {t("logoImage")}
+                {t("logo.image")}
               </label>
               <input
                 type="file"
@@ -322,10 +322,10 @@ const ClubWebsiteManager: React.FC = () => {
                   <button
                     type="button"
                     className="absolute top-2 right-2 bg-white bg-opacity-80 rounded-full p-1 shadow hover:bg-red-100"
-                    title={t("logoImageDelete")}
+                    title={t("logo.delete")}
                     onClick={handleDeleteLogoImage}
                   >
-                    <span className="sr-only">{t("logoImageDelete")}</span>
+                    <span className="sr-only">{t("logo.delete")}</span>
                     <svg
                       className="w-5 h-5 text-red-600"
                       fill="none"
@@ -403,7 +403,7 @@ const ClubWebsiteManager: React.FC = () => {
 
             <div className="mt-4">
               <label className="block text-sm font-medium text-gray-700">
-                {t("bannerImage")}
+                {t("banner.image")}
               </label>
               <input
                 type="file"
@@ -425,10 +425,10 @@ const ClubWebsiteManager: React.FC = () => {
                   <button
                     type="button"
                     className="absolute top-2 right-2 bg-white bg-opacity-80 rounded-full p-1 shadow hover:bg-red-100"
-                    title={t("bannerImageDelete")}
+                    title={t("banner.imageDelete")}
                     onClick={handleDeleteBannerImage}
                   >
-                    <span className="sr-only">{t("bannerImageDelete")}</span>
+                    <span className="sr-only">{t("banner.imageDelete")}</span>
                     <svg
                       className="w-5 h-5 text-red-600"
                       fill="none"
@@ -518,7 +518,7 @@ const ClubWebsiteManager: React.FC = () => {
 
         {/* Events Section */}
         <section>
-          <h2 className="text-2xl font-semibold mb-4">{t("events")}</h2>
+          <h2 className="text-2xl font-semibold mb-4">{t("event.title")}</h2>
           <div className="space-y-4">
             {localContent.events.map((event) => (
               <div key={event.id} className="border rounded-lg p-4">
@@ -553,9 +553,9 @@ const ClubWebsiteManager: React.FC = () => {
                   <button
                     onClick={() => {
                       if (!club?.id) return;
-                      const title = prompt(t("eventTitle"), event.title);
+                      const title = prompt(t("event.eventTitle"), event.title);
                       const description = prompt(
-                        t("eventDescription"),
+                        t("event.eventDescription"),
                         event.description
                       );
                       if (title && description) {
@@ -572,9 +572,9 @@ const ClubWebsiteManager: React.FC = () => {
           </div>
           <button
             onClick={() => {
-              const title = prompt(t("eventTitle"));
-              const description = prompt(t("eventDescription"));
-              const dateStr = prompt(t("eventDate"));
+              const title = prompt(t("event.eventTitle"));
+              const description = prompt(t("event.eventDescription"));
+              const dateStr = prompt(t("event.eventDate"));
               const fileInput = document.createElement("input");
               fileInput.type = "file";
               fileInput.accept = "image/*";
@@ -596,7 +596,7 @@ const ClubWebsiteManager: React.FC = () => {
             }}
             className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
           >
-            {t("addEvent")}
+            {t("event.addEvent")}
           </button>
         </section>
       </div>

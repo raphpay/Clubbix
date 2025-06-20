@@ -3,8 +3,12 @@
   "basicContent": "Contenu de base",
   "headline": "Titre",
   "subtext": "Sous-texte",
-  "bannerImage": "Image de bannière",
-  "bannerImageDelete": "Supprimer l'image de bannière",
+  "banner": {
+    "image": "Image de bannière",
+    "imageDelete": "Supprimer l'image de bannière",
+    "imageSizeError": "L'image de bannière doit être de {width}x{height} pixels",
+    "imageTypeError": "L'image de bannière doit être un fichier image valide"
+  },
   "addImage": "Ajouter une image",
   "imageCaption": "Légende de l'image",
   "gallery": {
@@ -13,13 +17,15 @@
     "addImage": "Ajouter une image",
     "maxImages": "Vous ne pouvez ajouter que {count} images"
   },
-  "events": "Événements",
-  "addEvent": "Ajouter un événement",
-  "eventTitle": "Titre de l'événement",
-  "eventDescription": "Description de l'événement",
-  "eventDate": "Date de l'événement (AAAA-MM-JJ)",
-  "eventImage": "Image de l'événement",
-  "published": "Publié",
+  "event": {
+    "title": "Événements",
+    "addEvent": "Ajouter un événement",
+    "eventTitle": "Titre de l'événement",
+    "description": "Description de l'événement",
+    "date": "Date de l'événement (AAAA-MM-JJ)",
+    "image": "Image de l'événement",
+    "published": "Publié"
+  },
   "draft": "Brouillon",
   "publish": "Publier",
   "publishing": "Publication en cours...",
@@ -36,11 +42,10 @@
   "seeWebsite": "Voir le site Web",
   "logo": {
     "title": "Logo",
+    "image": "Image du logo",
     "upload": "Télécharger le logo",
-    "delete": "Supprimer le logo"
-  },
-  "bannerImageSizeError": "L'image de bannière doit être de {width}x{height} pixels",
-  "bannerImageTypeError": "L'image de bannière doit être un fichier image valide",
-  "logoImageSizeError": "Le logo doit être de {size}x{size} pixels",
-  "logoImageTypeError": "Le logo doit être un fichier image valide"
+    "delete": "Supprimer le logo",
+    "imageSizeError": "Le logo doit être de {size}x{size} pixels",
+    "imageTypeError": "Le logo doit être un fichier image valide"
+  }
 }

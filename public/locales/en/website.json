@@ -3,8 +3,12 @@
   "basicContent": "Basic Content",
   "headline": "Headline",
   "subtext": "Subtext",
-  "bannerImage": "Banner Image",
-  "bannerImageDelete": "Delete Banner Image",
+  "banner": {
+    "image": "Banner Image",
+    "imageDelete": "Delete Banner Image",
+    "imageSizeError": "Banner image must be {width}x{height} pixels",
+    "imageTypeError": "Banner image must be a valid image file"
+  },
   "addImage": "Add Image",
   "imageCaption": "Image Caption",
   "gallery": {
@@ -13,13 +17,15 @@
     "addImage": "Add Image",
     "maxImages": "You can only add up to {count} images"
   },
-  "events": "Events",
-  "addEvent": "Add Event",
-  "eventTitle": "Event Title",
-  "eventDescription": "Event Description",
-  "eventDate": "Event Date (YYYY-MM-DD)",
-  "eventImage": "Event Image",
-  "published": "Published",
+  "event": {
+    "title": "Events",
+    "addEvent": "Add Event",
+    "eventTitle": "Event Title",
+    "description": "Event Description",
+    "date": "Event Date (YYYY-MM-DD)",
+    "image": "Event Image",
+    "published": "Published"
+  },
   "draft": "Draft",
   "publish": "Publish",
   "publishing": "Publishing...",
@@ -36,11 +42,10 @@
   "seeWebsite": "See website",
   "logo": {
     "title": "Logo",
+    "image": "Logo Image",
     "upload": "Upload Logo",
-    "delete": "Delete Logo"
-  },
-  "bannerImageSizeError": "Banner image must be {width}x{height} pixels",
-  "bannerImageTypeError": "Banner image must be a valid image file",
-  "logoImageSizeError": "Logo must be {size}x{size} pixels",
-  "logoImageTypeError": "Logo must be a valid image file"
+    "delete": "Delete Logo",
+    "imageSizeError": "Logo must be {size}x{size} pixels",
+    "imageTypeError": "Logo must be a valid image file"
+  }
 }
