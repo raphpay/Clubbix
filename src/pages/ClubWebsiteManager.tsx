@@ -1,23 +1,19 @@
-import {
-  deleteObject,
-  getDownloadURL,
-  listAll,
-  ref,
-  uploadBytes,
-} from "firebase/storage";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "../components/ui/Button";
-import { storage } from "../config/firebase";
 import { useClub } from "../hooks/useClub";
 import {
   addEvent,
   addGalleryImage,
   createClubWebsiteContent,
+  deleteBannerImage,
+  deleteGalleryImage,
+  deleteLogoImage,
   getClubWebsiteContent,
   updateClubWebsiteContent,
   updateEvent,
-  uploadWebsiteImage,
+  uploadBannerImage,
+  uploadLogoImage,
 } from "../services/firestore/clubWebsiteService";
 import { ClubWebsiteContent } from "../services/firestore/types";
 
@@ -43,11 +39,11 @@ const ClubWebsiteManager: React.FC = () => {
       try {
         const websiteContent = await getClubWebsiteContent(club.id);
         if (!websiteContent) {
-          // Initialize with default content if none exists
           const defaultContent = {
             headline: "Welcome to Our Club",
             subtext: "Join us in our journey",
             bannerImageUrl: "",
+            logoUrl: "",
             gallery: [],
             events: [],
           };
@@ -72,7 +68,6 @@ const ClubWebsiteManager: React.FC = () => {
         setIsLoading(false);
       }
     };
-
     loadContent();
   }, [club?.id, t]);
 
@@ -96,26 +91,23 @@ const ClubWebsiteManager: React.FC = () => {
     }
   };
 
+  // LOGO
   const handleLogoImageUpload = async (file: File) => {
     if (!club?.id) return;
     setError(null);
     if (!file.type.startsWith("image/")) {
-      setError(t("logoImageTypeError"));
+      setError(t("logo.imageTypeError"));
       return;
     }
     const img = new window.Image();
     img.src = URL.createObjectURL(file);
     img.onload = async () => {
       if (img.width !== LOGO_SIZE || img.height !== LOGO_SIZE) {
-        setError(t("logoImageSizeError", { size: LOGO_SIZE }));
+        setError(t("logo.imageSizeError", { size: LOGO_SIZE }));
         return;
       }
       try {
-        const fileName = `logo.png`;
-        const logoRef = ref(storage, `clubs/${club.id}/public/${fileName}`);
-        await deleteObject(logoRef).catch(() => {});
-        await uploadBytes(logoRef, file);
-        const url = await getDownloadURL(logoRef);
+        const url = await uploadLogoImage(club.id, file);
         setLocalContent((prev) => (prev ? { ...prev, logoUrl: url } : prev));
       } catch (err) {
         setError(t("error.upload"));
@@ -124,40 +116,66 @@ const ClubWebsiteManager: React.FC = () => {
     };
   };
 
+  const handleDeleteLogoImage = async () => {
+    if (!club?.id || !localContent?.logoUrl) return;
+    setError(null);
+    try {
+      await deleteLogoImage(club.id);
+      setLocalContent((prev) => (prev ? { ...prev, logoUrl: "" } : prev));
+    } catch (err) {
+      setError(t("error.upload"));
+      console.error(err);
+    }
+  };
+
+  // BANNER
   const handleBannerImageUpload = async (file: File) => {
     if (!club?.id) return;
     setError(null);
-    // Validate type
     if (!file.type.startsWith("image/")) {
-      setError(t("bannerImageTypeError"));
+      setError(t("banner.imageTypeError"));
       return;
     }
-    // Validate dimensions
     const img = new window.Image();
     img.src = URL.createObjectURL(file);
     img.onload = async () => {
       if (img.width !== BANNER_WIDTH || img.height !== BANNER_HEIGHT) {
         setError(
-          t("bannerImageSizeError", {
+          t("banner.imageSizeError", {
             width: BANNER_WIDTH,
             height: BANNER_HEIGHT,
           })
         );
         return;
       }
-      // Delete existing banner images
-      const bannerRef = ref(storage, `clubs/${club.id}/website/banner`);
-      const bannerList = await listAll(bannerRef);
-      const deletePromises = bannerList.items.map((item) => deleteObject(item));
-      await Promise.all(deletePromises);
-      // Upload new banner image
-      const imageUrl = await uploadWebsiteImage(club.id, file, "banner");
-      handleContentChange({ bannerImageUrl: imageUrl });
+      try {
+        const imageUrl = await uploadBannerImage(club.id, file);
+        handleContentChange({ bannerImageUrl: imageUrl });
+      } catch (err) {
+        setError(t("error.upload"));
+        console.error(err);
+      }
     };
   };
 
+  const handleDeleteBannerImage = async () => {
+    if (!club?.id || !localContent?.bannerImageUrl) return;
+    setError(null);
+    try {
+      await deleteBannerImage(club.id);
+      setLocalContent((prev) =>
+        prev ? { ...prev, bannerImageUrl: "" } : prev
+      );
+    } catch (err) {
+      setError(t("error.upload"));
+      console.error(err);
+    }
+  };
+
+  // GALLERY
   const handleGalleryImageUpload = async (file: File, caption: string) => {
     if (!club?.id) return;
+    setError(null);
     try {
       await addGalleryImage(club.id, file, caption);
       const updatedContent = await getClubWebsiteContent(club.id);
@@ -171,6 +189,29 @@ const ClubWebsiteManager: React.FC = () => {
     }
   };
 
+  const handleDeleteGalleryImage = async (
+    imageId: string,
+    imageUrl: string
+  ) => {
+    if (!club?.id || !localContent) return;
+    setError(null);
+    try {
+      await deleteGalleryImage(club.id, imageUrl, imageId);
+      setLocalContent((prev) =>
+        prev
+          ? {
+              ...prev,
+              gallery: prev.gallery.filter((img) => img.id !== imageId),
+            }
+          : prev
+      );
+    } catch (err) {
+      setError(t("error.upload"));
+      console.error(err);
+    }
+  };
+
+  // EVENTS (no change, still use addEvent/updateEvent)
   const handleEventCreate = async (event: {
     title: string;
     description: string;
@@ -187,78 +228,6 @@ const ClubWebsiteManager: React.FC = () => {
       }
     } catch (err) {
       setError(t("error.create"));
-      console.error(err);
-    }
-  };
-
-  // Delete a gallery image from storage and Firestore
-  const handleDeleteGalleryImage = async (
-    imageId: string,
-    imageUrl: string
-  ) => {
-    if (!club?.id || !localContent) return;
-    setError(null);
-    try {
-      // Remove from storage
-      const imageRef = ref(
-        storage,
-        imageUrl
-          .replace(/^https?:\/\/[^/]+\/o\//, "")
-          .replace(/\?.*$/, "")
-          .replace(/%2F/g, "/")
-      );
-      await deleteObject(imageRef);
-      // Remove from local state
-      const updatedGallery = localContent.gallery.filter(
-        (img) => img.id !== imageId
-      );
-      setLocalContent({ ...localContent, gallery: updatedGallery });
-      // Optionally, update Firestore immediately or wait for publish
-    } catch (err) {
-      setError(t("error.upload"));
-      console.error(err);
-    }
-  };
-
-  // Delete the banner image from storage and local state
-  const handleDeleteBannerImage = async () => {
-    if (!club?.id || !localContent?.bannerImageUrl) return;
-    setError(null);
-    try {
-      // Remove from storage
-      const imageRef = ref(
-        storage,
-        localContent.bannerImageUrl
-          .replace(/^https?:\/\/[^/]+\/o\//, "")
-          .replace(/\?.*$/, "")
-          .replace(/%2F/g, "/")
-      );
-      await deleteObject(imageRef);
-      // Remove from local state
-      setLocalContent({ ...localContent, bannerImageUrl: "" });
-      // Optionally, update Firestore immediately or wait for publish
-    } catch (err) {
-      setError(t("error.upload"));
-      console.error(err);
-    }
-  };
-
-  // Delete the logo image from storage and local state
-  const handleDeleteLogoImage = async () => {
-    if (!club?.id || !localContent?.logoUrl) return;
-    setError(null);
-    try {
-      const imageRef = ref(
-        storage,
-        localContent.logoUrl
-          .replace(/^https?:\/\/[^/]+\/o\//, "")
-          .replace(/\?.*$/, "")
-          .replace(/%2F/g, "/")
-      );
-      await deleteObject(imageRef);
-      setLocalContent((prev) => (prev ? { ...prev, logoUrl: "" } : prev));
-    } catch (err) {
-      setError(t("error.upload"));
       console.error(err);
     }
   };

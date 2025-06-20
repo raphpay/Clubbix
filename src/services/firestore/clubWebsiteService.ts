@@ -5,7 +5,13 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import {
+  deleteObject,
+  getDownloadURL,
+  listAll,
+  ref,
+  uploadBytes,
+} from "firebase/storage";
 import { nanoid } from "nanoid";
 import { db, storage } from "../../config/firebase";
 import { ClubWebsiteContent } from "./types";
@@ -161,4 +167,76 @@ export const updateEvent = async (
     events: updatedEvents,
     updatedAt: serverTimestamp(),
   });
+};
+
+export const uploadLogoImage = async (
+  clubId: string,
+  file: File
+): Promise<string> => {
+  const fileName = `logo.png`;
+  const logoRef = ref(storage, `clubs/${clubId}/public/${fileName}`);
+  await deleteObject(logoRef).catch(() => {});
+  await uploadBytes(logoRef, file);
+  return getDownloadURL(logoRef);
+};
+
+export const deleteLogoImage = async (clubId: string): Promise<void> => {
+  const fileName = `logo.png`;
+  const logoRef = ref(storage, `clubs/${clubId}/public/${fileName}`);
+  await deleteObject(logoRef).catch(() => {});
+};
+
+export const uploadBannerImage = async (
+  clubId: string,
+  file: File
+): Promise<string> => {
+  // Delete all existing banners
+  const bannerRef = ref(storage, `clubs/${clubId}/website/banner`);
+  const bannerList = await listAll(bannerRef);
+  const deletePromises = bannerList.items.map((item) => deleteObject(item));
+  await Promise.all(deletePromises);
+  // Upload new banner
+  const fileName = `${Date.now()}-${file.name}`;
+  const newBannerRef = ref(
+    storage,
+    `clubs/${clubId}/website/banner/${fileName}`
+  );
+  await uploadBytes(newBannerRef, file);
+  return getDownloadURL(newBannerRef);
+};
+
+export const deleteBannerImage = async (clubId: string): Promise<void> => {
+  const bannerRef = ref(storage, `clubs/${clubId}/website/banner`);
+  const bannerList = await listAll(bannerRef);
+  const deletePromises = bannerList.items.map((item) => deleteObject(item));
+  await Promise.all(deletePromises);
+};
+
+export const deleteGalleryImage = async (
+  clubId: string,
+  imageUrl: string,
+  imageId: string
+): Promise<ClubWebsiteContent | null> => {
+  // Remove from storage
+  const imageRef = ref(
+    storage,
+    imageUrl
+      .replace(/^https?:\/\/[^/]+\/o\//, "")
+      .replace(/\?.*$/, "")
+      .replace(/%2F/g, "/")
+  );
+  await deleteObject(imageRef);
+  // Remove from Firestore (localContent update is handled in component)
+  const websiteRef = doc(db, "clubWebsites", clubId);
+  const websiteDoc = await getDoc(websiteRef);
+  if (!websiteDoc.exists()) return null;
+  const websiteData = websiteDoc.data() as ClubWebsiteContent;
+  const updatedGallery = websiteData.gallery.filter(
+    (img) => img.id !== imageId
+  );
+  await updateDoc(websiteRef, {
+    gallery: updatedGallery,
+    updatedAt: serverTimestamp(),
+  });
+  return { ...websiteData, gallery: updatedGallery };
 };
