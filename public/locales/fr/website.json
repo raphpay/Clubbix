@@ -33,5 +33,14 @@
     "create": "Échec de la création de l'événement",
     "notFound": "Contenu du site Web non trouvé"
   },
-  "seeWebsite": "Voir le site Web"
+  "seeWebsite": "Voir le site Web",
+  "logo": {
+    "title": "Logo",
+    "upload": "Télécharger le logo",
+    "delete": "Supprimer le logo"
+  },
+  "bannerImageSizeError": "L'image de bannière doit être de {width}x{height} pixels",
+  "bannerImageTypeError": "L'image de bannière doit être un fichier image valide",
+  "logoImageSizeError": "Le logo doit être de {size}x{size} pixels",
+  "logoImageTypeError": "Le logo doit être un fichier image valide"
 }

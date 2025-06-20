@@ -1,4 +1,10 @@
-import { deleteObject, listAll, ref } from "firebase/storage";
+import {
+  deleteObject,
+  getDownloadURL,
+  listAll,
+  ref,
+  uploadBytes,
+} from "firebase/storage";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "../components/ui/Button";
@@ -14,6 +20,10 @@ import {
   uploadWebsiteImage,
 } from "../services/firestore/clubWebsiteService";
 import { ClubWebsiteContent } from "../services/firestore/types";
+
+const LOGO_SIZE = 256; // px, square
+const BANNER_WIDTH = 1200;
+const BANNER_HEIGHT = 400;
 
 const ClubWebsiteManager: React.FC = () => {
   const { t } = useTranslation("website");
@@ -86,24 +96,64 @@ const ClubWebsiteManager: React.FC = () => {
     }
   };
 
+  const handleLogoImageUpload = async (file: File) => {
+    if (!club?.id) return;
+    setError(null);
+    if (!file.type.startsWith("image/")) {
+      setError(t("logoImageTypeError"));
+      return;
+    }
+    const img = new window.Image();
+    img.src = URL.createObjectURL(file);
+    img.onload = async () => {
+      if (img.width !== LOGO_SIZE || img.height !== LOGO_SIZE) {
+        setError(t("logoImageSizeError", { size: LOGO_SIZE }));
+        return;
+      }
+      try {
+        const fileName = `logo.png`;
+        const logoRef = ref(storage, `clubs/${club.id}/public/${fileName}`);
+        await deleteObject(logoRef).catch(() => {});
+        await uploadBytes(logoRef, file);
+        const url = await getDownloadURL(logoRef);
+        setLocalContent((prev) => (prev ? { ...prev, logoUrl: url } : prev));
+      } catch (err) {
+        setError(t("error.upload"));
+        console.error(err);
+      }
+    };
+  };
+
   const handleBannerImageUpload = async (file: File) => {
     if (!club?.id) return;
-    try {
+    setError(null);
+    // Validate type
+    if (!file.type.startsWith("image/")) {
+      setError(t("bannerImageTypeError"));
+      return;
+    }
+    // Validate dimensions
+    const img = new window.Image();
+    img.src = URL.createObjectURL(file);
+    img.onload = async () => {
+      if (img.width !== BANNER_WIDTH || img.height !== BANNER_HEIGHT) {
+        setError(
+          t("bannerImageSizeError", {
+            width: BANNER_WIDTH,
+            height: BANNER_HEIGHT,
+          })
+        );
+        return;
+      }
       // Delete existing banner images
       const bannerRef = ref(storage, `clubs/${club.id}/website/banner`);
       const bannerList = await listAll(bannerRef);
-
-      // Delete all existing banner images
       const deletePromises = bannerList.items.map((item) => deleteObject(item));
       await Promise.all(deletePromises);
-
       // Upload new banner image
       const imageUrl = await uploadWebsiteImage(club.id, file, "banner");
       handleContentChange({ bannerImageUrl: imageUrl });
-    } catch (err) {
-      setError(t("error.upload"));
-      console.error(err);
-    }
+    };
   };
 
   const handleGalleryImageUpload = async (file: File, caption: string) => {
@@ -193,6 +243,26 @@ const ClubWebsiteManager: React.FC = () => {
     }
   };
 
+  // Delete the logo image from storage and local state
+  const handleDeleteLogoImage = async () => {
+    if (!club?.id || !localContent?.logoUrl) return;
+    setError(null);
+    try {
+      const imageRef = ref(
+        storage,
+        localContent.logoUrl
+          .replace(/^https?:\/\/[^/]+\/o\//, "")
+          .replace(/\?.*$/, "")
+          .replace(/%2F/g, "/")
+      );
+      await deleteObject(imageRef);
+      setLocalContent((prev) => (prev ? { ...prev, logoUrl: "" } : prev));
+    } catch (err) {
+      setError(t("error.upload"));
+      console.error(err);
+    }
+  };
+
   if (isLoading) {
     return <div>{t("loading")}</div>;
   }
@@ -224,6 +294,61 @@ const ClubWebsiteManager: React.FC = () => {
       )}
 
       <div className="bg-white shadow rounded-lg p-6">
+        {/* Logo Section */}
+        <section className="mb-8">
+          <h2 className="text-2xl font-semibold mb-4">{t("logo.title")}</h2>
+          <div className="space-y-4">
+            <div className="mt-4">
+              <label className="block text-sm font-medium text-gray-700">
+                {t("logoImage")}
+              </label>
+              <input
+                type="file"
+                id="logoImage"
+                accept="image/png,image/jpeg"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handleLogoImageUpload(file);
+                }}
+                className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+              />
+              {localContent.logoUrl && (
+                <div className="relative mt-2 inline-block">
+                  <img
+                    src={localContent.logoUrl}
+                    alt="Logo"
+                    className="h-24 w-24 object-cover rounded-full border"
+                  />
+                  <button
+                    type="button"
+                    className="absolute top-2 right-2 bg-white bg-opacity-80 rounded-full p-1 shadow hover:bg-red-100"
+                    title={t("logoImageDelete")}
+                    onClick={handleDeleteLogoImage}
+                  >
+                    <span className="sr-only">{t("logoImageDelete")}</span>
+                    <svg
+                      className="w-5 h-5 text-red-600"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              )}
+              <p className="text-xs text-gray-500 mt-1">
+                PNG, {LOGO_SIZE}x{LOGO_SIZE}px
+              </p>
+            </div>
+          </div>
+        </section>
+
         {/* Basic Content Section */}
         <section className="mb-8">
           <div className="flex items-center justify-between">
@@ -320,6 +445,9 @@ const ClubWebsiteManager: React.FC = () => {
                   </button>
                 </div>
               )}
+              <p className="text-xs text-gray-500 mt-1">
+                Image, {BANNER_WIDTH}x{BANNER_HEIGHT}px
+              </p>
             </div>
           </div>
         </section>

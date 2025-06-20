@@ -24,6 +24,7 @@ export interface ClubWebsiteContent {
   headline: string;
   subtext: string;
   bannerImageUrl: string;
+  logoUrl?: string;
   gallery: {
     id: string;
     imageUrl: string;

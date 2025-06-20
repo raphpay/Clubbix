@@ -33,5 +33,14 @@
     "create": "Failed to create event",
     "notFound": "Website content not found"
   },
-  "seeWebsite": "See website"
+  "seeWebsite": "See website",
+  "logo": {
+    "title": "Logo",
+    "upload": "Upload Logo",
+    "delete": "Delete Logo"
+  },
+  "bannerImageSizeError": "Banner image must be {width}x{height} pixels",
+  "bannerImageTypeError": "Banner image must be a valid image file",
+  "logoImageSizeError": "Logo must be {size}x{size} pixels",
+  "logoImageTypeError": "Logo must be a valid image file"
 }
