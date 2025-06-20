@@ -1,6 +1,8 @@
 {
+  "dashboard": "Tableau de bord",
   "members": "Membres",
   "treasury": "Trésorerie",
   "events": "Événements",
-  "trainings": "Entraînements"
+  "trainings": "Entraînements",
+  "website": "Site Web"
 }

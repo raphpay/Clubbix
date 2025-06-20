@@ -1,0 +1,51 @@
+{
+  "title": "Gestionnaire de site Web du club",
+  "basicContent": "Contenu de base",
+  "headline": "Titre",
+  "subtext": "Sous-texte",
+  "banner": {
+    "image": "Image de bannière",
+    "imageDelete": "Supprimer l'image de bannière",
+    "imageSizeError": "L'image de bannière doit être de {width}x{height} pixels",
+    "imageTypeError": "L'image de bannière doit être un fichier image valide"
+  },
+  "addImage": "Ajouter une image",
+  "imageCaption": "Légende de l'image",
+  "gallery": {
+    "title": "Galerie",
+    "captionPrompt": "Entrez la légende de l'image",
+    "addImage": "Ajouter une image",
+    "maxImages": "Vous ne pouvez ajouter que {count} images"
+  },
+  "event": {
+    "title": "Événements",
+    "addEvent": "Ajouter un événement",
+    "eventTitle": "Titre de l'événement",
+    "description": "Description de l'événement",
+    "date": "Date de l'événement (AAAA-MM-JJ)",
+    "image": "Image de l'événement",
+    "published": "Publié"
+  },
+  "draft": "Brouillon",
+  "publish": "Publier",
+  "publishing": "Publication en cours...",
+  "unpublish": "Dépublier",
+  "edit": "Modifier",
+  "loading": "Chargement...",
+  "error": {
+    "load": "Échec du chargement du contenu du site Web",
+    "update": "Échec de la mise à jour du contenu",
+    "upload": "Échec du téléchargement de l'image",
+    "create": "Échec de la création de l'événement",
+    "notFound": "Contenu du site Web non trouvé"
+  },
+  "seeWebsite": "Voir le site Web",
+  "logo": {
+    "title": "Logo",
+    "image": "Image du logo",
+    "upload": "Télécharger le logo",
+    "delete": "Supprimer le logo",
+    "imageSizeError": "Le logo doit être de {size}x{size} pixels",
+    "imageTypeError": "Le logo doit être un fichier image valide"
+  }
+}

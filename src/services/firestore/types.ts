@@ -17,3 +17,29 @@ export interface ClubData {
   members: string[];
   createdAt: Date;
 }
+
+export interface ClubWebsiteContent {
+  id: string;
+  clubId: string;
+  clubName: string;
+  headline: string;
+  subtext: string;
+  bannerImageUrl: string;
+  logoUrl?: string;
+  gallery: {
+    id: string;
+    imageUrl: string;
+    caption: string;
+    order: number;
+  }[];
+  events: {
+    id: string;
+    title: string;
+    description: string;
+    imageUrl: string;
+    date: Date;
+    isPublished: boolean;
+  }[];
+  updatedAt: Date;
+  createdAt: Date;
+}

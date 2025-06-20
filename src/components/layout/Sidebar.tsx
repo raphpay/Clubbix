@@ -1,8 +1,8 @@
-import { Calendar, Dumbbell, Users, Wallet } from "lucide-react";
+import { Calendar, Dumbbell, Globe, Users, Wallet } from "lucide-react";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../hooks/useAuth";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -16,6 +16,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
   const adminNavItems = [
     { path: "/admin/dashboard/members", icon: Users, label: t("members") },
     { path: "/admin/dashboard/treasury", icon: Wallet, label: t("treasury") },
+    { path: "/admin/dashboard/website", icon: Globe, label: t("website") },
     { path: "/admin/dashboard/events", icon: Calendar, label: t("events") },
   ];
 

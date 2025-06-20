@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { LogOut, User } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../hooks/useAuth";
 
 export const ProfileButton: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
