@@ -141,6 +141,58 @@ const ClubWebsiteManager: React.FC = () => {
     }
   };
 
+  // Delete a gallery image from storage and Firestore
+  const handleDeleteGalleryImage = async (
+    imageId: string,
+    imageUrl: string
+  ) => {
+    if (!club?.id || !localContent) return;
+    setError(null);
+    try {
+      // Remove from storage
+      const imageRef = ref(
+        storage,
+        imageUrl
+          .replace(/^https?:\/\/[^/]+\/o\//, "")
+          .replace(/\?.*$/, "")
+          .replace(/%2F/g, "/")
+      );
+      await deleteObject(imageRef);
+      // Remove from local state
+      const updatedGallery = localContent.gallery.filter(
+        (img) => img.id !== imageId
+      );
+      setLocalContent({ ...localContent, gallery: updatedGallery });
+      // Optionally, update Firestore immediately or wait for publish
+    } catch (err) {
+      setError(t("error.upload"));
+      console.error(err);
+    }
+  };
+
+  // Delete the banner image from storage and local state
+  const handleDeleteBannerImage = async () => {
+    if (!club?.id || !localContent?.bannerImageUrl) return;
+    setError(null);
+    try {
+      // Remove from storage
+      const imageRef = ref(
+        storage,
+        localContent.bannerImageUrl
+          .replace(/^https?:\/\/[^/]+\/o\//, "")
+          .replace(/\?.*$/, "")
+          .replace(/%2F/g, "/")
+      );
+      await deleteObject(imageRef);
+      // Remove from local state
+      setLocalContent({ ...localContent, bannerImageUrl: "" });
+      // Optionally, update Firestore immediately or wait for publish
+    } catch (err) {
+      setError(t("error.upload"));
+      console.error(err);
+    }
+  };
+
   if (isLoading) {
     return <div>{t("loading")}</div>;
   }
@@ -239,11 +291,34 @@ const ClubWebsiteManager: React.FC = () => {
                 className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
               />
               {localContent.bannerImageUrl && (
-                <img
-                  src={localContent.bannerImageUrl}
-                  alt="Banner"
-                  className="mt-2 h-32 object-cover rounded-lg"
-                />
+                <div className="relative mt-2 inline-block">
+                  <img
+                    src={localContent.bannerImageUrl}
+                    alt="Banner"
+                    className="h-32 object-cover rounded-lg"
+                  />
+                  <button
+                    type="button"
+                    className="absolute top-2 right-2 bg-white bg-opacity-80 rounded-full p-1 shadow hover:bg-red-100"
+                    title={t("bannerImageDelete")}
+                    onClick={handleDeleteBannerImage}
+                  >
+                    <span className="sr-only">{t("bannerImageDelete")}</span>
+                    <svg
+                      className="w-5 h-5 text-red-600"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                </div>
               )}
             </div>
           </div>
@@ -254,13 +329,36 @@ const ClubWebsiteManager: React.FC = () => {
           <h2 className="text-2xl font-semibold mb-4">{t("gallery.title")}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {localContent.gallery.map((image) => (
-              <div key={image.id} className="relative">
+              <div key={image.id} className="relative group">
                 <img
                   src={image.imageUrl}
                   alt={image.caption}
                   className="w-full h-48 object-cover rounded-lg"
                 />
                 <p className="mt-2 text-sm text-gray-600">{image.caption}</p>
+                <button
+                  type="button"
+                  className="absolute top-2 right-2 bg-white bg-opacity-80 rounded-full p-1 shadow hover:bg-red-100"
+                  title={t("gallery.deleteImage")}
+                  onClick={() =>
+                    handleDeleteGalleryImage(image.id, image.imageUrl)
+                  }
+                >
+                  <span className="sr-only">{t("gallery.deleteImage")}</span>
+                  <svg
+                    className="w-5 h-5 text-red-600"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
               </div>
             ))}
           </div>
@@ -275,12 +373,18 @@ const ClubWebsiteManager: React.FC = () => {
               type="file"
               id="galleryImage"
               accept="image/*"
+              disabled={localContent.gallery.length >= 3}
               onChange={(e) => {
                 const file = e.target.files?.[0];
                 if (file) handleGalleryImageUpload(file, "");
               }}
-              className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+              className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 disabled:opacity-50"
             />
+            {localContent.gallery.length >= 3 && (
+              <p className="text-sm text-red-500 mt-2">
+                {t("gallery.maxImages", { count: 3 })}
+              </p>
+            )}
           </div>
         </section>
 

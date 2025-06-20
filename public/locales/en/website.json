@@ -4,12 +4,14 @@
   "headline": "Headline",
   "subtext": "Subtext",
   "bannerImage": "Banner Image",
+  "bannerImageDelete": "Delete Banner Image",
   "addImage": "Add Image",
   "imageCaption": "Image Caption",
   "gallery": {
     "title": "Gallery",
     "captionPrompt": "Enter image caption",
-    "addImage": "Add Image"
+    "addImage": "Add Image",
+    "maxImages": "You can only add up to {count} images"
   },
   "events": "Events",
   "addEvent": "Add Event",

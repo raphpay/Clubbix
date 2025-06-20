@@ -4,12 +4,14 @@
   "headline": "Titre",
   "subtext": "Sous-texte",
   "bannerImage": "Image de bannière",
+  "bannerImageDelete": "Supprimer l'image de bannière",
   "addImage": "Ajouter une image",
   "imageCaption": "Légende de l'image",
   "gallery": {
     "title": "Galerie",
     "captionPrompt": "Entrez la légende de l'image",
-    "addImage": "Ajouter une image"
+    "addImage": "Ajouter une image",
+    "maxImages": "Vous ne pouvez ajouter que {count} images"
   },
   "events": "Événements",
   "addEvent": "Ajouter un événement",
