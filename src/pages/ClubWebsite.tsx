@@ -25,24 +25,26 @@ const ClubWebsite: React.FC = () => {
         setIsLoading(false);
       }
     };
-
     loadContent();
   }, [clubId]);
 
   if (isLoading) {
-    return <div>{t("loading")}</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        {t("loading")}
+      </div>
+    );
   }
-
-  if (error) {
-    return <div className="text-red-500">{t("error.load")}</div>;
-  }
-
-  if (!content) {
-    return <div>{t("error.notFound")}</div>;
+  if (error || !content) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-red-500">
+        {error || t("error.notFound")}
+      </div>
+    );
   }
 
   return (
-    <>
+    <div className="min-h-screen bg-white">
       <Helmet>
         <title>{content.headline}</title>
         <meta name="description" content={content.subtext} />
@@ -51,52 +53,78 @@ const ClubWebsite: React.FC = () => {
         )}
       </Helmet>
 
-      <div className="min-h-screen bg-gray-50">
-        {/* Hero Section */}
-        <div className="relative">
-          {content.bannerImageUrl && (
-            <div className="absolute inset-0">
-              <img
-                src={content.bannerImageUrl}
-                alt="Banner"
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-black bg-opacity-50" />
-            </div>
+      {/* Navbar (Logo + Club Name) */}
+      <nav className="flex items-center justify-between px-6 py-4 border-b bg-white">
+        <div className="flex items-center gap-3">
+          {content.logoUrl && (
+            <img
+              src={content.logoUrl}
+              alt="Club Logo"
+              className="h-12 w-12 rounded-full object-cover border"
+            />
           )}
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-            <h1 className="text-4xl font-bold text-white mb-4">
-              {content.headline}
-            </h1>
-            <p className="text-xl text-white">{content.subtext}</p>
-          </div>
+          <span className="text-xl font-bold text-gray-900">
+            {content.clubName}
+          </span>
         </div>
+      </nav>
 
-        {/* Gallery Section */}
-        {content.gallery.length > 0 && (
-          <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-            <h2 className="text-3xl font-bold mb-8">Gallery</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {content.gallery.map((image) => (
-                <div key={image.id} className="relative group">
-                  <img
-                    src={image.imageUrl}
-                    alt={image.caption}
-                    className="w-full h-64 object-cover rounded-lg shadow-lg transition-transform duration-300 group-hover:scale-105"
-                  />
-                  <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent rounded-b-lg">
+      {/* Hero Section */}
+      <section className="relative bg-gray-50">
+        {content.bannerImageUrl && (
+          <img
+            src={content.bannerImageUrl}
+            alt="Banner"
+            className="absolute inset-0 w-full h-full object-cover opacity-60"
+            style={{ zIndex: 0 }}
+          />
+        )}
+        <div className="relative z-10 max-w-4xl mx-auto px-4 py-20 text-center">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4 drop-shadow-lg">
+            {content.headline}
+          </h1>
+          <p className="text-lg md:text-2xl text-gray-700 mb-8 drop-shadow-lg">
+            {content.subtext}
+          </p>
+        </div>
+      </section>
+
+      {/* Gallery Section */}
+      {content.gallery && content.gallery.length > 0 && (
+        <section className="max-w-6xl mx-auto px-4 py-16" id="gallery">
+          <h2 className="text-3xl font-bold mb-8 text-center">Gallery</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {content.gallery.map((image) => (
+              <div
+                key={image.id}
+                className="relative group rounded-lg overflow-hidden shadow-lg"
+              >
+                <img
+                  src={image.imageUrl}
+                  alt={image.caption}
+                  className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                {image.caption && (
+                  <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
                     <p className="text-white text-sm">{image.caption}</p>
                   </div>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
-        {/* Events Section */}
-        {content.events.filter((event) => event.isPublished).length > 0 && (
-          <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-white">
-            <h2 className="text-3xl font-bold mb-8">Upcoming Events</h2>
+      {/* Events Section */}
+      {content.events &&
+        content.events.filter((e) => e.isPublished).length > 0 && (
+          <section
+            className="max-w-6xl mx-auto px-4 py-16 bg-gray-50"
+            id="events"
+          >
+            <h2 className="text-3xl font-bold mb-8 text-center">
+              Upcoming Events
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {content.events
                 .filter((event) => event.isPublished)
@@ -135,8 +163,29 @@ const ClubWebsite: React.FC = () => {
             </div>
           </section>
         )}
-      </div>
-    </>
+
+      {/* Footer */}
+      <footer className="bg-white border-t mt-16">
+        <div className="max-w-6xl mx-auto px-4 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            {content.logoUrl && (
+              <img
+                src={content.logoUrl}
+                alt="Club Logo"
+                className="h-8 w-8 rounded-full object-cover border"
+              />
+            )}
+            <span className="font-semibold text-gray-700">
+              {content.clubName}
+            </span>
+          </div>
+          <div className="text-sm text-gray-500">
+            &copy; {new Date().getFullYear()} {content.clubName}. All rights
+            reserved.
+          </div>
+        </div>
+      </footer>
+    </div>
   );
 };
 

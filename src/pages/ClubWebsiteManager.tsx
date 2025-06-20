@@ -1,6 +1,8 @@
+import { doc, getDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "../components/ui/Button";
+import { db } from "../config/firebase";
 import { useClub } from "../hooks/useClub";
 import {
   addEvent,
@@ -39,7 +41,12 @@ const ClubWebsiteManager: React.FC = () => {
       try {
         const websiteContent = await getClubWebsiteContent(club.id);
         if (!websiteContent) {
+          // Fetch club name from clubs collection
+          const clubDoc = await getDoc(doc(db, "clubs", club.id));
+          const clubData = clubDoc.exists() ? clubDoc.data() : {};
+          const clubName = clubData?.name || "";
           const defaultContent = {
+            clubName,
             headline: "Welcome to Our Club",
             subtext: "Join us in our journey",
             bannerImageUrl: "",

@@ -21,6 +21,7 @@ export interface ClubData {
 export interface ClubWebsiteContent {
   id: string;
   clubId: string;
+  clubName: string;
   headline: string;
   subtext: string;
   bannerImageUrl: string;
