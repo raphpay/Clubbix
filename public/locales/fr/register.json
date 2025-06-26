@@ -1,0 +1,23 @@
+{
+  "title": "S'inscrire",
+  "subtitle": "Créez un compte pour commencer",
+  "form": {
+    "clubName": "Nom du club",
+    "inviteCode": "Code d'invitation",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "email": "Email",
+    "password": "Mot de passe",
+    "clubLogo": "Logo du club (Optionnel)"
+  },
+  "selectedPlan": "Plan sélectionné : {{name}}",
+  "change": "Modifier",
+  "continue": "Continuer",
+  "back": "Retour",
+  "registering": "Inscription...",
+  "register": "S'inscrire",
+  "signIn": "Connectez-vous à votre compte existant",
+  "registerAsMember": "S'inscrire en tant que membre",
+  "toggleRole": "Basculer le rôle",
+  "registerAsAdmin": "S'inscrire en tant qu'administrateur"
+}

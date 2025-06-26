@@ -1,0 +1,23 @@
+{
+  "title": "Register",
+  "subtitle": "Create an account to get started",
+  "form": {
+    "clubName": "Club Name",
+    "inviteCode": "Invite Code",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "password": "Password",
+    "clubLogo": "Club Logo (Optional)"
+  },
+  "selectedPlan": "Selected Plan: {{name}}",
+  "change": "Change",
+  "continue": "Continue",
+  "back": "Back",
+  "registering": "Registering...",
+  "register": "Register",
+  "signIn": "Sign in to your existing account",
+  "registerAsMember": "Register as Member",
+  "toggleRole": "Toggle role",
+  "registerAsAdmin": "Register as Admin"
+}

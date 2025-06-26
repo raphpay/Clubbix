@@ -20,7 +20,7 @@ import { useRegistrationStore } from "../store/useRegistrationStore";
 import LabelInput from "./inputs/LabelInput";
 
 const RegistrationForm = () => {
-  const { t } = useTranslation("pricing");
+  const { t } = useTranslation(["register", "pricing"]);
   const {
     role,
     step,
@@ -188,15 +188,15 @@ const RegistrationForm = () => {
 
     const plans = {
       starter: {
-        name: t("plans.starter.name"),
+        name: t("pricing:plans.starter.name"),
         price: selectedBillingCycle === "monthly" ? 21 : 199,
       },
       pro: {
-        name: t("plans.pro.name"),
+        name: t("pricing:plans.pro.name"),
         price: selectedBillingCycle === "monthly" ? 55 : 499,
       },
       elite: {
-        name: t("plans.elite.name"),
+        name: t("pricing:plans.elite.name"),
         price: selectedBillingCycle === "monthly" ? 65 : 599,
       },
     };
@@ -208,7 +208,7 @@ const RegistrationForm = () => {
         <div className="flex items-center justify-between">
           <div>
             <h3 className="text-sm font-medium text-indigo-900">
-              Selected Plan: {plan.name}
+              {t("register:selectedPlan", { name: plan.name })}
             </h3>
             <p className="text-sm text-indigo-700">
               €{plan.price}/
@@ -222,7 +222,7 @@ const RegistrationForm = () => {
             }}
             className="text-sm text-indigo-600 hover:text-indigo-500"
           >
-            Change
+            {t("register:change")}
           </button>
         </div>
       </div>
@@ -240,14 +240,14 @@ const RegistrationForm = () => {
       <form onSubmit={handleInitialSubmit} className="space-y-6">
         {role === "admin" ? (
           <LabelInput
-            label="Club Name"
+            label={t("register:form.clubName")}
             value={formData.clubName || ""}
             errors={errors.clubName}
             onChange={(value) => setFormData({ clubName: value })}
           />
         ) : (
           <LabelInput
-            label="Invite Code"
+            label={t("register:form.inviteCode")}
             value={formData.inviteCode || ""}
             errors={errors.inviteCode}
             onChange={(value) => setFormData({ inviteCode: value })}
@@ -255,7 +255,7 @@ const RegistrationForm = () => {
         )}
         <div>
           <Button type="submit" variant="primary" fullWidth>
-            Continue
+            {t("register:continue")}
           </Button>
         </div>
       </form>
@@ -277,7 +277,7 @@ const RegistrationForm = () => {
               htmlFor="logo"
               className="block text-sm font-medium text-gray-700"
             >
-              Club Logo (Optional)
+              {t("register:form.clubLogo")}
             </label>
             <input
               type="file"
@@ -291,14 +291,14 @@ const RegistrationForm = () => {
 
         <div className="grid grid-cols-2 gap-4">
           <LabelInput
-            label="First Name"
+            label={t("register:form.firstName")}
             value={formData.firstName || ""}
             errors={errors.firstName}
             onChange={(value) => setFormData({ firstName: value })}
           />
 
           <LabelInput
-            label="Last Name"
+            label={t("register:form.lastName")}
             value={formData.lastName || ""}
             errors={errors.lastName}
             onChange={(value) => setFormData({ lastName: value })}
@@ -306,7 +306,7 @@ const RegistrationForm = () => {
         </div>
 
         <LabelInput
-          label="Email"
+          label={t("register:form.email")}
           value={formData.email || ""}
           errors={errors.email}
           onChange={(value) => setFormData({ email: value })}
@@ -314,7 +314,7 @@ const RegistrationForm = () => {
         />
 
         <LabelInput
-          label="Password"
+          label={t("register:form.password")}
           value={formData.password || ""}
           errors={errors.password}
           onChange={(value) => setFormData({ password: value })}
@@ -340,10 +340,10 @@ const RegistrationForm = () => {
             size="lg"
             disabled={isLoading}
           >
-            Back
+            {t("register:back")}
           </Button>
           <Button variant="primary" size="lg" disabled={isLoading}>
-            {isLoading ? "Registering..." : "Register"}
+            {isLoading ? t("register:registering") : t("register:register")}
           </Button>
         </div>
       </form>
@@ -354,7 +354,7 @@ const RegistrationForm = () => {
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Create your account
+          {t("register:title")}
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
           Or{" "}
@@ -362,7 +362,7 @@ const RegistrationForm = () => {
             to="/login"
             className="font-medium text-indigo-600 hover:text-indigo-500"
           >
-            sign in to your existing account
+            {t("register:signIn")}
           </Link>
         </p>
       </div>
@@ -373,26 +373,26 @@ const RegistrationForm = () => {
           {renderSelectedPlanInfo()}
 
           {/* Role Toggle */}
-          <div className="flex items-center justify-between mb-8">
-            <span className="text-sm font-medium text-gray-900">
-              Register as Member
+          <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4">
+            <span className="text-sm font-medium text-gray-900 text-center sm:text-left">
+              {t("register:registerAsMember")}
             </span>
             <Switch
               checked={role === "admin"}
               onChange={() => setRole(role === "admin" ? "member" : "admin")}
               className={`${
                 role === "admin" ? "bg-indigo-600" : "bg-gray-200"
-              } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2`}
+              } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 flex-shrink-0`}
             >
-              <span className="sr-only">Toggle role</span>
+              <span className="sr-only">{t("register:toggleRole")}</span>
               <span
                 className={`${
                   role === "admin" ? "translate-x-6" : "translate-x-1"
                 } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
               />
             </Switch>
-            <span className="text-sm font-medium text-gray-900">
-              Register as Admin
+            <span className="text-sm font-medium text-gray-900 text-center sm:text-right">
+              {t("register:registerAsAdmin")}
             </span>
           </div>
 
