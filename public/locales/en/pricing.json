@@ -1,0 +1,51 @@
+{
+  "title": "Simple, transparent pricing",
+  "subtitle": "Choose the plan that's right for your club",
+  "billing": {
+    "monthly": "Monthly",
+    "annual": "Annual",
+    "save": "Save ~17%",
+    "saveAmount": "Save €{{amount}} per year"
+  },
+  "plans": {
+    "starter": {
+      "name": "Starter",
+      "maxMembers": "Up to 30 members",
+      "features": [
+        "Member Management",
+        "Basic Treasury",
+        "Public Club Page",
+        "Email Support",
+        "Basic Customization"
+      ]
+    },
+    "pro": {
+      "name": "Pro",
+      "maxMembers": "Up to 100 members",
+      "tag": "Best Value",
+      "features": [
+        "Everything in Starter",
+        "Events & Training Calendar",
+        "Notifications",
+        "Moderate Customization",
+        "Priority Support",
+        "Advanced Analytics"
+      ]
+    },
+    "elite": {
+      "name": "Elite",
+      "maxMembers": "Unlimited members",
+      "features": [
+        "Everything in Pro",
+        "Advanced Reporting",
+        "Advanced Customization",
+        "Priority Support",
+        "White-label Options"
+      ]
+    }
+  },
+  "cta": {
+    "continue": "Continue"
+  },
+  "additionalInfo": "All plans include a 14-day free trial. No credit card required."
+}

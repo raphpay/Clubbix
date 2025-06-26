@@ -1,7 +1,8 @@
 import { Switch } from "@headlessui/react";
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "../components/ui/Button";
 import {
   getAuthErrorMessage,
@@ -19,12 +20,38 @@ import { useRegistrationStore } from "../store/useRegistrationStore";
 import LabelInput from "./inputs/LabelInput";
 
 const RegistrationForm = () => {
-  const { role, step, formData, setRole, setStep, setFormData } =
-    useRegistrationStore();
+  const { t } = useTranslation("pricing");
+  const {
+    role,
+    step,
+    formData,
+    selectedPlan,
+    selectedBillingCycle,
+    setRole,
+    setStep,
+    setFormData,
+    setSelectedPlan,
+    setSelectedBillingCycle,
+  } = useRegistrationStore();
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  // Handle URL parameters for plan and billing cycle
+  useEffect(() => {
+    const plan = searchParams.get("plan") as "starter" | "pro" | "elite" | null;
+    const billing = searchParams.get("billing") as "monthly" | "annual" | null;
+
+    if (plan && ["starter", "pro", "elite"].includes(plan)) {
+      setSelectedPlan(plan);
+    }
+
+    if (billing && ["monthly", "annual"].includes(billing)) {
+      setSelectedBillingCycle(billing);
+    }
+  }, [searchParams, setSelectedPlan, setSelectedBillingCycle]);
 
   const validateInitialStep = async () => {
     const newErrors: Record<string, string> = {};
@@ -154,6 +181,52 @@ const RegistrationForm = () => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     setFormData({ logo: file });
+  };
+
+  const renderSelectedPlanInfo = () => {
+    if (!selectedPlan || !selectedBillingCycle) return null;
+
+    const plans = {
+      starter: {
+        name: t("plans.starter.name"),
+        price: selectedBillingCycle === "monthly" ? 21 : 199,
+      },
+      pro: {
+        name: t("plans.pro.name"),
+        price: selectedBillingCycle === "monthly" ? 55 : 499,
+      },
+      elite: {
+        name: t("plans.elite.name"),
+        price: selectedBillingCycle === "monthly" ? 65 : 599,
+      },
+    };
+
+    const plan = plans[selectedPlan];
+
+    return (
+      <div className="mb-6 rounded-lg bg-indigo-50 p-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-sm font-medium text-indigo-900">
+              Selected Plan: {plan.name}
+            </h3>
+            <p className="text-sm text-indigo-700">
+              €{plan.price}/
+              {selectedBillingCycle === "monthly" ? "month" : "year"}
+            </p>
+          </div>
+          <button
+            onClick={() => {
+              setSelectedPlan(undefined);
+              setSelectedBillingCycle(undefined);
+            }}
+            className="text-sm text-indigo-600 hover:text-indigo-500"
+          >
+            Change
+          </button>
+        </div>
+      </div>
+    );
   };
 
   const renderInitialStep = () => (
@@ -296,6 +369,9 @@ const RegistrationForm = () => {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+          {/* Selected Plan Info */}
+          {renderSelectedPlanInfo()}
+
           {/* Role Toggle */}
           <div className="flex items-center justify-between mb-8">
             <span className="text-sm font-medium text-gray-900">

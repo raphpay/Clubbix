@@ -1,0 +1,51 @@
+{
+  "title": "Tarification simple et transparente",
+  "subtitle": "Choisissez le plan qui convient à votre club",
+  "billing": {
+    "monthly": "Mensuel",
+    "annual": "Annuel",
+    "save": "Économisez ~17%",
+    "saveAmount": "Économisez €{{amount}} par an"
+  },
+  "plans": {
+    "starter": {
+      "name": "Starter",
+      "maxMembers": "Jusqu'à 30 membres",
+      "features": [
+        "Gestion des membres",
+        "Trésorerie de base",
+        "Page publique du club",
+        "Support par email",
+        "Personnalisation de base"
+      ]
+    },
+    "pro": {
+      "name": "Pro",
+      "maxMembers": "Jusqu'à 100 membres",
+      "tag": "Meilleur rapport qualité-prix",
+      "features": [
+        "Tout ce qui est inclus dans Starter",
+        "Calendrier d'événements et d'entraînements",
+        "Notifications",
+        "Personnalisation modérée",
+        "Support prioritaire",
+        "Analyses avancées"
+      ]
+    },
+    "elite": {
+      "name": "Elite",
+      "maxMembers": "Membres illimités",
+      "features": [
+        "Tout ce qui est inclus dans Pro",
+        "Rapports avancés",
+        "Personnalisation avancée",
+        "Support prioritaire",
+        "Options white-label"
+      ]
+    }
+  },
+  "cta": {
+    "continue": "Continuer"
+  },
+  "additionalInfo": "Tous les plans incluent un essai gratuit de 14 jours. Aucune carte de crédit requise."
+}

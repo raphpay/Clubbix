@@ -6,6 +6,7 @@ import { Footer } from "../components/layout/Footer";
 import { Navbar } from "../components/layout/Navbar";
 import { Section } from "../components/layout/Section";
 import { SEO } from "../components/layout/SEO";
+import PricingSection from "../components/PricingSection";
 
 const LandingPage: React.FC = () => {
   const { t } = useTranslation("landing");
@@ -164,85 +165,7 @@ const LandingPage: React.FC = () => {
         </div>
       </Section>
 
-      {/* Pricing Section */}
-      <Section
-        id="pricing"
-        title={t("pricing.title")}
-        subtitle={t("pricing.subtitle")}
-        background="white"
-      >
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:max-w-4xl lg:mx-auto">
-          {[
-            {
-              name: t("pricing.plans.starter.name"),
-              price: t("pricing.plans.starter.price"),
-              period: t("pricing.plans.starter.period"),
-              features: t("pricing.plans.starter.features", {
-                returnObjects: true,
-              }) as string[],
-              cta: t("pricing.plans.starter.cta"),
-            },
-            {
-              name: t("pricing.plans.professional.name"),
-              price: t("pricing.plans.professional.price"),
-              period: t("pricing.plans.professional.period"),
-              features: t("pricing.plans.professional.features", {
-                returnObjects: true,
-              }) as string[],
-              cta: t("pricing.plans.professional.cta"),
-            },
-          ].map((plan) => (
-            <div
-              key={plan.name}
-              className="bg-white border border-gray-200 rounded-lg shadow-sm divide-y divide-gray-200"
-            >
-              <div className="p-6">
-                <h3 className="text-lg font-medium text-gray-900">
-                  {plan.name}
-                </h3>
-                <p className="mt-8">
-                  <span className="text-4xl font-extrabold text-gray-900">
-                    {plan.price}
-                  </span>
-                  <span className="text-base font-medium text-gray-500">
-                    {plan.period}
-                  </span>
-                </p>
-                <Link
-                  to="/signup"
-                  className="mt-8 block w-full bg-indigo-600 border border-transparent rounded-md py-2 text-sm font-semibold text-white text-center hover:bg-indigo-700"
-                >
-                  {plan.cta}
-                </Link>
-              </div>
-              <div className="pt-6 pb-8 px-6">
-                <ul className="space-y-4">
-                  {plan.features.map((feature: string) => (
-                    <li key={feature} className="flex items-start">
-                      <div className="flex-shrink-0">
-                        <svg
-                          className="h-6 w-6 text-green-500"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M5 13l4 4L19 7"
-                          />
-                        </svg>
-                      </div>
-                      <p className="ml-3 text-base text-gray-500">{feature}</p>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          ))}
-        </div>
-      </Section>
+      <PricingSection />
 
       {/* Testimonials Section */}
       <Section
