@@ -1,4 +1,5 @@
 import { Switch } from "@headlessui/react";
+import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -85,13 +86,15 @@ const PricingSection: React.FC<PricingSectionProps> = ({ id }) => {
         {/* Billing Toggle */}
         <div className="mt-16 flex justify-center">
           <div className="flex items-center space-x-4">
-            <span
-              className={`text-sm font-medium ${
-                billingCycle === "monthly" ? "text-gray-900" : "text-gray-500"
-              }`}
+            <motion.span
+              key={`monthly-${billingCycle}`}
+              initial={{ opacity: 0.5 }}
+              animate={{ opacity: billingCycle === "monthly" ? 1 : 0.5 }}
+              transition={{ duration: 0.2 }}
+              className="text-sm font-medium text-gray-900"
             >
               {t("billing.monthly")}
-            </span>
+            </motion.span>
             <Switch
               checked={billingCycle === "annual"}
               onChange={(checked) =>
@@ -101,24 +104,37 @@ const PricingSection: React.FC<PricingSectionProps> = ({ id }) => {
                 billingCycle === "annual" ? "bg-indigo-600" : "bg-gray-200"
               } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2`}
             >
-              <span
-                className={`${
-                  billingCycle === "annual" ? "translate-x-6" : "translate-x-1"
-                } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
+              <motion.span
+                layout
+                className="inline-block h-4 w-4 rounded-full bg-white"
+                transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                style={{
+                  x: billingCycle === "annual" ? 20 : 4,
+                }}
               />
             </Switch>
-            <span
-              className={`text-sm font-medium ${
-                billingCycle === "annual" ? "text-gray-900" : "text-gray-500"
-              }`}
+            <motion.span
+              key={`annual-${billingCycle}`}
+              initial={{ opacity: 0.5 }}
+              animate={{ opacity: billingCycle === "annual" ? 1 : 0.5 }}
+              transition={{ duration: 0.2 }}
+              className="text-sm font-medium text-gray-900"
             >
               {t("billing.annual")}
-            </span>
-            {billingCycle === "annual" && (
-              <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
-                {t("billing.save")}
-              </span>
-            )}
+            </motion.span>
+            <AnimatePresence>
+              {billingCycle === "annual" && (
+                <motion.span
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.2 }}
+                  className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800"
+                >
+                  {t("billing.save")}
+                </motion.span>
+              )}
+            </AnimatePresence>
           </div>
         </div>
 
@@ -152,18 +168,38 @@ const PricingSection: React.FC<PricingSectionProps> = ({ id }) => {
                     {plan.maxMembers}
                   </p>
                   <div className="mt-6 flex items-baseline gap-x-1">
-                    <span className="text-4xl font-bold tracking-tight text-gray-900">
+                    <motion.span
+                      key={`price-${plan.id}-${billingCycle}`}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="text-4xl font-bold tracking-tight text-gray-900"
+                    >
                       €{currentPrice}
-                    </span>
-                    <span className="text-sm font-semibold leading-6 text-gray-600">
+                    </motion.span>
+                    <motion.span
+                      key={`period-${plan.id}-${billingCycle}`}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.3, delay: 0.1 }}
+                      className="text-sm font-semibold leading-6 text-gray-600"
+                    >
                       /{isAnnual ? "year" : "month"}
-                    </span>
+                    </motion.span>
                   </div>
-                  {isAnnual && (
-                    <p className="mt-2 text-sm text-green-600">
-                      {t("billing.saveAmount", { amount: savings })}
-                    </p>
-                  )}
+                  <AnimatePresence>
+                    {isAnnual && (
+                      <motion.p
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="mt-2 text-sm text-green-600 overflow-hidden"
+                      >
+                        {t("billing.saveAmount", { amount: savings })}
+                      </motion.p>
+                    )}
+                  </AnimatePresence>
                 </div>
 
                 <button
