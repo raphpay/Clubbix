@@ -11,6 +11,9 @@
     "clubLogo": "Club Logo (Optional)"
   },
   "selectedPlan": "Selected Plan: {{name}}",
+  "selectPlanTitle": "Select a Plan",
+  "selectPlanDescription": "Please choose a plan and billing cycle to continue with your club registration.",
+  "selectPlan": "Choose Plan",
   "change": "Change",
   "continue": "Continue",
   "back": "Back",
@@ -19,5 +22,12 @@
   "signIn": "Sign in to your existing account",
   "registerAsMember": "Register as Member",
   "toggleRole": "Toggle role",
-  "registerAsAdmin": "Register as Admin"
+  "registerAsAdmin": "Register as Admin",
+  "errors": {
+    "clubNameRequired": "Club name is required",
+    "clubNameTaken": "This club name is already taken",
+    "inviteCodeRequired": "Invite code is required",
+    "planRequired": "Please select a plan to continue",
+    "billingRequired": "Please select a billing cycle to continue"
+  }
 }

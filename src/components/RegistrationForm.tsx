@@ -63,17 +63,25 @@ const RegistrationForm = () => {
 
     if (role === "admin") {
       if (!formData.clubName) {
-        newErrors.clubName = "Club name is required";
+        newErrors.clubName = t("register:errors.clubNameRequired");
       } else {
         const exists = await checkClubNameExists(formData.clubName);
         if (exists) {
-          newErrors.clubName = "This club name is already taken";
+          newErrors.clubName = t("register:errors.clubNameTaken");
         }
+      }
+
+      // Validate that admin users have selected a plan and billing cycle
+      if (!selectedPlan) {
+        newErrors.plan = t("register:errors.planRequired");
+      }
+      if (!selectedBillingCycle) {
+        newErrors.billing = t("register:errors.billingRequired");
       }
     }
 
     if (role === "member" && !formData.inviteCode) {
-      newErrors.inviteCode = "Invite code is required";
+      newErrors.inviteCode = t("register:errors.inviteCodeRequired");
     }
 
     setErrors(newErrors);
@@ -189,8 +197,6 @@ const RegistrationForm = () => {
   };
 
   const renderSelectedPlanInfo = () => {
-    if (!selectedPlan || !selectedBillingCycle) return null;
-
     const plans = {
       starter: {
         name: t("pricing:plans.starter.name"),
@@ -206,8 +212,6 @@ const RegistrationForm = () => {
       },
     };
 
-    const plan = plans[selectedPlan];
-
     const handleChangePlan = () => {
       // Clear the current selection
       setSelectedPlan(undefined);
@@ -215,6 +219,38 @@ const RegistrationForm = () => {
       // Navigate to pricing section
       navigate("/#pricing");
     };
+
+    // If no plan is selected, show a message to select a plan
+    if (!selectedPlan || !selectedBillingCycle) {
+      return (
+        <div className="mb-6 rounded-lg bg-yellow-50 p-4 border border-yellow-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-sm font-medium text-yellow-800">
+                {t("register:selectPlanTitle")}
+              </h3>
+              <p className="text-sm text-yellow-700 mt-1">
+                {t("register:selectPlanDescription")}
+              </p>
+            </div>
+            <button
+              onClick={handleChangePlan}
+              className="text-sm text-yellow-600 hover:text-yellow-500 font-medium"
+            >
+              {t("register:selectPlan")}
+            </button>
+          </div>
+          {(errors.plan || errors.billing) && (
+            <div className="mt-2 text-sm text-red-600">
+              {errors.plan && <p>{errors.plan}</p>}
+              {errors.billing && <p>{errors.billing}</p>}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    const plan = plans[selectedPlan];
 
     return (
       <div className="mb-6 rounded-lg bg-indigo-50 p-4">
@@ -379,8 +415,8 @@ const RegistrationForm = () => {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          {/* Selected Plan Info */}
-          {renderSelectedPlanInfo()}
+          {/* Selected Plan Info (only for admin) */}
+          {role === "admin" && renderSelectedPlanInfo()}
 
           {/* Role Toggle */}
           <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4">
@@ -389,7 +425,16 @@ const RegistrationForm = () => {
             </span>
             <Switch
               checked={role === "admin"}
-              onChange={() => setRole(role === "admin" ? "member" : "admin")}
+              onChange={() => {
+                setRole(role === "admin" ? "member" : "admin");
+                // Clear plan-related errors when switching roles
+                setErrors((prev) => {
+                  const newErrors = { ...prev };
+                  delete newErrors.plan;
+                  delete newErrors.billing;
+                  return newErrors;
+                });
+              }}
               className={`${
                 role === "admin" ? "bg-indigo-600" : "bg-gray-200"
               } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 flex-shrink-0`}
