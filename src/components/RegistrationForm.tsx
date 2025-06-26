@@ -139,13 +139,15 @@ const RegistrationForm = () => {
           // Create club
           const clubId = await createClub({
             name: formData.clubName!,
-            logoUrl,
+            logoUrl: logoUrl ?? "",
             createdBy: userId,
             inviteCode: generateInviteCode(),
             members: [userId],
             formattedName: formData
               .clubName!.toLowerCase()
               .replace(/\s+/g, "-"),
+            plan: selectedPlan,
+            billingCycle: selectedBillingCycle,
           });
 
           // Create user profile
@@ -156,6 +158,11 @@ const RegistrationForm = () => {
             role: "admin",
             clubId,
           });
+
+          // TODO: Redirect to Stripe Checkout for payment
+          // Example: navigate(`/payment?plan=${selectedPlan}&billing=${selectedBillingCycle}&clubId=${clubId}`);
+          // For now, redirect to dashboard as fallback
+          navigate("/admin/dashboard");
         } else {
           // Join existing club
           const clubId = await joinClub(userId, formData.inviteCode!);
