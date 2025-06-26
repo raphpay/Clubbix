@@ -1,0 +1,33 @@
+{
+  "title": "S'inscrire",
+  "subtitle": "Créez un compte pour commencer",
+  "form": {
+    "clubName": "Nom du club",
+    "inviteCode": "Code d'invitation",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "email": "Email",
+    "password": "Mot de passe",
+    "clubLogo": "Logo du club (Optionnel)"
+  },
+  "selectedPlan": "Plan sélectionné : {{name}}",
+  "selectPlanTitle": "Sélectionner un plan",
+  "selectPlanDescription": "Veuillez choisir un plan et un cycle de facturation pour continuer avec l'inscription de votre club.",
+  "selectPlan": "Choisir un plan",
+  "change": "Modifier",
+  "continue": "Continuer",
+  "back": "Retour",
+  "registering": "Inscription...",
+  "register": "S'inscrire",
+  "signIn": "Connectez-vous à votre compte existant",
+  "registerAsMember": "S'inscrire en tant que membre",
+  "toggleRole": "Basculer le rôle",
+  "registerAsAdmin": "S'inscrire en tant qu'administrateur",
+  "errors": {
+    "clubNameRequired": "Le nom du club est requis",
+    "clubNameTaken": "Ce nom de club est déjà pris",
+    "inviteCodeRequired": "Le code d'invitation est requis",
+    "planRequired": "Veuillez sélectionner un plan pour continuer",
+    "billingRequired": "Veuillez sélectionner un cycle de facturation pour continuer"
+  }
+}

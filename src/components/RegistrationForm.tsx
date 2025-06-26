@@ -1,7 +1,8 @@
 import { Switch } from "@headlessui/react";
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "../components/ui/Button";
 import {
   getAuthErrorMessage,
@@ -19,29 +20,68 @@ import { useRegistrationStore } from "../store/useRegistrationStore";
 import LabelInput from "./inputs/LabelInput";
 
 const RegistrationForm = () => {
-  const { role, step, formData, setRole, setStep, setFormData } =
-    useRegistrationStore();
+  const { t } = useTranslation(["register", "pricing"]);
+  const {
+    role,
+    step,
+    formData,
+    selectedPlan,
+    selectedBillingCycle,
+    setRole,
+    setStep,
+    setFormData,
+    setSelectedPlan,
+    setSelectedBillingCycle,
+  } = useRegistrationStore();
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  // Handle URL parameters for plan and billing cycle
+  useEffect(() => {
+    const plan = searchParams.get("plan") as "starter" | "pro" | "elite" | null;
+    const billing = searchParams.get("billing") as "monthly" | "annual" | null;
+
+    if (plan && ["starter", "pro", "elite"].includes(plan)) {
+      setSelectedPlan(plan);
+    }
+
+    if (billing && ["monthly", "annual"].includes(billing)) {
+      setSelectedBillingCycle(billing);
+    }
+
+    // If both plan and billing are present, default to admin role (creating a new club)
+    if (plan && billing) {
+      setRole("admin");
+    }
+  }, [searchParams, setSelectedPlan, setSelectedBillingCycle, setRole]);
 
   const validateInitialStep = async () => {
     const newErrors: Record<string, string> = {};
 
     if (role === "admin") {
       if (!formData.clubName) {
-        newErrors.clubName = "Club name is required";
+        newErrors.clubName = t("register:errors.clubNameRequired");
       } else {
         const exists = await checkClubNameExists(formData.clubName);
         if (exists) {
-          newErrors.clubName = "This club name is already taken";
+          newErrors.clubName = t("register:errors.clubNameTaken");
         }
+      }
+
+      // Validate that admin users have selected a plan and billing cycle
+      if (!selectedPlan) {
+        newErrors.plan = t("register:errors.planRequired");
+      }
+      if (!selectedBillingCycle) {
+        newErrors.billing = t("register:errors.billingRequired");
       }
     }
 
     if (role === "member" && !formData.inviteCode) {
-      newErrors.inviteCode = "Invite code is required";
+      newErrors.inviteCode = t("register:errors.inviteCodeRequired");
     }
 
     setErrors(newErrors);
@@ -156,6 +196,85 @@ const RegistrationForm = () => {
     setFormData({ logo: file });
   };
 
+  const renderSelectedPlanInfo = () => {
+    const plans = {
+      starter: {
+        name: t("pricing:plans.starter.name"),
+        price: selectedBillingCycle === "monthly" ? 21 : 199,
+      },
+      pro: {
+        name: t("pricing:plans.pro.name"),
+        price: selectedBillingCycle === "monthly" ? 55 : 499,
+      },
+      elite: {
+        name: t("pricing:plans.elite.name"),
+        price: selectedBillingCycle === "monthly" ? 65 : 599,
+      },
+    };
+
+    const handleChangePlan = () => {
+      // Clear the current selection
+      setSelectedPlan(undefined);
+      setSelectedBillingCycle(undefined);
+      // Navigate to pricing section
+      navigate("/#pricing");
+    };
+
+    // If no plan is selected, show a message to select a plan
+    if (!selectedPlan || !selectedBillingCycle) {
+      return (
+        <div className="mb-6 rounded-lg bg-yellow-50 p-4 border border-yellow-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-sm font-medium text-yellow-800">
+                {t("register:selectPlanTitle")}
+              </h3>
+              <p className="text-sm text-yellow-700 mt-1">
+                {t("register:selectPlanDescription")}
+              </p>
+            </div>
+            <button
+              onClick={handleChangePlan}
+              className="text-sm text-yellow-600 hover:text-yellow-500 font-medium"
+            >
+              {t("register:selectPlan")}
+            </button>
+          </div>
+          {(errors.plan || errors.billing) && (
+            <div className="mt-2 text-sm text-red-600">
+              {errors.plan && <p>{errors.plan}</p>}
+              {errors.billing && <p>{errors.billing}</p>}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    const plan = plans[selectedPlan];
+
+    return (
+      <div className="mb-6 rounded-lg bg-indigo-50 p-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-sm font-medium text-indigo-900">
+              {t("register:selectedPlan", { name: plan.name })}
+            </h3>
+            <p className="text-sm text-indigo-700">
+              €{plan.price}/
+              {selectedBillingCycle === "monthly" ? "month" : "year"}
+            </p>
+          </div>
+          <button
+            onClick={handleChangePlan}
+            className="text-sm text-indigo-600 hover:text-indigo-500"
+          >
+            {t("register:change")}
+          </button>
+        </div>
+      </div>
+    );
+  };
+
   const renderInitialStep = () => (
     <motion.div
       key="initial"
@@ -167,14 +286,14 @@ const RegistrationForm = () => {
       <form onSubmit={handleInitialSubmit} className="space-y-6">
         {role === "admin" ? (
           <LabelInput
-            label="Club Name"
+            label={t("register:form.clubName")}
             value={formData.clubName || ""}
             errors={errors.clubName}
             onChange={(value) => setFormData({ clubName: value })}
           />
         ) : (
           <LabelInput
-            label="Invite Code"
+            label={t("register:form.inviteCode")}
             value={formData.inviteCode || ""}
             errors={errors.inviteCode}
             onChange={(value) => setFormData({ inviteCode: value })}
@@ -182,7 +301,7 @@ const RegistrationForm = () => {
         )}
         <div>
           <Button type="submit" variant="primary" fullWidth>
-            Continue
+            {t("register:continue")}
           </Button>
         </div>
       </form>
@@ -204,7 +323,7 @@ const RegistrationForm = () => {
               htmlFor="logo"
               className="block text-sm font-medium text-gray-700"
             >
-              Club Logo (Optional)
+              {t("register:form.clubLogo")}
             </label>
             <input
               type="file"
@@ -218,14 +337,14 @@ const RegistrationForm = () => {
 
         <div className="grid grid-cols-2 gap-4">
           <LabelInput
-            label="First Name"
+            label={t("register:form.firstName")}
             value={formData.firstName || ""}
             errors={errors.firstName}
             onChange={(value) => setFormData({ firstName: value })}
           />
 
           <LabelInput
-            label="Last Name"
+            label={t("register:form.lastName")}
             value={formData.lastName || ""}
             errors={errors.lastName}
             onChange={(value) => setFormData({ lastName: value })}
@@ -233,7 +352,7 @@ const RegistrationForm = () => {
         </div>
 
         <LabelInput
-          label="Email"
+          label={t("register:form.email")}
           value={formData.email || ""}
           errors={errors.email}
           onChange={(value) => setFormData({ email: value })}
@@ -241,7 +360,7 @@ const RegistrationForm = () => {
         />
 
         <LabelInput
-          label="Password"
+          label={t("register:form.password")}
           value={formData.password || ""}
           errors={errors.password}
           onChange={(value) => setFormData({ password: value })}
@@ -267,10 +386,10 @@ const RegistrationForm = () => {
             size="lg"
             disabled={isLoading}
           >
-            Back
+            {t("register:back")}
           </Button>
           <Button variant="primary" size="lg" disabled={isLoading}>
-            {isLoading ? "Registering..." : "Register"}
+            {isLoading ? t("register:registering") : t("register:register")}
           </Button>
         </div>
       </form>
@@ -281,7 +400,7 @@ const RegistrationForm = () => {
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Create your account
+          {t("register:title")}
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
           Or{" "}
@@ -289,34 +408,46 @@ const RegistrationForm = () => {
             to="/login"
             className="font-medium text-indigo-600 hover:text-indigo-500"
           >
-            sign in to your existing account
+            {t("register:signIn")}
           </Link>
         </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+          {/* Selected Plan Info (only for admin) */}
+          {role === "admin" && renderSelectedPlanInfo()}
+
           {/* Role Toggle */}
-          <div className="flex items-center justify-between mb-8">
-            <span className="text-sm font-medium text-gray-900">
-              Register as Member
+          <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4">
+            <span className="text-sm font-medium text-gray-900 text-center sm:text-left">
+              {t("register:registerAsMember")}
             </span>
             <Switch
               checked={role === "admin"}
-              onChange={() => setRole(role === "admin" ? "member" : "admin")}
+              onChange={() => {
+                setRole(role === "admin" ? "member" : "admin");
+                // Clear plan-related errors when switching roles
+                setErrors((prev) => {
+                  const newErrors = { ...prev };
+                  delete newErrors.plan;
+                  delete newErrors.billing;
+                  return newErrors;
+                });
+              }}
               className={`${
                 role === "admin" ? "bg-indigo-600" : "bg-gray-200"
-              } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2`}
+              } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 flex-shrink-0`}
             >
-              <span className="sr-only">Toggle role</span>
+              <span className="sr-only">{t("register:toggleRole")}</span>
               <span
                 className={`${
                   role === "admin" ? "translate-x-6" : "translate-x-1"
                 } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
               />
             </Switch>
-            <span className="text-sm font-medium text-gray-900">
-              Register as Admin
+            <span className="text-sm font-medium text-gray-900 text-center sm:text-right">
+              {t("register:registerAsAdmin")}
             </span>
           </div>
 

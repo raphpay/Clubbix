@@ -29,9 +29,12 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   const handleNavClick = (href: string) => {
     if (href.startsWith("#")) {
-      const element = document.getElementById(href.substring(1));
+      const element = document.querySelector(href);
       if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
       }
     }
   };
