@@ -208,6 +208,14 @@ const RegistrationForm = () => {
 
     const plan = plans[selectedPlan];
 
+    const handleChangePlan = () => {
+      // Clear the current selection
+      setSelectedPlan(undefined);
+      setSelectedBillingCycle(undefined);
+      // Navigate to pricing section
+      navigate("/#pricing");
+    };
+
     return (
       <div className="mb-6 rounded-lg bg-indigo-50 p-4">
         <div className="flex items-center justify-between">
@@ -221,10 +229,7 @@ const RegistrationForm = () => {
             </p>
           </div>
           <button
-            onClick={() => {
-              setSelectedPlan(undefined);
-              setSelectedBillingCycle(undefined);
-            }}
+            onClick={handleChangePlan}
             className="text-sm text-indigo-600 hover:text-indigo-500"
           >
             {t("register:change")}

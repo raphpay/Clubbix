@@ -16,7 +16,11 @@ export interface PricingPlan {
   popular?: boolean;
 }
 
-const PricingSection: React.FC = () => {
+interface PricingSectionProps {
+  id?: string;
+}
+
+const PricingSection: React.FC<PricingSectionProps> = ({ id }) => {
   const { t } = useTranslation("pricing");
   const [billingCycle, setBillingCycle] = useState<BillingCycle>("monthly");
   const navigate = useNavigate();
@@ -67,7 +71,7 @@ const PricingSection: React.FC = () => {
   };
 
   return (
-    <div className="bg-white py-6 sm:py-12">
+    <div id={id} className="bg-white py-6 sm:py-12">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-4xl text-center">
           <h2 className="text-base font-semibold leading-7 text-indigo-600">

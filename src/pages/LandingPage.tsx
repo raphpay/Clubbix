@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import LanguageSwitcher from "../components/LanguageSwitcher";
 import { Footer } from "../components/layout/Footer";
 import { Navbar } from "../components/layout/Navbar";
@@ -10,6 +10,23 @@ import PricingSection from "../components/PricingSection";
 
 const LandingPage: React.FC = () => {
   const { t } = useTranslation("landing");
+  const location = useLocation();
+
+  // Handle anchor navigation and smooth scrolling
+  useEffect(() => {
+    if (location.hash) {
+      const element = document.querySelector(location.hash);
+      if (element) {
+        // Add a small delay to ensure the page is fully loaded
+        setTimeout(() => {
+          element.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }, 100);
+      }
+    }
+  }, [location.hash]);
 
   const navItems = [
     { label: t("nav.features"), href: "#features" },
@@ -165,7 +182,7 @@ const LandingPage: React.FC = () => {
         </div>
       </Section>
 
-      <PricingSection />
+      <PricingSection id="pricing" />
 
       {/* Testimonials Section */}
       <Section
