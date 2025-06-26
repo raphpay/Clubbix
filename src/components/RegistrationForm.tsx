@@ -51,7 +51,12 @@ const RegistrationForm = () => {
     if (billing && ["monthly", "annual"].includes(billing)) {
       setSelectedBillingCycle(billing);
     }
-  }, [searchParams, setSelectedPlan, setSelectedBillingCycle]);
+
+    // If both plan and billing are present, default to admin role (creating a new club)
+    if (plan && billing) {
+      setRole("admin");
+    }
+  }, [searchParams, setSelectedPlan, setSelectedBillingCycle, setRole]);
 
   const validateInitialStep = async () => {
     const newErrors: Record<string, string> = {};
