@@ -15,6 +15,8 @@ export interface ClubData {
   createdBy: string;
   inviteCode: string;
   members: string[];
+  plan?: string; // e.g., 'starter', 'pro', 'elite'
+  billingCycle?: string; // e.g., 'monthly', 'annual'
   createdAt: Date;
 }
 
