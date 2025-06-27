@@ -1,5 +1,13 @@
+import {
+  browserLocalPersistence,
+  onAuthStateChanged,
+  setPersistence,
+} from "firebase/auth";
 import React, { createContext, ReactNode, useEffect, useState } from "react";
-import { User } from "../services/auth";
+import { auth } from "../config/firebase";
+import { getUser, User } from "../services/auth";
+
+setPersistence(auth, browserLocalPersistence);
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -28,14 +36,32 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setIsAuthenticated(false);
     setUser(null);
     localStorage.removeItem("user");
+    auth.signOut();
   };
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-      setIsAuthenticated(true);
-    }
+    // Listen for Firebase Auth state changes
+    const unsubscribe = onAuthStateChanged(auth, async (firUser) => {
+      if (firUser) {
+        // Fetch your custom user profile from Firestore
+        try {
+          const appUser = await getUser(firUser.uid);
+          setUser(appUser);
+          setIsAuthenticated(true);
+          localStorage.setItem("user", JSON.stringify(appUser));
+        } catch (err) {
+          setUser(null);
+          setIsAuthenticated(false);
+          localStorage.removeItem("user");
+        }
+      } else {
+        setUser(null);
+        setIsAuthenticated(false);
+        localStorage.removeItem("user");
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
 
   return (

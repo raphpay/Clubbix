@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export interface UserData {
   id?: string;
   firstName: string;
@@ -15,9 +17,11 @@ export interface ClubData {
   createdBy: string;
   inviteCode: string;
   members: string[];
-  plan?: string; // e.g., 'starter', 'pro', 'elite'
-  billingCycle?: string; // e.g., 'monthly', 'annual'
   createdAt: Date;
+  plan?: "starter" | "pro" | "elite";
+  billingCycle?: "monthly" | "annual";
+  subscription?: ClubSubscriptionData;
+  stripeSession?: StripeSessionData;
 }
 
 export interface ClubWebsiteContent {
@@ -44,4 +48,86 @@ export interface ClubWebsiteContent {
   }[];
   updatedAt: Date;
   createdAt: Date;
+}
+
+export interface StripeSessionData {
+  // Core session info
+  sessionId: string; // cs_test_...
+  customerId: string; // cus_...
+  subscriptionId: string; // sub_...
+
+  // Payment details
+  amount: number; // Amount in euros
+  currency: string; // 'eur', 'usd', etc.
+  paymentStatus: string; // 'paid', 'pending', 'failed'
+
+  // Subscription details
+  plan: string; // 'starter', 'pro', 'elite'
+  billingCycle: string; // 'monthly', 'annual'
+  interval: string; // 'month', 'year'
+
+  // Customer info
+  customerEmail: string;
+
+  // Your app metadata
+  userId: string;
+  clubId: string;
+
+  // Timestamps
+  createdAt: Timestamp;
+  expiresAt: Timestamp;
+
+  // Status tracking
+  status: "active" | "cancelled" | "past_due" | "unpaid";
+}
+
+export interface ClubSubscriptionData {
+  subscriptionId: string; // "sub_..."
+  clubId: string; // "firebase_club_id"
+  plan: string; // "starter"
+  billingCycle: string; // "monthly"
+  status: "active" | "cancelled" | "past_due" | "unpaid" | "incomplete";
+  currentPeriodStart: Timestamp;
+  currentPeriodEnd: Timestamp;
+  cancelAtPeriodEnd: boolean;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
+}
+
+export interface ClubSubscriptionHistory {
+  customerId: string;
+  email: string;
+  userId: string;
+  clubId: string;
+  createdAt: Timestamp;
+}
+
+// New interfaces for better organization
+export interface StripeCustomerData {
+  customerId: string; // "cus_..."
+  email: string;
+  userId: string;
+  clubId: string;
+  createdAt: Timestamp;
+}
+
+export interface StripeInvoiceData {
+  invoiceId: string; // "in_..."
+  subscriptionId: string; // "sub_..."
+  customerId: string; // "cus_..."
+  amount: number; // Amount in cents
+  currency: string;
+  status: "paid" | "open" | "void" | "uncollectible";
+  createdAt: Timestamp;
+  paidAt?: Timestamp;
+}
+
+// Webhook event types
+export interface WebhookEventData {
+  eventType: string;
+  eventId: string;
+  timestamp: Timestamp;
+  data: any;
+  processed: boolean;
+  error?: string;
 }

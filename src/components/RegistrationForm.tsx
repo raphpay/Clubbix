@@ -160,12 +160,6 @@ const RegistrationForm = () => {
             clubId,
           });
 
-          console.log("selectedPlan", selectedPlan);
-          console.log("selectedBillingCycle", selectedBillingCycle);
-          console.log("userId", userId);
-          console.log("email", formData.email);
-          console.log("clubId", clubId);
-
           // Create checkout session
           const checkoutResponse = await createCheckoutSession({
             plan: selectedPlan!,
@@ -174,8 +168,6 @@ const RegistrationForm = () => {
             email: formData.email,
             clubId,
           });
-
-          console.log("checkoutResponse", checkoutResponse);
 
           // Redirect to Stripe Checkout
           window.location.href = checkoutResponse.url;
