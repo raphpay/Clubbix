@@ -50,12 +50,6 @@ export const createClub = async (
   const clubDataToSave = {
     ...clubData,
     createdAt: serverTimestamp(),
-    // Initialize subscription fields (will be updated by webhook)
-    subscription: {
-      status: "incomplete" as const,
-      plan: clubData.plan || "starter",
-      billingCycle: clubData.billingCycle || "monthly",
-    },
   };
 
   await setDoc(clubRef, clubDataToSave);

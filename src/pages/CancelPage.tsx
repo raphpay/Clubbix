@@ -1,10 +1,12 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import { useClub } from "../hooks/useClub";
 
 const CancelPage: React.FC = () => {
   const { t } = useTranslation("common");
   const navigate = useNavigate();
+  const { club } = useClub();
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">

@@ -16,16 +16,16 @@ export interface CheckoutSessionResponse {
 // Price ID mapping - Replace these with your actual Stripe Price IDs
 const PRICE_IDS = {
   starter: {
-    monthly: "price_1ReDscPsFlms57nuqrgXOIeC", // Stripe price ID for Starter Monthly
-    annual: "price_1ReDt4PsFlms57nuGkltrYHB", // Stripe price ID for Starter Yearly
+    monthly: "price_1RecG2PsFlms57nuEd3bjIkg", // Stripe price ID for Starter Monthly
+    annual: "price_1RecGhPsFlms57nuMDCYumUm", // Stripe price ID for Starter Yearly
   },
   pro: {
-    monthly: "price_1ReDthPsFlms57nuLaAblSQv", // Stripe price ID for Pro Monthly
-    annual: "price_1ReDuiPsFlms57nuKPfp6Fdb", // Replace with your actual Stripe price ID for Pro Yearly
+    monthly: "price_1RecJJPsFlms57nudWe8PRgq", // Stripe price ID for Pro Monthly
+    annual: "price_1RecJsPsFlms57nu66Jg8ZTP", // Replace with your actual Stripe price ID for Pro Yearly
   },
   elite: {
-    monthly: "price_1ReDxcPsFlms57nuLWcR2mUm", // Replace with your actual Stripe price ID for Elite Monthly
-    annual: "price_1ReDvMPsFlms57nuMzvCFtWC", // Replace with your actual Stripe price ID for Elite Yearly
+    monthly: "price_1RecKUPsFlms57nuYH1ZCUns", // Replace with your actual Stripe price ID for Elite Monthly
+    annual: "price_1RecKyPsFlms57nuiNZwwTzN", // Replace with your actual Stripe price ID for Elite Yearly
   },
 };
 

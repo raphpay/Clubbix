@@ -8,12 +8,11 @@ const SuccessPage: React.FC = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
 
-  const sessionId = searchParams.get("session_id");
-
   // Debug logging
-  console.log("SuccessPage loaded");
-  console.log("Session ID:", sessionId);
-  console.log("All search params:", Object.fromEntries(searchParams.entries()));
+  // const sessionId = searchParams.get("session_id");
+  // console.log("SuccessPage loaded");
+  // console.log("Session ID:", sessionId);
+  // console.log("All search params:", Object.fromEntries(searchParams.entries()));
 
   useEffect(() => {
     // Simulate loading for 2 seconds to show the success message

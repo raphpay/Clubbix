@@ -12,33 +12,7 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../../config/firebase";
-import {
-  ClubData,
-  ClubSubscriptionData,
-  StripeCustomerData,
-  StripeInvoiceData,
-  StripeSessionData,
-  WebhookEventData,
-} from "./types";
-
-// Save Stripe session data
-export const saveStripeSession = async (
-  sessionData: Omit<StripeSessionData, "createdAt" | "expiresAt"> & {
-    expiresAt: Date;
-  }
-) => {
-  const sessionRef = doc(db, "stripe_sessions", sessionData.sessionId);
-
-  const dataToSave = {
-    ...sessionData,
-    createdAt: serverTimestamp(),
-    expiresAt: sessionData.expiresAt,
-  };
-
-  await setDoc(sessionRef, dataToSave);
-  console.log("Stripe session saved:", sessionData.sessionId);
-  return sessionData.sessionId;
-};
+import { ClubData, ClubSubscriptionData, StripeSessionData } from "./types";
 
 // Save subscription data
 export const saveSubscription = async (
@@ -82,41 +56,6 @@ export const updateSubscription = async (
   });
 
   console.log("Subscription updated:", subscriptionId);
-};
-
-// Save customer data
-export const saveCustomer = async (
-  customerData: Omit<StripeCustomerData, "createdAt">
-) => {
-  const customerRef = doc(db, "customers", customerData.customerId);
-
-  const dataToSave = {
-    ...customerData,
-    createdAt: serverTimestamp(),
-  };
-
-  await setDoc(customerRef, dataToSave);
-  console.log("Customer saved:", customerData.customerId);
-  return customerData.customerId;
-};
-
-// Save invoice data
-export const saveInvoice = async (
-  invoiceData: Omit<StripeInvoiceData, "createdAt" | "paidAt"> & {
-    paidAt?: Date;
-  }
-) => {
-  const invoiceRef = doc(db, "invoices", invoiceData.invoiceId);
-
-  const dataToSave = {
-    ...invoiceData,
-    createdAt: serverTimestamp(),
-    ...(invoiceData.paidAt && { paidAt: invoiceData.paidAt }),
-  };
-
-  await setDoc(invoiceRef, dataToSave);
-  console.log("Invoice saved:", invoiceData.invoiceId);
-  return invoiceData.invoiceId;
 };
 
 // Update club with subscription info
@@ -214,51 +153,6 @@ export const getSubscriptionsExpiringSoon = async (): Promise<
   const querySnapshot = await getDocs(q);
 
   return querySnapshot.docs.map((doc) => doc.data() as ClubSubscriptionData);
-};
-
-// Get customer by ID
-export const getCustomer = async (
-  customerId: string
-): Promise<StripeCustomerData | null> => {
-  const customerRef = doc(db, "customers", customerId);
-  const customerDoc = await getDoc(customerRef);
-
-  if (customerDoc.exists()) {
-    return customerDoc.data() as StripeCustomerData;
-  }
-
-  return null;
-};
-
-// Get customer by club ID
-export const getCustomerByClubId = async (
-  clubId: string
-): Promise<StripeCustomerData | null> => {
-  const customersRef = collection(db, "customers");
-  const q = query(customersRef, where("clubId", "==", clubId), limit(1));
-  const querySnapshot = await getDocs(q);
-
-  if (!querySnapshot.empty) {
-    return querySnapshot.docs[0].data() as StripeCustomerData;
-  }
-
-  return null;
-};
-
-// Save webhook event for audit trail
-export const saveWebhookEvent = async (
-  eventData: Omit<WebhookEventData, "timestamp">
-) => {
-  const eventRef = doc(collection(db, "webhook_events"));
-
-  const dataToSave = {
-    ...eventData,
-    timestamp: serverTimestamp(),
-  };
-
-  await setDoc(eventRef, dataToSave);
-  console.log("Webhook event saved:", eventData.eventId);
-  return eventRef.id;
 };
 
 // Get club with subscription data

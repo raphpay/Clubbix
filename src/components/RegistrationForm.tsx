@@ -147,8 +147,6 @@ const RegistrationForm = () => {
             formattedName: formData
               .clubName!.toLowerCase()
               .replace(/\s+/g, "-"),
-            plan: selectedPlan,
-            billingCycle: selectedBillingCycle,
           });
 
           // Create user profile
