@@ -1,0 +1,15 @@
+{
+  "success": {
+    "paymentProcessing": "Paiement en cours de traitement...",
+    "paymentSuccessful": "Paiment réussi !",
+    "message": "Votre souscription a été activé. Vous allez être redirigé vers \n le dashboard.",
+    "dashboardNav": "Aller au Dashboard",
+    "homeNav": "Retour à la page d'acceuil"
+  },
+  "cancel": {
+    "paymentCancelled": "Paiement annulé",
+    "message": "Votre paiement a été annulé. Vous pouvez réessayer ou contacter le support\nsi vous avez besoin d'aide.",
+    "tryAgain": "réessayer",
+    "dahsboardNav": "Aller au Dashboard"
+  }
+}

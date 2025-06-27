@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 const SuccessPage: React.FC = () => {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation("subscription");
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
@@ -31,7 +31,7 @@ const SuccessPage: React.FC = () => {
             <div className="text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
               <h2 className="mt-4 text-lg font-medium text-gray-900">
-                Processing your payment...
+                {t("success.paymentProcessing")}
               </h2>
             </div>
           </div>
@@ -61,26 +61,23 @@ const SuccessPage: React.FC = () => {
               </svg>
             </div>
             <h2 className="mt-4 text-lg font-medium text-gray-900">
-              Payment Successful!
+              {t("success.paymentSuccessful")}
             </h2>
-            <p className="mt-2 text-sm text-gray-600">
-              Your subscription has been activated. You'll be redirected to your
-              dashboard shortly.
-            </p>
+            <p className="mt-2 text-sm text-gray-600">{t("success.message")}</p>
 
             <div className="mt-6 space-y-3">
               <button
                 onClick={() => navigate("/admin/dashboard")}
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
               >
-                Go to Dashboard Now
+                {t("success.dashboardNav")}
               </button>
 
               <button
                 onClick={() => navigate("/")}
                 className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
               >
-                Back to Home
+                {t("success.homeNav")}
               </button>
             </div>
           </div>

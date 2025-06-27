@@ -29,24 +29,21 @@ const CancelPage: React.FC = () => {
               </svg>
             </div>
             <h2 className="mt-4 text-lg font-medium text-gray-900">
-              Payment Cancelled
+              {t("cancel.paymentCancelled")}
             </h2>
-            <p className="mt-2 text-sm text-gray-600">
-              Your payment was cancelled. You can try again or contact support
-              if you need help.
-            </p>
+            <p className="mt-2 text-sm text-gray-600">{t("cancel.message")}</p>
             <div className="mt-6 space-y-3">
               <button
                 onClick={() => navigate("/#pricing")}
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
               >
-                Try Again
+                {t("cancel.tryAgain")}
               </button>
               <button
                 onClick={() => navigate("/admin/dashboard")}
                 className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
               >
-                Go to Dashboard
+                {t("cancel.dashboardNav")}
               </button>
             </div>
           </div>

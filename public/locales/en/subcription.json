@@ -1,0 +1,15 @@
+{
+  "success": {
+    "paymentProcessing": "Processing your payment...",
+    "paymentSuccessful": "Payment Successful!",
+    "message": "Your subscription has been activated. You'll be redirected to your \ndashboard shortly.",
+    "dashboardNav": "Go to Dashboard Now",
+    "homeNav": "Back to Home"
+  },
+  "cancel": {
+    "paymentCancelled": "Payment Cancelled",
+    "message": "Your payment was cancelled. You can try again or contact support\nif you need help.",
+    "tryAgain": "Try Again",
+    "dahsboardNav": "Go to Dashboard"
+  }
+}
