@@ -29,7 +29,18 @@ export const sendPasswordReset = async (email: string) => {
     if (error.code === "auth/user-not-found") {
       throw new Error("No user found with this email");
     }
-    throw error;
+    if (error.code === "auth/invalid-email") {
+      throw new Error("Invalid email address");
+    }
+    if (error.code === "auth/too-many-requests") {
+      throw new Error(
+        "Too many password reset requests. Please wait before requesting another reset."
+      );
+    }
+    if (error.code === "auth/operation-not-allowed") {
+      throw new Error("Password reset is not enabled for this account");
+    }
+    throw new Error("Failed to send password reset email. Please try again.");
   }
 };
 
