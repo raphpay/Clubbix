@@ -25,7 +25,22 @@ const ProfilePage: React.FC = () => {
     email: "",
   });
 
+  const [originalData, setOriginalData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+  });
+
   const [userData, setUserData] = useState<UserData | null>(null);
+
+  // Check if form has changed
+  const hasFormChanged = () => {
+    return (
+      formData.firstName !== originalData.firstName ||
+      formData.lastName !== originalData.lastName ||
+      formData.email !== originalData.email
+    );
+  };
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -45,11 +60,15 @@ const ProfilePage: React.FC = () => {
           };
           console.log("Fetched user data:", userDataWithId);
           setUserData(userDataWithId);
-          setFormData({
+
+          const initialFormData = {
             firstName: data.firstName || "",
             lastName: data.lastName || "",
             email: data.email || "",
-          });
+          };
+
+          setFormData(initialFormData);
+          setOriginalData(initialFormData);
         } else {
           console.error("User document does not exist");
           setErrors({ general: "User profile not found" });
@@ -135,6 +154,13 @@ const ProfilePage: React.FC = () => {
         };
         updateUser(updatedUser);
       }
+
+      // Update original data to reflect the saved state
+      setOriginalData({
+        firstName: formData.firstName.trim(),
+        lastName: formData.lastName.trim(),
+        email: formData.email,
+      });
 
       setSuccessMessage(t("profileUpdated"));
     } catch (error: any) {
@@ -279,7 +305,11 @@ const ProfilePage: React.FC = () => {
 
               {/* Submit Button */}
               <div className="flex justify-end">
-                <Button type="submit" variant="primary" disabled={saving}>
+                <Button
+                  type="submit"
+                  variant="primary"
+                  disabled={saving || !hasFormChanged()}
+                >
                   {saving ? t("saving") : t("saveChanges")}
                 </Button>
               </div>
