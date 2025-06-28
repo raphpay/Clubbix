@@ -182,7 +182,7 @@ const ProfilePage: React.FC = () => {
   }
 
   return (
-    <div className="py-6">
+    <div className="py-14">
       <div className="max-w-2xl mx-auto">
         <div className="bg-white shadow rounded-lg">
           <div className="px-4 py-5 sm:p-6">
