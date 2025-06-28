@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export interface UserData {
   id?: string;
   firstName: string;
@@ -15,9 +17,8 @@ export interface ClubData {
   createdBy: string;
   inviteCode: string;
   members: string[];
-  plan?: string; // e.g., 'starter', 'pro', 'elite'
-  billingCycle?: string; // e.g., 'monthly', 'annual'
   createdAt: Date;
+  subscriptionId?: string;
 }
 
 export interface ClubWebsiteContent {
@@ -44,4 +45,17 @@ export interface ClubWebsiteContent {
   }[];
   updatedAt: Date;
   createdAt: Date;
+}
+
+export interface ClubSubscriptionData {
+  subscriptionId?: string; // "sub_..."
+  clubId: string; // "firebase_club_id"
+  plan: string; // "starter"
+  billingCycle: string; // "monthly"
+  status: "active" | "cancelled" | "past_due" | "unpaid" | "incomplete";
+  currentPeriodStart: Timestamp;
+  currentPeriodEnd: Timestamp;
+  cancelAtPeriodEnd: boolean;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
 }

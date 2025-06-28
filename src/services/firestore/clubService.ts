@@ -46,10 +46,13 @@ export const createClub = async (
   const clubId = doc(clubsRef).id;
   const clubRef = doc(db, "clubs", clubId);
 
-  await setDoc(clubRef, {
+  // Prepare club data with initial subscription info
+  const clubDataToSave = {
     ...clubData,
     createdAt: serverTimestamp(),
-  });
+  };
+
+  await setDoc(clubRef, clubDataToSave);
 
   return clubId;
 };

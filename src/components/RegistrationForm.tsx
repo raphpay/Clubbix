@@ -16,6 +16,7 @@ import {
   joinClub,
   uploadClubLogo,
 } from "../services/firestore";
+import { createCheckoutSession } from "../services/stripe";
 import { useRegistrationStore } from "../store/useRegistrationStore";
 import LabelInput from "./inputs/LabelInput";
 
@@ -146,8 +147,6 @@ const RegistrationForm = () => {
             formattedName: formData
               .clubName!.toLowerCase()
               .replace(/\s+/g, "-"),
-            plan: selectedPlan,
-            billingCycle: selectedBillingCycle,
           });
 
           // Create user profile
@@ -159,10 +158,17 @@ const RegistrationForm = () => {
             clubId,
           });
 
-          // TODO: Redirect to Stripe Checkout for payment
-          // Example: navigate(`/payment?plan=${selectedPlan}&billing=${selectedBillingCycle}&clubId=${clubId}`);
-          // For now, redirect to dashboard as fallback
-          navigate("/admin/dashboard");
+          // Create checkout session
+          const checkoutResponse = await createCheckoutSession({
+            plan: selectedPlan!,
+            billingCycle: selectedBillingCycle!,
+            userId,
+            email: formData.email,
+            clubId,
+          });
+
+          // Redirect to Stripe Checkout
+          window.location.href = checkoutResponse.url;
         } else {
           // Join existing club
           const clubId = await joinClub(userId, formData.inviteCode!);
@@ -191,6 +197,7 @@ const RegistrationForm = () => {
         // Redirect to dashboard
         navigate(role === "admin" ? "/admin/dashboard" : "/member/dashboard");
       } catch (error) {
+        console.log("error", error);
         setAuthError(getAuthErrorMessage(error));
       } finally {
         setIsLoading(false);

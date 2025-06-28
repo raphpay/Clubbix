@@ -14,6 +14,7 @@ import { useAuth } from "./hooks/useAuth";
 
 // Pages
 import RegistrationForm from "./components/RegistrationForm";
+import CancelPage from "./pages/CancelPage";
 import ClubWebsite from "./pages/ClubWebsite";
 import ClubWebsiteManager from "./pages/ClubWebsiteManager";
 import AdminDashboard from "./pages/dashboard/admin/AdminDashboard";
@@ -26,6 +27,7 @@ import TrainingPage from "./pages/dashboard/member/TrainingPage";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import SuccessPage from "./pages/SuccessPage";
 
 // Component to handle authenticated user redirects
 const AuthenticatedRedirect: React.FC = () => {
@@ -54,6 +56,8 @@ const App: React.FC = () => {
               <Route path="/" element={<LandingPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<RegistrationForm />} />
+              <Route path="/success" element={<SuccessPage />} />
+              <Route path="/cancel" element={<CancelPage />} />
               {/* Note: /signup?plan={plan}&billing={billingCycle} is handled by RegistrationForm */}
 
               {/* Protected routes */}
