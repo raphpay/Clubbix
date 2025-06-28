@@ -24,5 +24,17 @@
   "emailVerificationRequired": "To change your email address, you need to verify your current email first. Click the button below to send a verification email.",
   "sendVerificationEmail": "Send Verification Email",
   "sending": "Sending...",
-  "verificationEmailSent": "Verification email sent! Please check your inbox and verify your email before changing it."
+  "verificationEmailSent": "Verification email sent! Please check your inbox and verify your email before changing it.",
+  "loadingProfile": "Loading profile...",
+  "errors": {
+    "auth": {
+      "operationNotAllowed": "Email verification required. Please verify your current email address before changing it. You can request a verification email from your account settings.",
+      "emailAlreadyInUse": "This email is already in use by another account."
+    },
+    "general": {
+      "userNotFound": "User profile not found",
+      "loadFailed": "Failed to load profile data",
+      "updateProfileFailed": "Failed to update profile. Please try again."
+    }
+  }
 }

@@ -89,11 +89,11 @@ const ProfilePage: React.FC = () => {
           setOriginalData(initialFormData);
         } else {
           console.error("User document does not exist");
-          setErrors({ general: "User profile not found" });
+          setErrors({ general: t("errors.general.userNotFound") });
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
-        setErrors({ general: "Failed to load profile data" });
+        setErrors({ general: t("errors.general.loadFailed") });
       } finally {
         setLoading(false);
       }
@@ -155,14 +155,13 @@ const ProfilePage: React.FC = () => {
           }
           if (error.code === "auth/operation-not-allowed") {
             setErrors({
-              email:
-                "Email verification required. Please verify your current email address before changing it. You can request a verification email from your account settings.",
+              email: t("errors.auth.operationNotAllowed"),
             });
             return;
           }
           if (error.code === "auth/email-already-in-use") {
             setErrors({
-              email: "This email is already in use by another account.",
+              email: t("errros.auth.emailAlreadyInUse"),
             });
             return;
           }
@@ -197,7 +196,7 @@ const ProfilePage: React.FC = () => {
     } catch (error: any) {
       console.error("Error updating profile:", error);
       setErrors({
-        general: error.message || "Failed to update profile. Please try again.",
+        general: error.message || t("errors.general.updateProfileFailed"),
       });
     } finally {
       setSaving(false);
@@ -209,7 +208,7 @@ const ProfilePage: React.FC = () => {
       <div className="flex items-center justify-center py-12">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading profile...</p>
+          <p className="mt-4 text-gray-600">{t("loadingProfile")}</p>
         </div>
       </div>
     );

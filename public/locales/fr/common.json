@@ -24,5 +24,17 @@
   "emailVerificationRequired": "Pour changer votre adresse email, vous devez d'abord vérifier votre email actuel. Cliquez sur le bouton ci-dessous pour envoyer un email de vérification.",
   "sendVerificationEmail": "Envoyer l'email de vérification",
   "sending": "Envoi...",
-  "verificationEmailSent": "Email de vérification envoyé ! Veuillez vérifier votre boîte de réception et vérifier votre email avant de le changer."
+  "verificationEmailSent": "Email de vérification envoyé ! Veuillez vérifier votre boîte de réception et vérifier votre email avant de le changer.",
+  "loadingProfile": "Chargement du profil...",
+  "errors": {
+    "auth": {
+      "operationNotAllowed": "Une vérification de l'email est requise. Veuillez vérifier votre adresse emailavant de la changer. Vous pouvez demander une vérification d'email depuis votre page profil.",
+      "emailAlreadyInUse": "Cet email est déjà utilisé par un autre compte."
+    },
+    "general": {
+      "userNotFound": "Profil utilisateur non trouvé",
+      "loadFailed": "Erreur de chargement des données du profil",
+      "updateProfileFailed": "Erreur lors de la mise à jour le profil. Veuillez réessayer."
+    }
+  }
 }
