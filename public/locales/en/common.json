@@ -9,5 +9,15 @@
   "rememberMe": "Remember Me",
   "dontHaveAccount": "Don't have an account?",
   "alreadyHaveAccount": "Already have an account?",
-  "language": "Language"
+  "language": "Language",
+  "profile": "Profile",
+  "firstName": "First Name",
+  "lastName": "Last Name",
+  "role": "Role",
+  "club": "Club",
+  "saveChanges": "Save Changes",
+  "saving": "Saving...",
+  "profileUpdated": "Profile updated successfully!",
+  "manageProfile": "Manage your personal information and account settings.",
+  "noClubAssigned": "No club assigned"
 }

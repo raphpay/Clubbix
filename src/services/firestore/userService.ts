@@ -122,3 +122,11 @@ export const deleteMember = async (
   const userRef = doc(db, "users", memberId);
   await setDoc(userRef, { clubId: null }, { merge: true });
 };
+
+export const updateUserProfile = async (
+  userId: string,
+  updates: Partial<UserData>
+): Promise<void> => {
+  const userRef = doc(db, "users", userId);
+  await setDoc(userRef, updates, { merge: true });
+};

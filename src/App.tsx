@@ -27,6 +27,7 @@ import TrainingPage from "./pages/dashboard/member/TrainingPage";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import ProfilePage from "./pages/ProfilePage";
 import SuccessPage from "./pages/SuccessPage";
 
 // Component to handle authenticated user redirects
@@ -74,6 +75,7 @@ const App: React.FC = () => {
                 <Route path="members" element={<MembersPage />} />
                 <Route path="events" element={<EventsPage />} />
                 <Route path="website" element={<ClubWebsiteManager />} />
+                <Route path="profile" element={<ProfilePage />} />
               </Route>
 
               <Route
@@ -87,6 +89,7 @@ const App: React.FC = () => {
                 <Route index element={<MemberDashboard />} />
                 <Route path="trainings" element={<TrainingPage />} />
                 <Route path="events" element={<MemberEventsPage />} />
+                <Route path="profile" element={<ProfilePage />} />
               </Route>
 
               {/* Club routes */}

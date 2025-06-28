@@ -9,5 +9,15 @@
   "rememberMe": "Se souvenir de moi",
   "dontHaveAccount": "Vous n'avez pas de compte ?",
   "alreadyHaveAccount": "Vous avez déjà un compte ?",
-  "language": "Langue"
+  "language": "Langue",
+  "profile": "Profil",
+  "firstName": "Prénom",
+  "lastName": "Nom de famille",
+  "role": "Rôle",
+  "club": "Club",
+  "saveChanges": "Enregistrer les modifications",
+  "saving": "Enregistrement...",
+  "profileUpdated": "Profil mis à jour avec succès !",
+  "manageProfile": "Gérez vos informations personnelles et les paramètres de votre compte.",
+  "noClubAssigned": "Aucun club assigné"
 }
