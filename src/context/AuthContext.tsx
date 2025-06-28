@@ -14,6 +14,7 @@ interface AuthContextType {
   user: User | null;
   login: (user: User) => void;
   logout: () => void;
+  updateUser: (user: User) => void;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(
@@ -37,6 +38,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setUser(null);
     localStorage.removeItem("user");
     auth.signOut();
+  };
+
+  const updateUser = (user: User) => {
+    setUser(user);
+    localStorage.setItem("user", JSON.stringify(user));
   };
 
   useEffect(() => {
@@ -65,7 +71,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, user, login, logout, updateUser }}
+    >
       {children}
     </AuthContext.Provider>
   );

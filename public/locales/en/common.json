@@ -9,5 +9,32 @@
   "rememberMe": "Remember Me",
   "dontHaveAccount": "Don't have an account?",
   "alreadyHaveAccount": "Already have an account?",
-  "language": "Language"
+  "language": "Language",
+  "profile": "Profile",
+  "firstName": "First Name",
+  "lastName": "Last Name",
+  "role": "Role",
+  "club": "Club",
+  "saveChanges": "Save Changes",
+  "saving": "Saving...",
+  "profileUpdated": "Profile updated successfully!",
+  "manageProfile": "Manage your personal information and account settings.",
+  "noClubAssigned": "No club assigned",
+  "emailChangeNotice": "Email Change Notice",
+  "emailVerificationRequired": "To change your email address, you need to verify your current email first. Click the button below to send a verification email.",
+  "sendVerificationEmail": "Send Verification Email",
+  "sending": "Sending...",
+  "verificationEmailSent": "Verification email sent! Please check your inbox and verify your email before changing it.",
+  "loadingProfile": "Loading profile...",
+  "errors": {
+    "auth": {
+      "operationNotAllowed": "Email verification required. Please verify your current email address before changing it. You can request a verification email from your account settings.",
+      "emailAlreadyInUse": "This email is already in use by another account."
+    },
+    "general": {
+      "userNotFound": "User profile not found",
+      "loadFailed": "Failed to load profile data",
+      "updateProfileFailed": "Failed to update profile. Please try again."
+    }
+  }
 }

@@ -100,5 +100,9 @@ export const getUser = async (userId: string): Promise<User> => {
   if (!userDoc.exists()) {
     throw new Error("User not found");
   }
-  return userDoc.data() as User;
+  const userData = userDoc.data();
+  return {
+    ...userData,
+    uid: userId,
+  } as User;
 };

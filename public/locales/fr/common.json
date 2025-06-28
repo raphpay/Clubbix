@@ -9,5 +9,32 @@
   "rememberMe": "Se souvenir de moi",
   "dontHaveAccount": "Vous n'avez pas de compte ?",
   "alreadyHaveAccount": "Vous avez déjà un compte ?",
-  "language": "Langue"
+  "language": "Langue",
+  "profile": "Profil",
+  "firstName": "Prénom",
+  "lastName": "Nom de famille",
+  "role": "Rôle",
+  "club": "Club",
+  "saveChanges": "Enregistrer les modifications",
+  "saving": "Enregistrement...",
+  "profileUpdated": "Profil mis à jour avec succès !",
+  "manageProfile": "Gérez vos informations personnelles et les paramètres de votre compte.",
+  "noClubAssigned": "Aucun club assigné",
+  "emailChangeNotice": "Avis de changement d'email",
+  "emailVerificationRequired": "Pour changer votre adresse email, vous devez d'abord vérifier votre email actuel. Cliquez sur le bouton ci-dessous pour envoyer un email de vérification.",
+  "sendVerificationEmail": "Envoyer l'email de vérification",
+  "sending": "Envoi...",
+  "verificationEmailSent": "Email de vérification envoyé ! Veuillez vérifier votre boîte de réception et vérifier votre email avant de le changer.",
+  "loadingProfile": "Chargement du profil...",
+  "errors": {
+    "auth": {
+      "operationNotAllowed": "Une vérification de l'email est requise. Veuillez vérifier votre adresse emailavant de la changer. Vous pouvez demander une vérification d'email depuis votre page profil.",
+      "emailAlreadyInUse": "Cet email est déjà utilisé par un autre compte."
+    },
+    "general": {
+      "userNotFound": "Profil utilisateur non trouvé",
+      "loadFailed": "Erreur de chargement des données du profil",
+      "updateProfileFailed": "Erreur lors de la mise à jour le profil. Veuillez réessayer."
+    }
+  }
 }

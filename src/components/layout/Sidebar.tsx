@@ -1,4 +1,4 @@
-import { Calendar, Dumbbell, Globe, Users, Wallet } from "lucide-react";
+import { Calendar, Dumbbell, Globe, User, Users, Wallet } from "lucide-react";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
@@ -18,6 +18,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
     { path: "/admin/dashboard/treasury", icon: Wallet, label: t("treasury") },
     { path: "/admin/dashboard/website", icon: Globe, label: t("website") },
     { path: "/admin/dashboard/events", icon: Calendar, label: t("events") },
+    { path: "/admin/dashboard/profile", icon: User, label: t("profile") },
   ];
 
   const memberNavItems = [
@@ -27,6 +28,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
       label: t("trainings"),
     },
     { path: "/member/dashboard/events", icon: Calendar, label: t("events") },
+    { path: "/member/dashboard/profile", icon: User, label: t("profile") },
   ];
 
   const navItems = isAdmin ? adminNavItems : memberNavItems;

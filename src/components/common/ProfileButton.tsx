@@ -30,7 +30,7 @@ export const ProfileButton: React.FC = () => {
   };
 
   const handleProfileClick = () => {
-    navigate(`/${user?.role}/profile`);
+    navigate(`/${user?.role}/dashboard/profile`);
     setIsOpen(false);
   };
 
