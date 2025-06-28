@@ -6,7 +6,10 @@ import { Button } from "../components/ui/Button";
 import { db } from "../config/firebase";
 import { useAuth } from "../hooks/useAuth";
 import { useClub } from "../hooks/useClub";
-import { updateUserEmail } from "../services/firestore/authService";
+import {
+  sendEmailVerificationLink,
+  updateUserEmail,
+} from "../services/firestore/authService";
 import { UserData } from "../services/firestore/types";
 import { updateUserProfile } from "../services/firestore/userService";
 
@@ -16,6 +19,7 @@ const ProfilePage: React.FC = () => {
   const { club } = useClub();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [sendingVerification, setSendingVerification] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [successMessage, setSuccessMessage] = useState<string>("");
 
@@ -40,6 +44,20 @@ const ProfilePage: React.FC = () => {
       formData.lastName !== originalData.lastName ||
       formData.email !== originalData.email
     );
+  };
+
+  const handleSendVerificationEmail = async () => {
+    setSendingVerification(true);
+    setErrors({});
+
+    try {
+      await sendEmailVerificationLink();
+      setSuccessMessage(t("verificationEmailSent"));
+    } catch (error: any) {
+      setErrors({ email: error.message });
+    } finally {
+      setSendingVerification(false);
+    }
   };
 
   useEffect(() => {
@@ -133,6 +151,19 @@ const ProfilePage: React.FC = () => {
         } catch (error: any) {
           if (error.message.includes("requires recent authentication")) {
             setErrors({ email: error.message });
+            return;
+          }
+          if (error.code === "auth/operation-not-allowed") {
+            setErrors({
+              email:
+                "Email verification required. Please verify your current email address before changing it. You can request a verification email from your account settings.",
+            });
+            return;
+          }
+          if (error.code === "auth/email-already-in-use") {
+            setErrors({
+              email: "This email is already in use by another account.",
+            });
             return;
           }
           throw error;
@@ -244,13 +275,45 @@ const ProfilePage: React.FC = () => {
               </div>
 
               {/* Email Field */}
-              <LabelInput
-                label={t("email")}
-                type="email"
-                value={formData.email}
-                errors={errors.email}
-                onChange={(value) => setFormData({ ...formData, email: value })}
-              />
+              <div className="space-y-2">
+                <LabelInput
+                  label={t("email")}
+                  type="email"
+                  value={formData.email}
+                  errors={errors.email}
+                  onChange={(value) =>
+                    setFormData({ ...formData, email: value })
+                  }
+                />
+
+                {/* Email verification notice */}
+                {formData.email !== originalData.email && (
+                  <div className="rounded-md bg-yellow-50 p-4">
+                    <div className="flex">
+                      <div className="ml-3">
+                        <h3 className="text-sm font-medium text-yellow-800">
+                          {t("emailChangeNotice")}
+                        </h3>
+                        <div className="mt-2 text-sm text-yellow-700">
+                          <p>{t("emailVerificationRequired")}</p>
+                        </div>
+                        <div className="mt-4">
+                          <Button
+                            type="button"
+                            variant="secondary"
+                            onClick={handleSendVerificationEmail}
+                            disabled={sendingVerification}
+                          >
+                            {sendingVerification
+                              ? t("sending")
+                              : t("sendVerificationEmail")}
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
 
               {/* Read-only Fields */}
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">

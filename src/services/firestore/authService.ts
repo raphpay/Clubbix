@@ -1,5 +1,6 @@
 import {
   createUserWithEmailAndPassword,
+  sendEmailVerification,
   sendPasswordResetEmail,
   updateEmail,
 } from "firebase/auth";
@@ -51,6 +52,24 @@ export const updateUserEmail = async (
     }
     if (error.code === "auth/email-already-in-use") {
       throw new Error("This email is already in use by another account.");
+    }
+    throw error;
+  }
+};
+
+export const sendEmailVerificationLink = async (): Promise<void> => {
+  const currentUser = auth.currentUser;
+  if (!currentUser) {
+    throw new Error("No authenticated user");
+  }
+
+  try {
+    await sendEmailVerification(currentUser);
+  } catch (error: any) {
+    if (error.code === "auth/too-many-requests") {
+      throw new Error(
+        "Too many verification requests. Please wait before requesting another verification email."
+      );
     }
     throw error;
   }

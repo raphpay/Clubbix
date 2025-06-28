@@ -19,5 +19,10 @@
   "saving": "Saving...",
   "profileUpdated": "Profile updated successfully!",
   "manageProfile": "Manage your personal information and account settings.",
-  "noClubAssigned": "No club assigned"
+  "noClubAssigned": "No club assigned",
+  "emailChangeNotice": "Email Change Notice",
+  "emailVerificationRequired": "To change your email address, you need to verify your current email first. Click the button below to send a verification email.",
+  "sendVerificationEmail": "Send Verification Email",
+  "sending": "Sending...",
+  "verificationEmailSent": "Verification email sent! Please check your inbox and verify your email before changing it."
 }

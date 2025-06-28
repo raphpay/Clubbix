@@ -19,5 +19,10 @@
   "saving": "Enregistrement...",
   "profileUpdated": "Profil mis à jour avec succès !",
   "manageProfile": "Gérez vos informations personnelles et les paramètres de votre compte.",
-  "noClubAssigned": "Aucun club assigné"
+  "noClubAssigned": "Aucun club assigné",
+  "emailChangeNotice": "Avis de changement d'email",
+  "emailVerificationRequired": "Pour changer votre adresse email, vous devez d'abord vérifier votre email actuel. Cliquez sur le bouton ci-dessous pour envoyer un email de vérification.",
+  "sendVerificationEmail": "Envoyer l'email de vérification",
+  "sending": "Envoi...",
+  "verificationEmailSent": "Email de vérification envoyé ! Veuillez vérifier votre boîte de réception et vérifier votre email avant de le changer."
 }
