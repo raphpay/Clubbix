@@ -8,6 +8,7 @@ import { useAuth } from "../hooks/useAuth";
 import { useClub } from "../hooks/useClub";
 import {
   sendEmailVerificationLink,
+  sendPasswordReset,
   updateUserEmail,
 } from "../services/firestore/authService";
 import { UserData } from "../services/firestore/types";
@@ -20,6 +21,7 @@ const ProfilePage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [sendingVerification, setSendingVerification] = useState(false);
+  const [resettingPassword, setResettingPassword] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [successMessage, setSuccessMessage] = useState<string>("");
 
@@ -57,6 +59,25 @@ const ProfilePage: React.FC = () => {
       setErrors({ email: error.message });
     } finally {
       setSendingVerification(false);
+    }
+  };
+
+  const handleResetPassword = async () => {
+    if (!user?.email) {
+      setErrors({ password: t("errors.auth.noEmail") });
+      return;
+    }
+
+    setResettingPassword(true);
+    setErrors({});
+
+    try {
+      await sendPasswordReset(user.email);
+      setSuccessMessage(t("passwordResetSent"));
+    } catch (error: any) {
+      setErrors({ password: error.message });
+    } finally {
+      setResettingPassword(false);
     }
   };
 
@@ -339,6 +360,37 @@ const ProfilePage: React.FC = () => {
                 </div>
               </div>
 
+              {/* Password Reset Section */}
+              <div className="border-t border-gray-200 pt-6">
+                <div className="mb-4">
+                  <h3 className="text-lg font-medium text-gray-900">
+                    {t("security")}
+                  </h3>
+                  <p className="text-sm text-gray-600">{t("manageSecurity")}</p>
+                </div>
+
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="text-sm font-medium text-gray-900">
+                        {t("password")}
+                      </h4>
+                      <p className="text-sm text-gray-600">
+                        {t("passwordResetDescription")}
+                      </p>
+                    </div>
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      onClick={handleResetPassword}
+                      disabled={resettingPassword}
+                    >
+                      {resettingPassword ? t("sending") : t("resetPassword")}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
               {/* Error Messages */}
               {errors.general && (
                 <div className="rounded-md bg-red-50 p-4">
@@ -346,6 +398,19 @@ const ProfilePage: React.FC = () => {
                     <div className="ml-3">
                       <h3 className="text-sm font-medium text-red-800">
                         {errors.general}
+                      </h3>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Password-specific errors */}
+              {errors.password && (
+                <div className="rounded-md bg-red-50 p-4">
+                  <div className="flex">
+                    <div className="ml-3">
+                      <h3 className="text-sm font-medium text-red-800">
+                        {errors.password}
                       </h3>
                     </div>
                   </div>

@@ -26,10 +26,16 @@
   "sending": "Sending...",
   "verificationEmailSent": "Verification email sent! Please check your inbox and verify your email before changing it.",
   "loadingProfile": "Loading profile...",
+  "resetPassword": "Reset Password",
+  "passwordResetSent": "Password reset email sent! Please check your inbox and follow the instructions to reset your password.",
+  "security": "Security",
+  "manageSecurity": "Manage your account security settings",
+  "passwordResetDescription": "Reset your password via email",
   "errors": {
     "auth": {
       "operationNotAllowed": "Email verification required. Please verify your current email address before changing it. You can request a verification email from your account settings.",
-      "emailAlreadyInUse": "This email is already in use by another account."
+      "emailAlreadyInUse": "This email is already in use by another account.",
+      "noEmail": "No email address found for this account."
     },
     "general": {
       "userNotFound": "User profile not found",

@@ -26,10 +26,16 @@
   "sending": "Envoi...",
   "verificationEmailSent": "Email de vérification envoyé ! Veuillez vérifier votre boîte de réception et vérifier votre email avant de le changer.",
   "loadingProfile": "Chargement du profil...",
+  "resetPassword": "Réinitialiser le mot de passe",
+  "passwordResetSent": "Email de réinitialisation de mot de passe envoyé ! Veuillez vérifier votre boîte de réception et suivre les instructions pour réinitialiser votre mot de passe.",
+  "security": "Sécurité",
+  "manageSecurity": "Gérez les paramètres de sécurité de votre compte",
+  "passwordResetDescription": "Réinitialisez votre mot de passe par email",
   "errors": {
     "auth": {
       "operationNotAllowed": "Une vérification de l'email est requise. Veuillez vérifier votre adresse emailavant de la changer. Vous pouvez demander une vérification d'email depuis votre page profil.",
-      "emailAlreadyInUse": "Cet email est déjà utilisé par un autre compte."
+      "emailAlreadyInUse": "Cet email est déjà utilisé par un autre compte.",
+      "noEmail": "Aucune adresse email trouvée pour ce compte."
     },
     "general": {
       "userNotFound": "Profil utilisateur non trouvé",
