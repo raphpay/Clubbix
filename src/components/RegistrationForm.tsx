@@ -417,7 +417,7 @@ const RegistrationForm = () => {
           {t("register:title")}
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
-          Or{" "}
+          {t("or")}{" "}
           <Link
             to="/login"
             className="font-medium text-indigo-600 hover:text-indigo-500"

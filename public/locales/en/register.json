@@ -1,6 +1,7 @@
 {
   "title": "Register",
-  "subtitle": "Create an account to get started",
+  "subtitle": "Create an account to get started",,
+  "or": "Or",
   "form": {
     "clubName": "Club Name",
     "inviteCode": "Invite Code",
