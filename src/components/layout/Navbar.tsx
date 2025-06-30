@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Button } from "../ui/Button";
 import { Logo } from "../ui/Logo";
@@ -27,6 +28,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   ctaButtons = [],
   children,
 }) => {
+  const { t } = useTranslation("demo");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleNavClick = (href: string) => {
@@ -64,7 +66,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               to="/book-demo"
               className="px-3 py-2 text-gray-700 rounded-lg hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
             >
-              Book a demo
+              {t("title")}
             </Link>
             {children}
             {ctaButtons.length > 0 && (
@@ -116,7 +118,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   to="/book-demo"
                   className="block px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:text-white hover:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
                 >
-                  Book a demo
+                  {t("title")}
                 </Link>
                 <div className="mt-3 space-y-2">
                   {children}
