@@ -13,17 +13,24 @@ import {
 } from "../services/firestore/authService";
 import { UserData } from "../services/firestore/types";
 import { updateUserProfile } from "../services/firestore/userService";
+import { createCustomerPortalSession } from "../services/stripe";
 
 const ProfilePage: React.FC = () => {
   const { t } = useTranslation("common");
   const { user, updateUser } = useAuth();
   const { club } = useClub();
+
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [sendingVerification, setSendingVerification] = useState(false);
   const [resettingPassword, setResettingPassword] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [successMessage, setSuccessMessage] = useState<string>("");
+  const [portalLoading, setPortalLoading] = useState(false);
+  const [portalError, setPortalError] = useState<string>("");
+  const [cancelLoading, setCancelLoading] = useState(false);
+  const [cancelError, setCancelError] = useState<string>("");
+  const [cancelSuccess, setCancelSuccess] = useState<string>("");
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -78,6 +85,26 @@ const ProfilePage: React.FC = () => {
       setErrors({ password: error.message });
     } finally {
       setResettingPassword(false);
+    }
+  };
+
+  const handleOpenCustomerPortal = async () => {
+    setPortalLoading(true);
+    setPortalError("");
+    if (club?.subscription?.customerId) {
+      try {
+        const { url } = await createCustomerPortalSession(
+          formData.email,
+          club?.subscription?.customerId
+        );
+        window.location.href = url;
+      } catch (error: any) {
+        setPortalError(
+          error.message || t("errors.general.customerPortalFailed")
+        );
+      } finally {
+        setPortalLoading(false);
+      }
     }
   };
 
@@ -369,7 +396,7 @@ const ProfilePage: React.FC = () => {
                   <p className="text-sm text-gray-600">{t("manageSecurity")}</p>
                 </div>
 
-                <div className="bg-gray-50 rounded-lg p-4">
+                <div className="bg-gray-50 rounded-lg p-4 mb-4">
                   <div className="flex items-center justify-between">
                     <div>
                       <h4 className="text-sm font-medium text-gray-900">
@@ -388,6 +415,35 @@ const ProfilePage: React.FC = () => {
                       {resettingPassword ? t("sending") : t("resetPassword")}
                     </Button>
                   </div>
+                </div>
+
+                {/* Stripe Customer Portal Button */}
+                <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="text-sm font-medium text-gray-900">
+                        {t("stripe.manageSubscriptionTitle")}
+                      </h4>
+                      <p className="text-sm text-gray-600">
+                        {t("stripe.manageSubscriptionDescription")}
+                      </p>
+                    </div>
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      onClick={handleOpenCustomerPortal}
+                      disabled={portalLoading}
+                    >
+                      {portalLoading
+                        ? t("loading")
+                        : t("stripe.openCustomerPortal")}
+                    </Button>
+                  </div>
+                  {portalError && (
+                    <div className="mt-2 text-sm text-red-600">
+                      {portalError}
+                    </div>
+                  )}
                 </div>
               </div>
 

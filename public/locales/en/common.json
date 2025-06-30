@@ -42,5 +42,11 @@
       "loadFailed": "Failed to load profile data",
       "updateProfileFailed": "Failed to update profile. Please try again."
     }
-  }
+  },
+  "stripe": {
+    "manageSubscriptionTitle": "Manage subscription",
+    "manageSubscriptionDescription": "Manage or cancel your subscription via Stripe portal",
+    "openCustomerPortal": "Open customer portal"
+  },
+  "loading": "Loading"
 }

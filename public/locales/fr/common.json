@@ -42,5 +42,11 @@
       "loadFailed": "Erreur de chargement des données du profil",
       "updateProfileFailed": "Erreur lors de la mise à jour le profil. Veuillez réessayer."
     }
-  }
+  },
+  "stripe": {
+    "manageSubscriptionTitle": "Gérer l'abonnement",
+    "manageSubscriptionDescription": "Gérer ou annuler votre abonnement via le portail Stripe",
+    "openCustomerPortal": "Ouvrir le portail client"
+  },
+  "loading": "Chargement"
 }

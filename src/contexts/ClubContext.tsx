@@ -2,6 +2,7 @@ import { doc, onSnapshot } from "firebase/firestore";
 import React, { createContext, useEffect, useState } from "react";
 import { db } from "../config/firebase";
 import { useAuth } from "../hooks/useAuth";
+import { ClubData } from "../services/firestore";
 
 interface Club {
   id: string;
@@ -9,7 +10,7 @@ interface Club {
 }
 
 interface ClubContextType {
-  club: Club | null;
+  club: ClubData | null;
   loading: boolean;
 }
 
@@ -22,7 +23,7 @@ export const ClubProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const { user } = useAuth();
-  const [club, setClub] = useState<Club | null>(null);
+  const [club, setClub] = useState<ClubData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -43,7 +44,7 @@ export const ClubProvider: React.FC<{ children: React.ReactNode }> = ({
       doc(db, "clubs", clubId),
       (doc) => {
         if (doc.exists()) {
-          setClub({ id: doc.id, ...doc.data() } as Club);
+          setClub({ id: doc.id, ...(doc.data() as ClubData) });
         } else {
           setClub(null);
         }
