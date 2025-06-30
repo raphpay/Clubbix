@@ -3,15 +3,20 @@ import {
   onAuthStateChanged,
   setPersistence,
 } from "firebase/auth";
-import React, { createContext, ReactNode, useEffect, useState } from "react";
+import React, {
+  createContext,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { auth } from "../config/firebase";
 import { getUser, User } from "../services/auth";
-
-setPersistence(auth, browserLocalPersistence);
 
 interface AuthContextType {
   isAuthenticated: boolean;
   user: User | null;
+  loading: boolean;
   login: (user: User) => void;
   logout: () => void;
   updateUser: (user: User) => void;
@@ -26,53 +31,63 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const login = (user: User) => {
     setIsAuthenticated(true);
     setUser(user);
-    localStorage.setItem("user", JSON.stringify(user));
   };
 
-  const logout = () => {
+  const logout = useCallback(async () => {
     setIsAuthenticated(false);
     setUser(null);
-    localStorage.removeItem("user");
-    auth.signOut();
-  };
+    await auth.signOut();
+  }, []);
 
   const updateUser = (user: User) => {
     setUser(user);
-    localStorage.setItem("user", JSON.stringify(user));
   };
 
   useEffect(() => {
-    // Listen for Firebase Auth state changes
-    const unsubscribe = onAuthStateChanged(auth, async (firUser) => {
-      if (firUser) {
-        // Fetch your custom user profile from Firestore
-        try {
-          const appUser = await getUser(firUser.uid);
-          setUser(appUser);
-          setIsAuthenticated(true);
-          localStorage.setItem("user", JSON.stringify(appUser));
-        } catch (err) {
-          setUser(null);
-          setIsAuthenticated(false);
-          localStorage.removeItem("user");
-        }
-      } else {
-        setUser(null);
-        setIsAuthenticated(false);
-        localStorage.removeItem("user");
+    const initializeAuth = async () => {
+      try {
+        await setPersistence(auth, browserLocalPersistence);
+        const unsubscribe = onAuthStateChanged(auth, async (firUser) => {
+          if (firUser) {
+            try {
+              const appUser = await getUser(firUser.uid);
+              if (appUser) {
+                setUser(appUser);
+                setIsAuthenticated(true);
+              } else {
+                setUser(null);
+                setIsAuthenticated(false);
+              }
+            } catch (err) {
+              // ... handle error getting user profile
+              setUser(null);
+              setIsAuthenticated(false);
+            }
+          } else {
+            setUser(null);
+            setIsAuthenticated(false);
+          }
+          setLoading(false);
+        });
+        return () => unsubscribe();
+      } catch (error) {
+        // Handle persistence error
+        console.error("Failed to set persistence", error);
+        setLoading(false);
       }
-    });
+    };
 
-    return () => unsubscribe();
-  }, []);
+    initializeAuth();
+  }, [logout]);
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, user, login, logout, updateUser }}
+      value={{ isAuthenticated, user, login, logout, updateUser, loading }}
     >
       {children}
     </AuthContext.Provider>

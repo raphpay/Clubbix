@@ -46,61 +46,77 @@ const AuthenticatedRedirect: React.FC = () => {
   );
 };
 
+const AppContent: React.FC = () => {
+  const { loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
+  return (
+    <Routes>
+      {/* Public routes */}
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/signup" element={<RegistrationForm />} />
+      <Route path="/success" element={<SuccessPage />} />
+      <Route path="/cancel" element={<CancelPage />} />
+      {/* Note: /signup?plan={plan}&billing={billingCycle} is handled by RegistrationForm */}
+
+      {/* Protected routes */}
+      <Route
+        path="/admin/dashboard"
+        element={
+          <ProtectedRoute requiredRole="admin">
+            <DashboardLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<AdminDashboard />} />
+        <Route path="treasury" element={<TreasuryPage />} />
+        <Route path="members" element={<MembersPage />} />
+        <Route path="events" element={<EventsPage />} />
+        <Route path="website" element={<ClubWebsiteManager />} />
+        <Route path="profile" element={<ProfilePage />} />
+      </Route>
+
+      <Route
+        path="/member/dashboard/*"
+        element={
+          <ProtectedRoute requiredRole="member">
+            <DashboardLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<MemberDashboard />} />
+        <Route path="trainings" element={<TrainingPage />} />
+        <Route path="events" element={<MemberEventsPage />} />
+        <Route path="profile" element={<ProfilePage />} />
+      </Route>
+
+      {/* Club routes */}
+      <Route path="/clubs/:clubId" element={<ClubWebsite />} />
+
+      {/* Auth redirect */}
+      <Route path="/dashboard" element={<AuthenticatedRedirect />} />
+
+      {/* 404 route */}
+      <Route path="*" element={<NotFoundPage />} />
+    </Routes>
+  );
+};
+
 const App: React.FC = () => {
   return (
     <HelmetProvider>
       <AuthProvider>
         <ClubProvider>
           <Router>
-            <Routes>
-              {/* Public routes */}
-              <Route path="/" element={<LandingPage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/signup" element={<RegistrationForm />} />
-              <Route path="/success" element={<SuccessPage />} />
-              <Route path="/cancel" element={<CancelPage />} />
-              {/* Note: /signup?plan={plan}&billing={billingCycle} is handled by RegistrationForm */}
-
-              {/* Protected routes */}
-              <Route
-                path="/admin/dashboard"
-                element={
-                  <ProtectedRoute requiredRole="admin">
-                    <DashboardLayout />
-                  </ProtectedRoute>
-                }
-              >
-                <Route index element={<AdminDashboard />} />
-                <Route path="treasury" element={<TreasuryPage />} />
-                <Route path="members" element={<MembersPage />} />
-                <Route path="events" element={<EventsPage />} />
-                <Route path="website" element={<ClubWebsiteManager />} />
-                <Route path="profile" element={<ProfilePage />} />
-              </Route>
-
-              <Route
-                path="/member/dashboard/*"
-                element={
-                  <ProtectedRoute requiredRole="member">
-                    <DashboardLayout />
-                  </ProtectedRoute>
-                }
-              >
-                <Route index element={<MemberDashboard />} />
-                <Route path="trainings" element={<TrainingPage />} />
-                <Route path="events" element={<MemberEventsPage />} />
-                <Route path="profile" element={<ProfilePage />} />
-              </Route>
-
-              {/* Club routes */}
-              <Route path="/clubs/:clubId" element={<ClubWebsite />} />
-
-              {/* Auth redirect */}
-              <Route path="/dashboard" element={<AuthenticatedRedirect />} />
-
-              {/* 404 route */}
-              <Route path="*" element={<NotFoundPage />} />
-            </Routes>
+            <AppContent />
           </Router>
         </ClubProvider>
       </AuthProvider>
