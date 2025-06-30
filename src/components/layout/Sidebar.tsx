@@ -35,7 +35,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
 
   return (
     <aside
-      className={`fixed left-0 top-16 z-40 h-[calc(100vh-64px)] w-64 bg-white border-r border-gray-200 transition-transform duration-300 transform ${
+      className={`fixed left-0 top-16 z-40 h-[calc(100vh-64px)] w-64 bg-white border-r border-gray-200 transition-transform duration-300 transform dark:bg-gray-800 dark:border-gray-700 ${
         isOpen ? "translate-x-0" : "-translate-x-full"
       } lg:translate-x-0`}
     >
@@ -46,8 +46,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
               <NavLink
                 to={item.path}
                 className={({ isActive }) =>
-                  `flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 ${
-                    isActive ? "bg-gray-100" : ""
+                  `flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 ${
+                    isActive ? "bg-gray-100 dark:bg-gray-700" : ""
                   }`
                 }
               >

@@ -16,11 +16,11 @@ const getBackgroundClasses = (
 ): string => {
   switch (background) {
     case "gray":
-      return "bg-gray-50";
+      return "bg-gray-50 dark:bg-gray-800";
     case "primary":
-      return "bg-blue-50";
+      return "bg-blue-50 dark:bg-gray-800";
     default:
-      return "bg-white";
+      return "bg-white dark:bg-gray-900";
   }
 };
 

@@ -21,7 +21,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
       <DashboardNavbar onMenuClick={toggleSidebar} />
       <div className="flex h-[calc(100vh-64px)]">
         <Sidebar isOpen={isSidebarOpen} />

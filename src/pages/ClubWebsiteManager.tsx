@@ -244,7 +244,7 @@ const ClubWebsiteManager: React.FC = () => {
   }
 
   if (error) {
-    return <div className="text-red-500">{error}</div>;
+    return <div className="text-red-500 dark:text-red-400">{error}</div>;
   }
 
   if (!localContent) {
@@ -256,26 +256,32 @@ const ClubWebsiteManager: React.FC = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-gray-900">{t("title")}</h1>
+        <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+          {t("title")}
+        </h1>
       </div>
 
       {error && (
-        <div className="rounded-md bg-red-50 p-4">
+        <div className="rounded-md bg-red-50 p-4 dark:bg-red-900/20">
           <div className="flex">
             <div className="ml-3">
-              <h3 className="text-sm font-medium text-red-800">{error}</h3>
+              <h3 className="text-sm font-medium text-red-800 dark:text-red-400">
+                {error}
+              </h3>
             </div>
           </div>
         </div>
       )}
 
-      <div className="bg-white shadow rounded-lg p-6">
+      <div className="bg-white shadow rounded-lg p-6 dark:bg-gray-800">
         {/* Logo Section */}
         <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">{t("logo.title")}</h2>
+          <h2 className="text-2xl font-semibold mb-4 dark:text-gray-100">
+            {t("logo.title")}
+          </h2>
           <div className="space-y-4">
             <div className="mt-4">
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 {t("logo.image")}
               </label>
               <input
@@ -286,7 +292,7 @@ const ClubWebsiteManager: React.FC = () => {
                   const file = e.target.files?.[0];
                   if (file) handleLogoImageUpload(file);
                 }}
-                className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+                className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 dark:text-gray-400 dark:file:bg-gray-700 dark:file:text-gray-200 dark:hover:file:bg-gray-600"
               />
               {localContent.logoUrl && (
                 <div className="relative mt-2 inline-block">
@@ -297,7 +303,7 @@ const ClubWebsiteManager: React.FC = () => {
                   />
                   <button
                     type="button"
-                    className="absolute top-2 right-2 bg-white bg-opacity-80 rounded-full p-1 shadow hover:bg-red-100"
+                    className="absolute top-2 right-2 bg-white bg-opacity-80 rounded-full p-1 shadow hover:bg-red-100 dark:bg-gray-900/80 dark:hover:bg-red-900/40"
                     title={t("logo.delete")}
                     onClick={handleDeleteLogoImage}
                   >
@@ -318,7 +324,7 @@ const ClubWebsiteManager: React.FC = () => {
                   </button>
                 </div>
               )}
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-gray-500 mt-1 dark:text-gray-400">
                 PNG, {LOGO_SIZE}x{LOGO_SIZE}px
               </p>
             </div>
@@ -328,7 +334,9 @@ const ClubWebsiteManager: React.FC = () => {
         {/* Basic Content Section */}
         <section className="mb-8">
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-semibold mb-4">{t("basicContent")}</h2>
+            <h2 className="text-2xl font-semibold mb-4 dark:text-gray-100">
+              {t("basicContent")}
+            </h2>
             <div className="flex items-center gap-2">
               <Button
                 variant="outline"
@@ -351,7 +359,7 @@ const ClubWebsiteManager: React.FC = () => {
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 {t("headline")}
               </label>
               <input
@@ -360,11 +368,11 @@ const ClubWebsiteManager: React.FC = () => {
                 onChange={(e) =>
                   handleContentChange({ headline: e.target.value })
                 }
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 {t("subtext")}
               </label>
               <textarea
@@ -372,13 +380,13 @@ const ClubWebsiteManager: React.FC = () => {
                 onChange={(e) =>
                   handleContentChange({ subtext: e.target.value })
                 }
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
                 rows={3}
               />
             </div>
 
             <div className="mt-4">
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 {t("banner.image")}
               </label>
               <input
@@ -389,7 +397,7 @@ const ClubWebsiteManager: React.FC = () => {
                   const file = e.target.files?.[0];
                   if (file) handleBannerImageUpload(file);
                 }}
-                className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+                className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 dark:text-gray-400 dark:file:bg-gray-700 dark:file:text-gray-200 dark:hover:file:bg-gray-600"
               />
               {localContent.bannerImageUrl && (
                 <div className="relative mt-2 inline-block">
@@ -400,7 +408,7 @@ const ClubWebsiteManager: React.FC = () => {
                   />
                   <button
                     type="button"
-                    className="absolute top-2 right-2 bg-white bg-opacity-80 rounded-full p-1 shadow hover:bg-red-100"
+                    className="absolute top-2 right-2 bg-white bg-opacity-80 rounded-full p-1 shadow hover:bg-red-100 dark:bg-gray-900/80 dark:hover:bg-red-900/40"
                     title={t("banner.imageDelete")}
                     onClick={handleDeleteBannerImage}
                   >
@@ -421,7 +429,7 @@ const ClubWebsiteManager: React.FC = () => {
                   </button>
                 </div>
               )}
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-gray-500 mt-1 dark:text-gray-400">
                 Image, {BANNER_WIDTH}x{BANNER_HEIGHT}px
               </p>
             </div>
@@ -430,7 +438,9 @@ const ClubWebsiteManager: React.FC = () => {
 
         {/* Gallery Section */}
         <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">{t("gallery.title")}</h2>
+          <h2 className="text-2xl font-semibold mb-4 dark:text-gray-100">
+            {t("gallery.title")}
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {localContent.gallery.map((image) => (
               <div key={image.id} className="relative group">
@@ -439,10 +449,12 @@ const ClubWebsiteManager: React.FC = () => {
                   alt={image.caption}
                   className="w-full h-48 object-cover rounded-lg"
                 />
-                <p className="mt-2 text-sm text-gray-600">{image.caption}</p>
+                <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                  {image.caption}
+                </p>
                 <button
                   type="button"
-                  className="absolute top-2 right-2 bg-white bg-opacity-80 rounded-full p-1 shadow hover:bg-red-100"
+                  className="absolute top-2 right-2 bg-white bg-opacity-80 rounded-full p-1 shadow hover:bg-red-100 dark:bg-gray-900/80 dark:hover:bg-red-900/40"
                   title={t("gallery.deleteImage")}
                   onClick={() =>
                     handleDeleteGalleryImage(image.id, image.imageUrl)
@@ -469,7 +481,7 @@ const ClubWebsiteManager: React.FC = () => {
           <div className="mt-4">
             <label
               htmlFor="galleryImage"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
             >
               {t("gallery.addImage")}
             </label>
@@ -482,10 +494,10 @@ const ClubWebsiteManager: React.FC = () => {
                 const file = e.target.files?.[0];
                 if (file) handleGalleryImageUpload(file, "");
               }}
-              className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 disabled:opacity-50"
+              className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 disabled:opacity-50 dark:text-gray-400 dark:file:bg-gray-700 dark:file:text-gray-200 dark:hover:file:bg-gray-600"
             />
             {localContent.gallery.length >= 3 && (
-              <p className="text-sm text-red-500 mt-2">
+              <p className="text-sm text-red-500 mt-2 dark:text-red-400">
                 {t("gallery.maxImages", { count: 3 })}
               </p>
             )}
@@ -494,24 +506,33 @@ const ClubWebsiteManager: React.FC = () => {
 
         {/* Events Section */}
         <section>
-          <h2 className="text-2xl font-semibold mb-4">{t("event.title")}</h2>
+          <h2 className="text-2xl font-semibold mb-4 dark:text-gray-100">
+            {t("event.title")}
+          </h2>
           <div className="space-y-4">
             {localContent.events.map((event) => (
-              <div key={event.id} className="border rounded-lg p-4">
+              <div
+                key={event.id}
+                className="border rounded-lg p-4 dark:border-gray-700"
+              >
                 <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-medium">{event.title}</h3>
+                  <h3 className="text-lg font-medium dark:text-gray-100">
+                    {event.title}
+                  </h3>
                   <span
                     className={`px-2 py-1 rounded text-sm ${
                       event.isPublished
-                        ? "bg-green-100 text-green-800"
-                        : "bg-yellow-100 text-yellow-800"
+                        ? "bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300"
+                        : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300"
                     }`}
                   >
                     {event.isPublished ? t("published") : t("draft")}
                   </span>
                 </div>
-                <p className="mt-2 text-gray-600">{event.description}</p>
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-2 text-gray-600 dark:text-gray-300">
+                  {event.description}
+                </p>
+                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
                   {new Date(event.date).toLocaleDateString()}
                 </p>
                 <div className="mt-4 flex space-x-2">
@@ -522,7 +543,7 @@ const ClubWebsiteManager: React.FC = () => {
                         isPublished: !event.isPublished,
                       })
                     }
-                    className="px-3 py-1 text-sm rounded bg-indigo-100 text-indigo-700 hover:bg-indigo-200"
+                    className="px-3 py-1 text-sm rounded bg-indigo-100 text-indigo-700 hover:bg-indigo-200 dark:bg-indigo-900/30 dark:text-indigo-300 dark:hover:bg-indigo-900/50"
                   >
                     {event.isPublished ? t("unpublish") : t("publish")}
                   </button>
@@ -538,7 +559,7 @@ const ClubWebsiteManager: React.FC = () => {
                         updateEvent(club.id, event.id, { title, description });
                       }
                     }}
-                    className="px-3 py-1 text-sm rounded bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    className="px-3 py-1 text-sm rounded bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
                   >
                     {t("edit")}
                   </button>
@@ -570,7 +591,7 @@ const ClubWebsiteManager: React.FC = () => {
                 fileInput.click();
               }
             }}
-            className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+            className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 dark:bg-indigo-900 dark:hover:bg-indigo-800"
           >
             {t("event.addEvent")}
           </button>

@@ -72,13 +72,13 @@ const PricingSection: React.FC<PricingSectionProps> = ({ id }) => {
   };
 
   return (
-    <div id={id} className="bg-white py-6 sm:py-12">
+    <div id={id} className="bg-white py-6 sm:py-12 dark:bg-gray-900">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-4xl text-center">
-          <h2 className="text-base font-semibold leading-7 text-indigo-600">
+          <h2 className="text-base font-semibold leading-7 text-indigo-600 dark:text-indigo-400">
             {t("subtitle")}
           </h2>
-          <p className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+          <p className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl dark:text-white">
             {t("title")}
           </p>
         </div>
@@ -91,7 +91,7 @@ const PricingSection: React.FC<PricingSectionProps> = ({ id }) => {
               initial={{ opacity: 0.5 }}
               animate={{ opacity: billingCycle === "monthly" ? 1 : 0.5 }}
               transition={{ duration: 0.2 }}
-              className="text-sm font-medium text-gray-900"
+              className="text-sm font-medium text-gray-900 dark:text-gray-200"
             >
               {t("billing.monthly")}
             </motion.span>
@@ -101,7 +101,9 @@ const PricingSection: React.FC<PricingSectionProps> = ({ id }) => {
                 setBillingCycle(checked ? "annual" : "monthly")
               }
               className={`${
-                billingCycle === "annual" ? "bg-indigo-600" : "bg-gray-200"
+                billingCycle === "annual"
+                  ? "bg-indigo-600"
+                  : "bg-gray-200 dark:bg-gray-700"
               } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2`}
             >
               <motion.span
@@ -118,7 +120,7 @@ const PricingSection: React.FC<PricingSectionProps> = ({ id }) => {
               initial={{ opacity: 0.5 }}
               animate={{ opacity: billingCycle === "annual" ? 1 : 0.5 }}
               transition={{ duration: 0.2 }}
-              className="text-sm font-medium text-gray-900"
+              className="text-sm font-medium text-gray-900 dark:text-gray-200"
             >
               {t("billing.annual")}
             </motion.span>
@@ -129,7 +131,7 @@ const PricingSection: React.FC<PricingSectionProps> = ({ id }) => {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
                   transition={{ duration: 0.2 }}
-                  className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800"
+                  className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900/50 dark:text-green-300"
                 >
                   {t("billing.save")}
                 </motion.span>
@@ -148,9 +150,9 @@ const PricingSection: React.FC<PricingSectionProps> = ({ id }) => {
             return (
               <div
                 key={plan.id}
-                className={`relative rounded-3xl bg-white p-8 ring-1 ring-gray-200 xl:p-10 ${
+                className={`relative rounded-3xl bg-white p-8 ring-1 ring-gray-200 xl:p-10 dark:bg-gray-800/50 dark:ring-gray-700 ${
                   plan.popular
-                    ? "ring-2 ring-indigo-600 shadow-lg"
+                    ? "ring-2 ring-indigo-600 shadow-lg dark:ring-indigo-500"
                     : "shadow-sm"
                 }`}
               >
@@ -161,10 +163,10 @@ const PricingSection: React.FC<PricingSectionProps> = ({ id }) => {
                 )}
 
                 <div className="mb-8">
-                  <h3 className="text-lg font-semibold leading-8 text-gray-900">
+                  <h3 className="text-lg font-semibold leading-8 text-gray-900 dark:text-gray-100">
                     {plan.name}
                   </h3>
-                  <p className="mt-4 text-sm leading-6 text-gray-600">
+                  <p className="mt-4 text-sm leading-6 text-gray-600 dark:text-gray-400">
                     {plan.maxMembers}
                   </p>
                   <div className="mt-6 flex items-baseline gap-x-1">
@@ -173,7 +175,7 @@ const PricingSection: React.FC<PricingSectionProps> = ({ id }) => {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3 }}
-                      className="text-4xl font-bold tracking-tight text-gray-900"
+                      className="text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-100"
                     >
                       €{currentPrice}
                     </motion.span>
@@ -182,7 +184,7 @@ const PricingSection: React.FC<PricingSectionProps> = ({ id }) => {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ duration: 0.3, delay: 0.1 }}
-                      className="text-sm font-semibold leading-6 text-gray-600"
+                      className="text-sm font-semibold leading-6 text-gray-600 dark:text-gray-400"
                     >
                       /{isAnnual ? "year" : "month"}
                     </motion.span>
@@ -194,7 +196,7 @@ const PricingSection: React.FC<PricingSectionProps> = ({ id }) => {
                         animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="mt-2 text-sm text-green-600 overflow-hidden"
+                        className="mt-2 text-sm text-green-600 overflow-hidden dark:text-green-400"
                       >
                         {t("billing.saveAmount", { amount: savings })}
                       </motion.p>
@@ -206,18 +208,18 @@ const PricingSection: React.FC<PricingSectionProps> = ({ id }) => {
                   onClick={() => handlePlanSelect(plan.id)}
                   className={`block w-full rounded-md px-3 py-2 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${
                     plan.popular
-                      ? "bg-indigo-600 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-indigo-600"
-                      : "bg-indigo-600 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-indigo-600"
+                      ? "bg-indigo-600 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-indigo-600 dark:hover:bg-indigo-500"
+                      : "bg-indigo-600 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-indigo-600 dark:hover:bg-indigo-500"
                   }`}
                 >
                   {t("cta.continue")}
                 </button>
 
-                <ul className="mt-8 space-y-3 text-sm leading-6 text-gray-600">
+                <ul className="mt-8 space-y-3 text-sm leading-6 text-gray-600 dark:text-gray-400">
                   {plan.features.map((feature) => (
                     <li key={feature} className="flex gap-x-3">
                       <svg
-                        className="h-6 w-5 flex-none text-indigo-600"
+                        className="h-6 w-5 flex-none text-indigo-600 dark:text-indigo-400"
                         viewBox="0 0 20 20"
                         fill="currentColor"
                         aria-hidden="true"
@@ -239,7 +241,9 @@ const PricingSection: React.FC<PricingSectionProps> = ({ id }) => {
 
         {/* Additional Info */}
         <div className="mt-16 text-center">
-          <p className="text-sm text-gray-600">{t("additionalInfo")}</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            {t("additionalInfo")}
+          </p>
         </div>
       </div>
     </div>

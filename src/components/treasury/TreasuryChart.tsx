@@ -16,6 +16,7 @@ import { Download } from "lucide-react";
 import React, { useMemo } from "react";
 import { Bar, Line } from "react-chartjs-2";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "../../hooks/useTheme";
 import { TreasuryEntry } from "../../services/firestore/treasuryService";
 import { Button } from "../ui/Button";
 
@@ -40,6 +41,8 @@ const TreasuryChart: React.FC<TreasuryChartProps> = ({
   exportCSV,
 }) => {
   const { t } = useTranslation("treasury");
+  const { theme } = useTheme();
+
   const monthlyData = useMemo(() => {
     const months = new Map<string, { income: number; expenses: number }>();
 
@@ -127,36 +130,64 @@ const TreasuryChart: React.FC<TreasuryChartProps> = ({
     ],
   };
 
-  const chartOptions = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: "top" as const,
+  const chartOptions = useMemo(() => {
+    const isDark = theme === "dark";
+    const textColor = isDark
+      ? "rgba(255, 255, 255, 0.8)"
+      : "rgba(0, 0, 0, 0.8)";
+    const gridColor = isDark
+      ? "rgba(255, 255, 255, 0.1)"
+      : "rgba(0, 0, 0, 0.1)";
+
+    return {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: "top" as const,
+          labels: {
+            color: textColor,
+          },
+        },
+        title: {
+          display: true,
+          text: t("chart.title"),
+          color: textColor,
+        },
       },
-      title: {
-        display: true,
-        text: t("chart.title"),
-      },
-    },
-    scales: {
-      y: {
-        beginAtZero: true,
-        ticks: {
-          callback: function (
-            this: Scale<CoreScaleOptions>,
-            tickValue: number | string
-          ) {
-            return `$${Number(tickValue).toFixed(2)}`;
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            color: textColor,
+            callback: function (
+              this: Scale<CoreScaleOptions>,
+              tickValue: number | string
+            ) {
+              return `$${Number(tickValue).toFixed(2)}`;
+            },
+          },
+          grid: {
+            color: gridColor,
+          },
+        },
+        x: {
+          ticks: {
+            color: textColor,
+          },
+          grid: {
+            color: gridColor,
           },
         },
       },
-    },
-  };
+    };
+  }, [theme, t]);
 
   return (
-    <div className="bg-white shadow rounded-lg p-6">
+    <div className="bg-white shadow rounded-lg p-6 dark:bg-gray-800">
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-semibold mb-4">{t("chart.title")}</h2>
+        <h2 className="text-xl font-semibold mb-4 dark:text-gray-100">
+          {t("chart.title")}
+        </h2>
         <Button variant="primary" onClick={exportCSV}>
           <Download className="h-4 w-4 mr-2" />
           {t("page.buttons.export")}
@@ -165,14 +196,14 @@ const TreasuryChart: React.FC<TreasuryChartProps> = ({
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div>
-          <h3 className="text-lg font-medium mb-2">
+          <h3 className="text-lg font-medium mb-2 dark:text-gray-200">
             {t("chart.monthlyTrends")}
           </h3>
           <Line data={monthlyChartData} options={chartOptions} />
         </div>
 
         <div>
-          <h3 className="text-lg font-medium mb-2">
+          <h3 className="text-lg font-medium mb-2 dark:text-gray-200">
             {t("chart.categoryBreakdown")}
           </h3>
           <Bar data={categoryChartData} options={chartOptions} />

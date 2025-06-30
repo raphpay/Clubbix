@@ -30,21 +30,21 @@ const ClubWebsite: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900 dark:text-gray-100">
         {t("loading")}
       </div>
     );
   }
   if (error || !content) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-red-500">
+      <div className="min-h-screen flex items-center justify-center text-red-500 dark:bg-gray-900 dark:text-red-400">
         {error || t("error.notFound")}
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white dark:bg-gray-900">
       <Helmet>
         <title>{content.headline}</title>
         <meta name="description" content={content.subtext} />
@@ -54,23 +54,23 @@ const ClubWebsite: React.FC = () => {
       </Helmet>
 
       {/* Navbar (Logo + Club Name) */}
-      <nav className="flex items-center justify-between px-6 py-4 border-b bg-white">
+      <nav className="flex items-center justify-between px-6 py-4 border-b bg-white dark:bg-gray-900 dark:border-gray-700">
         <div className="flex items-center gap-3">
           {content.logoUrl && (
             <img
               src={content.logoUrl}
               alt="Club Logo"
-              className="h-12 w-12 rounded-full object-cover border"
+              className="h-12 w-12 rounded-full object-cover border dark:border-gray-700"
             />
           )}
-          <span className="text-xl font-bold text-gray-900">
+          <span className="text-xl font-bold text-gray-900 dark:text-gray-100">
             {content.clubName}
           </span>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="relative bg-gray-50">
+      <section className="relative bg-gray-50 dark:bg-gray-800">
         {content.bannerImageUrl && (
           <img
             src={content.bannerImageUrl}
@@ -80,10 +80,10 @@ const ClubWebsite: React.FC = () => {
           />
         )}
         <div className="relative z-10 max-w-4xl mx-auto px-4 py-20 text-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4 drop-shadow-lg">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4 drop-shadow-lg dark:text-gray-100">
             {content.headline}
           </h1>
-          <p className="text-lg md:text-2xl text-gray-700 mb-8 drop-shadow-lg">
+          <p className="text-lg md:text-2xl text-gray-700 mb-8 drop-shadow-lg dark:text-gray-300">
             {content.subtext}
           </p>
         </div>
@@ -92,12 +92,14 @@ const ClubWebsite: React.FC = () => {
       {/* Gallery Section */}
       {content.gallery && content.gallery.length > 0 && (
         <section className="max-w-6xl mx-auto px-4 py-16" id="gallery">
-          <h2 className="text-3xl font-bold mb-8 text-center">Gallery</h2>
+          <h2 className="text-3xl font-bold mb-8 text-center dark:text-gray-100">
+            Gallery
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {content.gallery.map((image) => (
               <div
                 key={image.id}
-                className="relative group rounded-lg overflow-hidden shadow-lg"
+                className="relative group rounded-lg overflow-hidden shadow-lg bg-white dark:bg-gray-800"
               >
                 <img
                   src={image.imageUrl}
@@ -119,10 +121,10 @@ const ClubWebsite: React.FC = () => {
       {content.events &&
         content.events.filter((e) => e.isPublished).length > 0 && (
           <section
-            className="max-w-6xl mx-auto px-4 py-16 bg-gray-50"
+            className="max-w-6xl mx-auto px-4 py-16 bg-gray-50 dark:bg-gray-800"
             id="events"
           >
-            <h2 className="text-3xl font-bold mb-8 text-center">
+            <h2 className="text-3xl font-bold mb-8 text-center dark:text-gray-100">
               Upcoming Events
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -135,7 +137,7 @@ const ClubWebsite: React.FC = () => {
                 .map((event) => (
                   <div
                     key={event.id}
-                    className="bg-white rounded-lg shadow-lg overflow-hidden"
+                    className="bg-white rounded-lg shadow-lg overflow-hidden dark:bg-gray-800"
                   >
                     {event.imageUrl && (
                       <img
@@ -145,11 +147,13 @@ const ClubWebsite: React.FC = () => {
                       />
                     )}
                     <div className="p-6">
-                      <h3 className="text-xl font-semibold mb-2">
+                      <h3 className="text-xl font-semibold mb-2 dark:text-gray-100">
                         {event.title}
                       </h3>
-                      <p className="text-gray-600 mb-4">{event.description}</p>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-gray-600 mb-4 dark:text-gray-300">
+                        {event.description}
+                      </p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
                         {new Date(event.date).toLocaleDateString(undefined, {
                           weekday: "long",
                           year: "numeric",
@@ -165,21 +169,21 @@ const ClubWebsite: React.FC = () => {
         )}
 
       {/* Footer */}
-      <footer className="bg-white border-t mt-16">
+      <footer className="bg-white border-t mt-16 dark:bg-gray-900 dark:border-gray-700">
         <div className="max-w-6xl mx-auto px-4 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             {content.logoUrl && (
               <img
                 src={content.logoUrl}
                 alt="Club Logo"
-                className="h-8 w-8 rounded-full object-cover border"
+                className="h-8 w-8 rounded-full object-cover border dark:border-gray-700"
               />
             )}
-            <span className="font-semibold text-gray-700">
+            <span className="font-semibold text-gray-700 dark:text-gray-200">
               {content.clubName}
             </span>
           </div>
-          <div className="text-sm text-gray-500">
+          <div className="text-sm text-gray-500 dark:text-gray-400">
             &copy; {new Date().getFullYear()} {content.clubName}. All rights
             reserved.
           </div>

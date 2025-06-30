@@ -72,22 +72,24 @@ const MembersPage: React.FC = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-gray-900">
+        <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
           {t("page.title")}
         </h1>
       </div>
 
       {error && (
-        <div className="rounded-md bg-red-50 p-4">
+        <div className="rounded-md bg-red-50 p-4 dark:bg-red-900/20">
           <div className="flex">
             <div className="ml-3">
-              <h3 className="text-sm font-medium text-red-800">{error}</h3>
+              <h3 className="text-sm font-medium text-red-800 dark:text-red-400">
+                {error}
+              </h3>
             </div>
           </div>
         </div>
       )}
 
-      <div className="bg-white shadow rounded-lg p-6">
+      <div className="bg-white shadow rounded-lg p-6 dark:bg-gray-800">
         <MemberList
           onAddMember={handleAddMember}
           onEditMember={handleEditMember}
@@ -108,11 +110,11 @@ const MembersPage: React.FC = () => {
           {/* Modal container */}
           <div className="flex min-h-screen items-center justify-center p-4">
             {/* Modal panel */}
-            <div className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+            <div className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6 dark:bg-gray-800">
               <div className="absolute top-0 right-0 pt-4 pr-4">
                 <button
                   type="button"
-                  className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:bg-gray-800 dark:text-gray-400 dark:hover:text-white"
                   onClick={() => setIsFormOpen(false)}
                 >
                   <span className="sr-only">Close</span>
@@ -135,7 +137,7 @@ const MembersPage: React.FC = () => {
 
               <div className="sm:flex sm:items-start">
                 <div className="mt-3 text-center sm:mt-0 sm:text-left w-full">
-                  <h3 className="text-lg font-medium leading-6 text-gray-900">
+                  <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">
                     {selectedMember
                       ? t("form.title.edit")
                       : t("form.title.add")}
