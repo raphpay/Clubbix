@@ -1,3 +1,5 @@
+import { AnimatePresence, motion } from "framer-motion";
+import { Menu, X } from "lucide-react";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "../ui/Button";
@@ -40,35 +42,40 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   return (
-    <nav className="bg-white shadow-sm fixed w-full top-0 z-50 mb-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex items-center">
-            {/* Logo */}
+    <header className="sticky top-0 z-50 bg-white shadow-sm">
+      <nav className="container mx-auto px-6 py-3">
+        <div className="flex items-center justify-between">
+          <Link to="/">
             <Logo />
-
-            {/* Desktop Navigation */}
-            <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-              {items.map((item) => (
-                <button
-                  key={item.href}
-                  onClick={() => handleNavClick(item.href)}
-                  className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900 hover:text-blue-600"
-                >
-                  {item.label}
-                </button>
-              ))}
-            </div>
+          </Link>
+          <div className="hidden md:flex items-center space-x-3">
+            {items.map((item) => (
+              <Link
+                key={item.label}
+                to={item.href}
+                className="px-3 py-2 text-gray-700 rounded-lg hover:bg-gray-100"
+              >
+                {item.label}
+              </Link>
+            ))}
           </div>
-
-          {/* CTA Buttons and Additional Content */}
-          <div className="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-4">
+          <div className="hidden md:flex items-center space-x-3">
+            <Link
+              to="/book-demo"
+              className="px-3 py-2 text-gray-700 rounded-lg hover:bg-gray-100"
+            >
+              Book a demo
+            </Link>
             {children}
             {ctaButtons.length > 0 && (
               <>
                 {ctaButtons.map((cta, index) => (
                   <Link key={index} to={cta.href}>
-                    <Button variant={cta.variant || "primary"} size="sm">
+                    <Button
+                      key={index}
+                      variant={cta.variant || "primary"}
+                      size="sm"
+                    >
                       {cta.label}
                     </Button>
                   </Link>
@@ -76,82 +83,60 @@ export const Navbar: React.FC<NavbarProps> = ({
               </>
             )}
           </div>
-
-          {/* Mobile menu button */}
-          <div className="flex items-center sm:hidden">
+          <div className="flex md:hidden">
             <button
-              type="button"
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
+              type="button"
+              className="text-gray-500 hover:text-gray-600 focus:outline-none focus:text-gray-600"
+              aria-label="toggle menu"
             >
-              <span className="sr-only">Open main menu</span>
-              {!isMenuOpen ? (
-                <svg
-                  className="block h-6 w-6"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  className="block h-6 w-6"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              )}
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
         </div>
-      </div>
-
-      {/* Mobile menu */}
-      {isMenuOpen && (
-        <div className="sm:hidden">
-          <div className="pt-2 pb-3 space-y-1">
-            {items.map((item) => (
-              <button
-                key={item.href}
-                onClick={() => {
-                  handleNavClick(item.href);
-                  setIsMenuOpen(false);
-                }}
-                className="block w-full text-left pl-3 pr-4 py-2 text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50"
-              >
-                {item.label}
-              </button>
-            ))}
-            {children && <div className="mt-4 px-4">{children}</div>}
-            {ctaButtons.length > 0 && (
-              <div className="mt-4 px-4 space-y-3">
-                {ctaButtons.map((cta, index) => (
-                  <Link key={index} to={cta.href}>
-                    <Button variant={cta.variant || "primary"} fullWidth>
-                      {cta.label}
-                    </Button>
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="absolute left-0 right-0 w-full bg-white md:hidden"
+            >
+              <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                {items.map((item) => (
+                  <Link
+                    key={item.label}
+                    to={item.href}
+                    className="block px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:text-white hover:bg-gray-700"
+                  >
+                    {item.label}
                   </Link>
                 ))}
+                <Link
+                  to="/book-demo"
+                  className="block px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:text-white hover:bg-gray-700"
+                >
+                  Book a demo
+                </Link>
+                <div className="mt-3 space-y-2">
+                  {children}
+                  {ctaButtons.length > 0 && (
+                    <div className="mt-4 px-4 space-y-3">
+                      {ctaButtons.map((cta, index) => (
+                        <Link key={index} to={cta.href}>
+                          <Button variant={cta.variant || "primary"} fullWidth>
+                            {cta.label}
+                          </Button>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
-            )}
-          </div>
-        </div>
-      )}
-    </nav>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </nav>
+    </header>
   );
 };

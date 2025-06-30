@@ -48,5 +48,7 @@
     "manageSubscriptionDescription": "Manage or cancel your subscription via Stripe portal",
     "openCustomerPortal": "Open customer portal"
   },
-  "loading": "Loading"
+  "loading": "Loading",
+  "get_started": "Get Started",
+  "save": "Save"
 }

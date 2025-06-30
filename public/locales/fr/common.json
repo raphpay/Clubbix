@@ -48,5 +48,7 @@
     "manageSubscriptionDescription": "Gérer ou annuler votre abonnement via le portail Stripe",
     "openCustomerPortal": "Ouvrir le portail client"
   },
-  "loading": "Chargement"
+  "loading": "Chargement",
+  "get_started": "Commencer",
+  "save": "Enregistrer"
 }

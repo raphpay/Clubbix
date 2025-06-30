@@ -14,6 +14,7 @@ import { useAuth } from "./hooks/useAuth";
 
 // Pages
 import RegistrationForm from "./components/RegistrationForm";
+import BookDemoPage from "./pages/BookDemoPage";
 import CancelPage from "./pages/CancelPage";
 import ClubWebsite from "./pages/ClubWebsite";
 import ClubWebsiteManager from "./pages/ClubWebsiteManager";
@@ -62,6 +63,7 @@ const AppContent: React.FC = () => {
       {/* Public routes */}
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/book-demo" element={<BookDemoPage />} />
       <Route path="/signup" element={<RegistrationForm />} />
       <Route path="/success" element={<SuccessPage />} />
       <Route path="/cancel" element={<CancelPage />} />
