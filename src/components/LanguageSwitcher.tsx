@@ -38,14 +38,14 @@ const LanguageSwitcher = () => {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="p-2 text-gray-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-full"
+        className="p-2 text-gray-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-full dark:text-gray-400 dark:hover:text-white"
         aria-label="Change language"
       >
         <Languages className="h-5 w-5" />
       </button>
 
       <div
-        className={`absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50 transform transition-all duration-200 ease-out origin-top-right ${
+        className={`absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50 transform transition-all duration-200 ease-out origin-top-right dark:bg-gray-800 dark:ring-1 dark:ring-gray-700 ${
           isOpen
             ? "scale-100 opacity-100 pointer-events-auto"
             : "scale-95 opacity-0 pointer-events-none"
@@ -58,8 +58,8 @@ const LanguageSwitcher = () => {
               onClick={() => changeLanguage(lang.code)}
               className={`${
                 i18n.language === lang.code
-                  ? "bg-indigo-50 text-indigo-600"
-                  : "text-gray-700 hover:bg-gray-50"
+                  ? "bg-indigo-50 text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-400"
+                  : "text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
               } block w-full text-left px-4 py-2 text-sm`}
               role="menuitem"
             >
