@@ -14,13 +14,13 @@ const DashboardNavbar: React.FC<DashboardNavbarProps> = ({ onMenuClick }) => {
   const { club } = useClub();
 
   return (
-    <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200">
+    <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
       <div className="px-4 py-3 lg:px-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <button
               onClick={onMenuClick}
-              className="p-2 mr-2 text-gray-600 rounded-lg hover:bg-gray-100 lg:hidden"
+              className="p-2 mr-2 text-gray-600 rounded-lg hover:bg-gray-100 lg:hidden dark:text-gray-400 dark:hover:bg-gray-700"
             >
               <Menu className="w-6 h-6" />
             </button>
@@ -29,7 +29,7 @@ const DashboardNavbar: React.FC<DashboardNavbarProps> = ({ onMenuClick }) => {
                 <Logo />
               </div>
               {club && (
-                <span className="text-lg font-semibold text-gray-800">
+                <span className="text-lg font-semibold text-gray-800 dark:text-gray-200">
                   {club.name}
                 </span>
               )}
