@@ -98,7 +98,7 @@ const LandingPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen" data-theme="light">
+    <div className="min-h-screen">
       <SEO
         title="Clubbix - All-in-one platform for club management"
         description="Create and manage your club's digital presence with Clubbix. Build beautiful websites, manage members, and grow your community with our all-in-one platform."
