@@ -422,10 +422,10 @@ const ProfilePage: React.FC = () => {
                   <div className="flex items-center justify-between">
                     <div>
                       <h4 className="text-sm font-medium text-gray-900">
-                        {t("manageSubscription")}
+                        {t("stripe.manageSubscriptionTitle")}
                       </h4>
                       <p className="text-sm text-gray-600">
-                        {t("manageSubscriptionDescription")}
+                        {t("stripe.manageSubscriptionDescription")}
                       </p>
                     </div>
                     <Button
@@ -434,7 +434,9 @@ const ProfilePage: React.FC = () => {
                       onClick={handleOpenCustomerPortal}
                       disabled={portalLoading}
                     >
-                      {portalLoading ? t("loading") : t("openCustomerPortal")}
+                      {portalLoading
+                        ? t("loading")
+                        : t("stripe.openCustomerPortal")}
                     </Button>
                   </div>
                   {portalError && (
