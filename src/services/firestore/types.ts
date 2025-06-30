@@ -11,6 +11,7 @@ export interface UserData {
 }
 
 export interface ClubData {
+  id?: string;
   name: string;
   formattedName: string;
   logoUrl?: string;
@@ -18,7 +19,7 @@ export interface ClubData {
   inviteCode: string;
   members: string[];
   createdAt: Date;
-  subscriptionId?: string;
+  subscription?: ClubSubscriptionData;
 }
 
 export interface ClubWebsiteContent {
@@ -49,6 +50,8 @@ export interface ClubWebsiteContent {
 
 export interface ClubSubscriptionData {
   subscriptionId?: string; // "sub_..."
+  customerId: string; // cus_...
+  priceId: string; // price_...
   clubId: string; // "firebase_club_id"
   plan: string; // "starter"
   billingCycle: string; // "monthly"
