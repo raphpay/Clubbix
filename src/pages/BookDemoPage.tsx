@@ -1,5 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { ThemeToggle } from "../components/common/ThemeToggle";
 import LanguageSwitcher from "../components/LanguageSwitcher";
 import { Footer } from "../components/layout/Footer";
 import { Navbar } from "../components/layout/Navbar";
@@ -62,6 +63,7 @@ const BookDemoPage: React.FC = () => {
         description={t("demo:seo.description")}
       />
       <Navbar items={navItems} ctaButtons={ctaButtons}>
+        <ThemeToggle />
         <LanguageSwitcher />
       </Navbar>
       <main className="container mx-auto px-4 py-16">

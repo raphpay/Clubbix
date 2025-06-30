@@ -28,7 +28,7 @@ export const Footer: React.FC<FooterProps> = ({
   copyright = `© ${new Date().getFullYear()} Your Company. All rights reserved.`,
 }) => {
   return (
-    <footer className="bg-gray-50">
+    <footer className="bg-gray-50 dark:bg-gray-800">
       <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
           {/* Logo and social links */}
@@ -40,7 +40,7 @@ export const Footer: React.FC<FooterProps> = ({
                   <a
                     key={item.label}
                     href={item.href}
-                    className="text-gray-400 hover:text-gray-500"
+                    className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
                   >
                     <span className="sr-only">{item.label}</span>
                     {item.icon}
@@ -58,7 +58,7 @@ export const Footer: React.FC<FooterProps> = ({
                   key={section.title}
                   className={index === 0 ? "mt-12 md:mt-0" : "mt-12"}
                 >
-                  <h3 className="text-sm font-semibold text-gray-900 tracking-wider uppercase">
+                  <h3 className="text-sm font-semibold text-gray-900 tracking-wider uppercase dark:text-gray-200">
                     {section.title}
                   </h3>
                   <ul className="mt-4 space-y-4">
@@ -66,7 +66,7 @@ export const Footer: React.FC<FooterProps> = ({
                       <li key={link.href}>
                         <a
                           href={link.href}
-                          className="text-base text-gray-500 hover:text-gray-900"
+                          className="text-base text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                         >
                           {link.label}
                         </a>
@@ -80,7 +80,7 @@ export const Footer: React.FC<FooterProps> = ({
         </div>
 
         {/* Copyright */}
-        <div className="mt-12 border-t border-gray-200 pt-8">
+        <div className="mt-12 border-t border-gray-200 pt-8 dark:border-gray-700">
           <p className="text-base text-gray-400 text-center">{copyright}</p>
         </div>
       </div>

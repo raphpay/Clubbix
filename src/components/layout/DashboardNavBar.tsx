@@ -2,6 +2,7 @@ import { Menu } from "lucide-react";
 import React from "react";
 import { useClub } from "../../hooks/useClub";
 import { ProfileButton } from "../common/ProfileButton";
+import { ThemeToggle } from "../common/ThemeToggle";
 import LanguageSwitcher from "../LanguageSwitcher";
 import { Logo } from "../ui/Logo";
 
@@ -36,6 +37,7 @@ const DashboardNavbar: React.FC<DashboardNavbarProps> = ({ onMenuClick }) => {
           </div>
 
           <div className="flex items-center space-x-4">
+            <ThemeToggle />
             <LanguageSwitcher />
             <ProfileButton />
           </div>

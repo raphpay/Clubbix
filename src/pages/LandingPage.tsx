@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
+import { ThemeToggle } from "../components/common/ThemeToggle";
 import LanguageSwitcher from "../components/LanguageSwitcher";
 import { Footer } from "../components/layout/Footer";
 import { Navbar } from "../components/layout/Navbar";
@@ -97,7 +98,7 @@ const LandingPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen" data-theme="light">
       <SEO
         title="Clubbix - All-in-one platform for club management"
         description="Create and manage your club's digital presence with Clubbix. Build beautiful websites, manage members, and grow your community with our all-in-one platform."
@@ -105,26 +106,27 @@ const LandingPage: React.FC = () => {
         url="https://clubbix.io"
       />
       <Navbar items={navItems} ctaButtons={ctaButtons}>
+        <ThemeToggle />
         <LanguageSwitcher />
       </Navbar>
 
       {/* Hero Section */}
       <Section background="white" className="pt-20">
         <div className="text-center">
-          <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
+          <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl dark:text-gray-100">
             <span className="block">{t("hero.title.line1")}</span>
-            <span className="block text-indigo-600">
+            <span className="block text-indigo-600 dark:text-indigo-400">
               {t("hero.title.line2")}
             </span>
           </h1>
-          <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
+          <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:mx-auto md:mt-5 md:text-xl lg:mx-0 dark:text-gray-400">
             {t("hero.subtitle")}
           </p>
           <div className="mt-5 sm:mt-8 sm:flex sm:justify-center">
             <div className="rounded-md shadow">
               <Link
                 to="/signup"
-                className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"
+                className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10 dark:bg-indigo-500 dark:hover:bg-indigo-600"
               >
                 {t("hero.buttons.createSite")}
               </Link>
@@ -132,7 +134,7 @@ const LandingPage: React.FC = () => {
             <div className="mt-3 sm:mt-0 sm:ml-3">
               <Link
                 to="/book-demo"
-                className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10"
+                className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10 dark:text-indigo-300 dark:bg-gray-800 dark:hover:bg-gray-700"
               >
                 {t("hero.buttons.bookDemo")}
               </Link>
@@ -169,12 +171,12 @@ const LandingPage: React.FC = () => {
           ].map((feature) => (
             <div
               key={feature.title}
-              className="bg-white p-6 rounded-lg shadow-sm"
+              className="bg-white p-6 rounded-lg shadow-sm dark:bg-gray-800"
             >
-              <h3 className="text-lg font-medium text-gray-900">
+              <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
                 {feature.title}
               </h3>
-              <p className="mt-2 text-base text-gray-500">
+              <p className="mt-2 text-base text-gray-500 dark:text-gray-400">
                 {feature.description}
               </p>
             </div>
@@ -210,14 +212,18 @@ const LandingPage: React.FC = () => {
           ].map((testimonial) => (
             <div
               key={testimonial.author}
-              className="bg-white rounded-lg shadow-lg p-6"
+              className="bg-white rounded-lg shadow-lg p-6 dark:bg-gray-800"
             >
-              <p className="text-gray-600 italic">"{testimonial.quote}"</p>
+              <p className="text-gray-600 italic dark:text-gray-400">
+                "{testimonial.quote}"
+              </p>
               <div className="mt-4">
-                <p className="text-base font-medium text-gray-900">
+                <p className="text-base font-medium text-gray-900 dark:text-gray-100">
                   {testimonial.author}
                 </p>
-                <p className="text-sm text-gray-500">{testimonial.role}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  {testimonial.role}
+                </p>
               </div>
             </div>
           ))}
@@ -246,10 +252,12 @@ const LandingPage: React.FC = () => {
             },
           ].map((faq) => (
             <div key={faq.question}>
-              <h3 className="text-lg font-medium text-gray-900">
+              <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
                 {faq.question}
               </h3>
-              <p className="mt-2 text-base text-gray-500">{faq.answer}</p>
+              <p className="mt-2 text-base text-gray-500 dark:text-gray-400">
+                {faq.answer}
+              </p>
             </div>
           ))}
         </div>
