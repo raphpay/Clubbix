@@ -59,7 +59,7 @@ const MemberList: React.FC<MemberListProps> = ({
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-lg font-semibold text-gray-900">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-200">
           {t("list.title")}
         </h2>
         <Button
@@ -72,41 +72,46 @@ const MemberList: React.FC<MemberListProps> = ({
         </Button>
       </div>
 
-      <div className="bg-white shadow-sm rounded-lg overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+      <div className="bg-white dark:bg-blue-900 shadow-sm rounded-lg overflow-hidden">
+        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
+          <thead className="bg-gray-50 dark:bg-gray-900">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                 {t("table.name")}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                 {t("table.email")}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                 {t("table.role")}
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                 {t("table.actions")}
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-blue-800">
             {members.map((member) => (
-              <tr key={member.id} className="hover:bg-gray-50">
+              <tr
+                key={member.id}
+                className="hover:bg-gray-50 dark:hover:bg-gray-700"
+              >
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">
+                  <div className="text-sm font-medium text-gray-900 dark:text-gray-200">
                     {member.firstName} {member.lastName}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-500">{member.email}</div>
+                  <div className="text-sm text-gray-500 dark:text-gray-400">
+                    {member.email}
+                  </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span
                     className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
                       member.role === "admin"
-                        ? "bg-purple-100 text-purple-800"
-                        : "bg-green-100 text-green-800"
+                        ? "bg-purple-100 dark:bg-purple-500 text-purple-800 dark:text-purple-200"
+                        : "bg-green-100 dark:bg-green-500 text-green-800 dark:text-green-200"
                     }`}
                   >
                     {t(`list.roles.${member.role}`)}
@@ -116,13 +121,13 @@ const MemberList: React.FC<MemberListProps> = ({
                   <div className="flex justify-end gap-2">
                     <button
                       onClick={() => onEditMember(member)}
-                      className="text-indigo-600 hover:text-indigo-900"
+                      className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-200"
                     >
                       <Pencil className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => onDeleteMember(member)}
-                      className="text-red-600 hover:text-red-900"
+                      className="text-red-600 hover:text-red-900 dark:text-red-900 dark:hover:text-red-400"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
