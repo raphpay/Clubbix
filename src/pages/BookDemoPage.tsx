@@ -5,10 +5,10 @@ import { Footer } from "../components/layout/Footer";
 import { Navbar } from "../components/layout/Navbar";
 import { SEO } from "../components/layout/SEO";
 
-const CALENDLY_URL = "https://calendly.com/your-username/30min";
+const CALENDLY_URL = import.meta.env.VITE_CALENDLY_LINK;
 
 const BookDemoPage: React.FC = () => {
-  const { t } = useTranslation(["common", "landing"]);
+  const { t } = useTranslation(["common", "landing", "demo"]);
 
   const navItems = [
     { label: t("landing:nav.features"), href: "/#features" },
@@ -58,11 +58,8 @@ const BookDemoPage: React.FC = () => {
   return (
     <>
       <SEO
-        title={t("common:book_demo.seo.title", "Book a Demo")}
-        description={t(
-          "common:book_demo.seo.description",
-          "Schedule a live demo with our team."
-        )}
+        title={t("demo:seo.title")}
+        description={t("demo:seo.description")}
       />
       <Navbar items={navItems} ctaButtons={ctaButtons}>
         <LanguageSwitcher />
@@ -70,14 +67,9 @@ const BookDemoPage: React.FC = () => {
       <main className="container mx-auto px-4 py-16">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
-            {t("book_demo.title", "Book a Demo")}
+            {t("demo:title")}
           </h1>
-          <p className="mt-4 text-xl text-gray-600">
-            {t(
-              "book_demo.subtitle",
-              "Choose a time that works for you. We're excited to show you around!"
-            )}
-          </p>
+          <p className="mt-4 text-xl text-gray-600">{t("demo:subtitle")}</p>
         </div>
 
         <div
@@ -87,7 +79,6 @@ const BookDemoPage: React.FC = () => {
           <iframe
             src={CALENDLY_URL}
             className="absolute top-0 left-0 w-full h-full"
-            frameBorder="0"
             title="Calendly scheduling widget"
             allow="fullscreen"
           ></iframe>
@@ -96,24 +87,18 @@ const BookDemoPage: React.FC = () => {
         <div className="mt-8 text-center text-gray-500">
           <noscript>
             <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer">
-              {t(
-                "book_demo.js_disabled",
-                "JavaScript is disabled. Please click here to book a demo."
-              )}
+              {t("demo:js_disabled")}
             </a>
           </noscript>
           <p>
-            {t("book_demo.widget_issue", "Having trouble with the widget?")}
+            {t("demo:widget_issue")}
             <a
               href={CALENDLY_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="ml-1 text-indigo-600 hover:underline"
             >
-              {t(
-                "book_demo.widget_issue_link_text",
-                "Book directly on Calendly"
-              )}
+              {t("demo:widget_issue_link_text")}
             </a>
           </p>
         </div>

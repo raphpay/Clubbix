@@ -1,0 +1,12 @@
+{
+  "seo": {
+    "title": "Réserver une démo",
+    "description": "Planifiez une démo en direct avec notre équipe pour voir comment notre plateforme peut vous aider."
+  },
+  "title": "Réserver une démo",
+  "subtitle": "Choisissez une heure qui vous convient. Nous sommes impatients de vous faire visiter !",
+  "js_disabled": "JavaScript est désactivé. Veuillez cliquer ici pour réserver une démo.",
+  "widget_issue": "Un problème avec le widget ?",
+  "widget_issue_link_text": "Réservez directement sur Calendly",
+  "schedule": "Schedule a live demo with our team."
+}

@@ -1,0 +1,12 @@
+{
+  "seo": {
+    "title": "Book a Demo",
+    "description": "Schedule a live demo with our team to see how our platform can help you."
+  },
+  "title": "Book a Demo",
+  "subtitle": "Choose a time that works for you. We're excited to show you around!",
+  "js_disabled": "JavaScript is disabled. Please click here to book a demo.",
+  "widget_issue": "Having trouble with the widget?",
+  "widget_issue_link_text": "Book directly on Calendly",
+  "schedule": "Schedule a live demo with our team."
+}
