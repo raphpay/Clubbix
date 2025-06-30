@@ -3,6 +3,7 @@ import React from "react";
 import { useClub } from "../../hooks/useClub";
 import { ProfileButton } from "../common/ProfileButton";
 import LanguageSwitcher from "../LanguageSwitcher";
+import { Logo } from "../ui/Logo";
 
 interface DashboardNavbarProps {
   onMenuClick: () => void;
@@ -23,7 +24,9 @@ const DashboardNavbar: React.FC<DashboardNavbarProps> = ({ onMenuClick }) => {
               <Menu className="w-6 h-6" />
             </button>
             <div className="flex items-center">
-              <img src="/logo.png" alt="Clubbix" className="h-8 mr-3" />
+              <div className="pr-4">
+                <Logo />
+              </div>
               {club && (
                 <span className="text-lg font-semibold text-gray-800">
                   {club.name}
