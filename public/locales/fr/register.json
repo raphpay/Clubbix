@@ -1,6 +1,7 @@
 {
   "title": "S'inscrire",
   "subtitle": "Créez un compte pour commencer",
+  "or": "Ou",
   "form": {
     "clubName": "Nom du club",
     "inviteCode": "Code d'invitation",

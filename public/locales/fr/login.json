@@ -1,0 +1,11 @@
+{
+  "signIn": "Connectez-vous à votre compte",
+  "createAccount": "créer un nouveau compte",
+  "or": "Ou",
+  "emailAddress": "Adresse email",
+  "password": "Mot de passe",
+  "button": {
+    "signingIn": "Connexion",
+    "signIn": "Se connecter"
+  }
+}

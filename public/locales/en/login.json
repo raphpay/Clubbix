@@ -1,0 +1,11 @@
+{
+  "signIn": "Sign in to your account",
+  "createAccount": "create a new account",
+  "or": "Or",
+  "emailAddress": "Email address",
+  "password": "Password",
+  "button": {
+    "signingIn": "Signing in",
+    "signIn": "Sign in"
+  }
+}
