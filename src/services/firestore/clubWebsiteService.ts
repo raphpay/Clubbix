@@ -346,3 +346,21 @@ export const deleteCard = async (
     updatedAt: serverTimestamp(),
   });
 };
+
+// Reorder sections (update 'order' field for all)
+export const reorderSections = async (
+  websiteId: string,
+  orderedSectionIds: string[]
+) => {
+  const batch = [] as Promise<void>[];
+  orderedSectionIds.forEach((sectionId, idx) => {
+    const sectionRef = doc(
+      db,
+      `clubWebsites/${websiteId}/sections/${sectionId}`
+    );
+    batch.push(
+      updateDoc(sectionRef, { order: idx + 1, updatedAt: serverTimestamp() })
+    );
+  });
+  await Promise.all(batch);
+};
