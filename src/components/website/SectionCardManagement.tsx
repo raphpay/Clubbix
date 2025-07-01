@@ -7,6 +7,7 @@ import {
   reorderSections,
   saveCard,
   saveSection,
+  uploadCardImage,
 } from "../../services/firestore/clubWebsiteService";
 import { ClubWebsiteSection } from "../../services/firestore/types/clubWebsite";
 import Alert from "../common/Alert";
@@ -40,6 +41,10 @@ const SectionCardManager: React.FC<SectionCardManagerProps> = ({
   const [modal, setModal] = useState<ModalState>({ type: null });
   // Form state for modal
   const [form, setForm] = useState<{ [key: string]: string }>({});
+
+  // Card image file state
+  const [cardImageFile, setCardImageFile] = useState<File | null>(null);
+  const [cardImagePreview, setCardImagePreview] = useState<string>("");
 
   // Fetch sections on mount
   useEffect(() => {
@@ -131,7 +136,9 @@ const SectionCardManager: React.FC<SectionCardManagerProps> = ({
 
   // --- Card Handlers ---
   const openAddCard = (section: ClubWebsiteSection) => {
-    setForm({ title: "", body: "", imageUrl: "" });
+    setForm({ title: "", body: "" });
+    setCardImageFile(null);
+    setCardImagePreview("");
     setModal({ type: "add-card", sectionId: section.id });
   };
 
@@ -140,21 +147,31 @@ const SectionCardManager: React.FC<SectionCardManagerProps> = ({
     setForm({
       title: card?.title || "",
       body: card?.body || "",
-      imageUrl: card?.imageUrl || "",
     });
+    setCardImageFile(null);
+    setCardImagePreview(card?.imageUrl || "");
     setModal({ type: "edit-card", sectionId: section.id, cardId });
   };
 
   const handleCardModalConfirm = async () => {
     setLoading(true);
     try {
+      let imageUrl = form.imageUrl || "";
+      // If a new file is selected, upload it
+      if (cardImageFile && modal.sectionId) {
+        imageUrl = await uploadCardImage(
+          websiteId,
+          modal.sectionId,
+          cardImageFile
+        );
+      }
       if (modal.type === "add-card" && modal.sectionId) {
         const section = sections.find((s) => s.id === modal.sectionId);
         if (!section) throw new Error(t("section.error.notFound"));
         await saveCard(websiteId, modal.sectionId, {
           title: form.title,
           body: form.body,
-          imageUrl: form.imageUrl,
+          imageUrl,
           order: (section.cards?.length || 0) + 1,
         });
       } else if (
@@ -170,11 +187,13 @@ const SectionCardManager: React.FC<SectionCardManagerProps> = ({
           ...card,
           title: form.title,
           body: form.body,
-          imageUrl: form.imageUrl,
+          imageUrl,
         });
       }
       setSections(await getSections(websiteId));
       setModal({ type: null });
+      setCardImageFile(null);
+      setCardImagePreview("");
     } catch (err) {
       setError(t("card.error.save"));
     } finally {
@@ -258,10 +277,21 @@ const SectionCardManager: React.FC<SectionCardManagerProps> = ({
     },
     {
       label: t("card.image"),
-      value: form.imageUrl || "",
-      onChange: (v: string) => setForm((f) => ({ ...f, imageUrl: v })),
-      type: "text",
-      placeholder: t("card.imagePlaceholder"),
+      value: "",
+      onChange: () => {}, // not used for file
+      type: "file",
+      onFileChange: (file: File | null) => {
+        setCardImageFile(file);
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (e) =>
+            setCardImagePreview(e.target?.result as string);
+          reader.readAsDataURL(file);
+        } else {
+          setCardImagePreview("");
+        }
+      },
+      filePreviewUrl: cardImagePreview,
       required: false,
     },
   ];
@@ -303,7 +333,7 @@ const SectionCardManager: React.FC<SectionCardManagerProps> = ({
                   <button
                     onClick={() => moveSection(section.id, "up")}
                     disabled={sIdx === 0}
-                    title={t("sections.moveUp")}
+                    title={t("section.moveUp")}
                     className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
                   >
                     ↑
@@ -311,7 +341,7 @@ const SectionCardManager: React.FC<SectionCardManagerProps> = ({
                   <button
                     onClick={() => moveSection(section.id, "down")}
                     disabled={sIdx === sections.length - 1}
-                    title={t("sections.moveDown")}
+                    title={t("section.moveDown")}
                     className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
                   >
                     ↓
@@ -441,9 +471,7 @@ const SectionCardManager: React.FC<SectionCardManagerProps> = ({
         }
         fields={cardFields}
         confirmText={
-          modal.type === "add-card"
-            ? t("section.add")
-            : t("section.buttons.save")
+          modal.type === "add-card" ? t("card.add") : t("section.buttons.save")
         }
         cancelText={t("section.buttons.cancel")}
         loading={loading}

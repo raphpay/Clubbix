@@ -4,10 +4,12 @@ import { useTranslation } from "react-i18next";
 interface AlertField {
   label: string;
   value: string;
-  onChange: (v: string) => void;
   type?: string;
   placeholder?: string;
   required?: boolean;
+  onChange: (v: string) => void;
+  onFileChange?: (file: File | null) => void;
+  filePreviewUrl?: string;
 }
 
 interface AlertProps {
@@ -72,14 +74,35 @@ const Alert: React.FC<AlertProps> = ({
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 {field.label}
               </label>
-              <input
-                type={field.type || "text"}
-                value={field.value}
-                onChange={(e) => field.onChange(e.target.value)}
-                placeholder={field.placeholder}
-                className="w-full rounded border border-gray-300 dark:border-gray-600 p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-gray-100"
-                required={field.required}
-              />
+              {field.type === "file" ? (
+                <>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0] || null;
+                      field.onFileChange?.(file);
+                    }}
+                    className="w-full rounded border border-gray-300 dark:border-gray-600 p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-gray-100"
+                  />
+                  {field.filePreviewUrl && (
+                    <img
+                      src={field.filePreviewUrl}
+                      alt="Preview"
+                      className="mt-2 h-24 rounded object-cover border"
+                    />
+                  )}
+                </>
+              ) : (
+                <input
+                  type={field.type || "text"}
+                  value={field.value}
+                  onChange={(e) => field.onChange(e.target.value)}
+                  placeholder={field.placeholder}
+                  className="w-full rounded border border-gray-300 dark:border-gray-600 p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-gray-100"
+                  required={field.required}
+                />
+              )}
             </div>
           ))}
           <div className="flex justify-end gap-2 mt-6">
