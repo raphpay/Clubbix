@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { UserData } from "../../services/firestore";
+import { UserData } from "../../services/firestore/types/user";
 import LabelInput from "../inputs/LabelInput";
 import { Button } from "../ui/Button";
 

@@ -2,7 +2,7 @@ import { doc, onSnapshot } from "firebase/firestore";
 import React, { createContext, useEffect, useState } from "react";
 import { db } from "../config/firebase";
 import { useAuth } from "../hooks/useAuth";
-import { ClubData } from "../services/firestore";
+import { ClubData } from "../services/firestore/types/club";
 
 interface Club {
   id: string;

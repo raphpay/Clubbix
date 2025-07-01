@@ -17,7 +17,7 @@ import {
   uploadBannerImage,
   uploadLogoImage,
 } from "../services/firestore/clubWebsiteService";
-import { ClubWebsiteContent } from "../services/firestore/types";
+import { ClubWebsiteContent } from "../services/firestore/types/clubWebsite";
 
 const LOGO_SIZE = 256; // px, square
 const BANNER_WIDTH = 1200;

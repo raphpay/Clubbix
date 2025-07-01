@@ -3,5 +3,7 @@ export * from "./clubService";
 export * from "./clubWebsiteService";
 export * from "./stripeService";
 export * from "./treasuryService";
-export * from "./types";
+export * from "./types/club";
+export * from "./types/clubWebsite";
+export * from "./types/user";
 export * from "./userService";

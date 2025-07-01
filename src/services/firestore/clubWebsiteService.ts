@@ -14,7 +14,7 @@ import {
 } from "firebase/storage";
 import { nanoid } from "nanoid";
 import { db, storage } from "../../config/firebase";
-import { ClubWebsiteContent } from "./types";
+import { ClubWebsiteContent } from "./types/clubWebsite";
 
 export const uploadWebsiteImage = async (
   clubId: string | undefined,

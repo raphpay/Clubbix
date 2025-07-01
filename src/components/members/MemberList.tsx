@@ -2,7 +2,8 @@ import { Pencil, Plus, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useClub } from "../../hooks/useClub";
-import { UserData, getMembers } from "../../services/firestore";
+import { UserData } from "../../services/firestore/types/user";
+import { getMembers } from "../../services/firestore/userService";
 import { Button } from "../ui/Button";
 
 interface MemberListProps {

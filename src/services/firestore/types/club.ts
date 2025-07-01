@@ -1,15 +1,5 @@
 import { Timestamp } from "firebase/firestore";
 
-export interface UserData {
-  id?: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  role: "admin" | "member";
-  clubId?: string;
-  createdAt: Date;
-}
-
 export interface ClubData {
   id?: string;
   name: string;
@@ -18,34 +8,8 @@ export interface ClubData {
   createdBy: string;
   inviteCode: string;
   members: string[];
-  createdAt: Date;
+  createdAt: Timestamp;
   subscription?: ClubSubscriptionData;
-}
-
-export interface ClubWebsiteContent {
-  id: string;
-  clubId: string;
-  clubName: string;
-  headline: string;
-  subtext: string;
-  bannerImageUrl: string;
-  logoUrl?: string;
-  gallery: {
-    id: string;
-    imageUrl: string;
-    caption: string;
-    order: number;
-  }[];
-  events: {
-    id: string;
-    title: string;
-    description: string;
-    imageUrl: string;
-    date: Date;
-    isPublished: boolean;
-  }[];
-  updatedAt: Date;
-  createdAt: Date;
 }
 
 export interface ClubSubscriptionData {

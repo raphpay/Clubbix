@@ -8,8 +8,8 @@ import {
   addMember,
   deleteMember,
   updateMember,
-  UserData,
 } from "../../../services/firestore";
+import { UserData } from "../../../services/firestore/types/user";
 
 const MembersPage: React.FC = () => {
   const { t } = useTranslation("members");
