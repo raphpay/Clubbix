@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 interface AlertField {
   label: string;
@@ -32,7 +33,8 @@ const Alert: React.FC<AlertProps> = ({
   cancelText = "Cancel",
   loading = false,
 }) => {
-  React.useEffect(() => {
+  const { t } = useTranslation("common");
+  useEffect(() => {
     if (open) {
       document.body.style.overflow = "hidden";
     } else {
@@ -94,14 +96,14 @@ const Alert: React.FC<AlertProps> = ({
               className="px-4 py-2 rounded bg-indigo-600 hover:bg-indigo-700 text-white disabled:opacity-50"
               disabled={loading}
             >
-              {loading ? "Saving..." : confirmText}
+              {loading ? t("alert.saving") : confirmText}
             </button>
           </div>
         </form>
         <button
           className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
           onClick={onClose}
-          aria-label="Close"
+          aria-label={t("alert.close")}
         >
           <svg
             width="24"

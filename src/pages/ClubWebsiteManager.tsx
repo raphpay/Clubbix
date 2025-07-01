@@ -603,7 +603,7 @@ const ClubWebsiteManager: React.FC = () => {
         {/* Sections & Cards Management Section */}
         <section className="mb-8 pt-4">
           <h2 className="text-2xl font-semibold mb-4 dark:text-gray-100">
-            Sections & Cards
+            {t("sectionAndCard.title")}
           </h2>
           {club?.id && <SectionCardManager websiteId={club.id} />}
         </section>

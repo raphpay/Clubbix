@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   deleteCard as deleteCardFS,
   deleteSection as deleteSectionFS,
@@ -30,6 +31,7 @@ type ModalState = {
 const SectionCardManager: React.FC<SectionCardManagerProps> = ({
   websiteId,
 }) => {
+  const { t } = useTranslation("website");
   const [sections, setSections] = useState<ClubWebsiteSection[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -57,10 +59,12 @@ const SectionCardManager: React.FC<SectionCardManagerProps> = ({
     setForm({ title: "", description: "" });
     setModal({ type: "add-section" });
   };
+
   const openEditSection = (section: ClubWebsiteSection) => {
     setForm({ title: section.title, description: section.description });
     setModal({ type: "edit-section", sectionId: section.id });
   };
+
   const handleSectionModalConfirm = async () => {
     setLoading(true);
     try {
@@ -73,7 +77,7 @@ const SectionCardManager: React.FC<SectionCardManagerProps> = ({
         });
       } else if (modal.type === "edit-section" && modal.sectionId) {
         const section = sections.find((s) => s.id === modal.sectionId);
-        if (!section) throw new Error("Section not found");
+        if (!section) throw new Error(t("section.error.notFound"));
         await saveSection(websiteId, {
           ...section,
           title: form.title,
@@ -83,20 +87,20 @@ const SectionCardManager: React.FC<SectionCardManagerProps> = ({
       setSections(await getSections(websiteId));
       setModal({ type: null });
     } catch (err) {
-      setError("Failed to save section");
+      setError(t("section.error.save"));
     } finally {
       setLoading(false);
     }
   };
 
   const deleteSection = async (id: string) => {
-    if (!window.confirm("Delete this section and all its cards?")) return;
+    if (!window.confirm(t("section.confirm.delete"))) return;
     setLoading(true);
     try {
       await deleteSectionFS(websiteId, id);
       setSections(await getSections(websiteId));
     } catch (err) {
-      setError("Failed to delete section");
+      setError(t("section.error.delete"));
     } finally {
       setLoading(false);
     }
@@ -119,7 +123,7 @@ const SectionCardManager: React.FC<SectionCardManagerProps> = ({
       );
       setSections(await getSections(websiteId));
     } catch (err) {
-      setError("Failed to reorder sections");
+      setError(t("section.error.reorder"));
     } finally {
       setLoading(false);
     }
@@ -130,6 +134,7 @@ const SectionCardManager: React.FC<SectionCardManagerProps> = ({
     setForm({ title: "", body: "", imageUrl: "" });
     setModal({ type: "add-card", sectionId: section.id });
   };
+
   const openEditCard = (section: ClubWebsiteSection, cardId: string) => {
     const card = section.cards.find((c) => c.id === cardId);
     setForm({
@@ -139,12 +144,13 @@ const SectionCardManager: React.FC<SectionCardManagerProps> = ({
     });
     setModal({ type: "edit-card", sectionId: section.id, cardId });
   };
+
   const handleCardModalConfirm = async () => {
     setLoading(true);
     try {
       if (modal.type === "add-card" && modal.sectionId) {
         const section = sections.find((s) => s.id === modal.sectionId);
-        if (!section) throw new Error("Section not found");
+        if (!section) throw new Error(t("section.error.notFound"));
         await saveCard(websiteId, modal.sectionId, {
           title: form.title,
           body: form.body,
@@ -157,9 +163,9 @@ const SectionCardManager: React.FC<SectionCardManagerProps> = ({
         modal.cardId
       ) {
         const section = sections.find((s) => s.id === modal.sectionId);
-        if (!section) throw new Error("Section not found");
+        if (!section) throw new Error(t("section.error.notFound"));
         const card = section.cards.find((c) => c.id === modal.cardId);
-        if (!card) throw new Error("Card not found");
+        if (!card) throw new Error(t("card.error.notFound"));
         await saveCard(websiteId, modal.sectionId, {
           ...card,
           title: form.title,
@@ -170,20 +176,20 @@ const SectionCardManager: React.FC<SectionCardManagerProps> = ({
       setSections(await getSections(websiteId));
       setModal({ type: null });
     } catch (err) {
-      setError("Failed to save card");
+      setError(t("card.error.save"));
     } finally {
       setLoading(false);
     }
   };
 
   const deleteCard = async (sectionId: string, cardId: string) => {
-    if (!window.confirm("Delete this card?")) return;
+    if (!window.confirm(t("card.confirm.delete"))) return;
     setLoading(true);
     try {
       await deleteCardFS(websiteId, sectionId, cardId);
       setSections(await getSections(websiteId));
     } catch (err) {
-      setError("Failed to delete card");
+      setError(t("card.error.delete"));
     } finally {
       setLoading(false);
     }
@@ -210,7 +216,7 @@ const SectionCardManager: React.FC<SectionCardManagerProps> = ({
       }
       setSections(await getSections(websiteId));
     } catch (err) {
-      setError("Failed to reorder cards");
+      setError(t("card.error.reorder"));
     } finally {
       setLoading(false);
     }
@@ -219,59 +225,61 @@ const SectionCardManager: React.FC<SectionCardManagerProps> = ({
   // --- Modal Field Configs ---
   const sectionFields = [
     {
-      label: "Section Title",
+      label: t("section.title"),
       value: form.title || "",
       onChange: (v: string) => setForm((f) => ({ ...f, title: v })),
       type: "text",
-      placeholder: "Enter section title",
+      placeholder: t("section.titlePlaceholder"),
     },
     {
-      label: "Section Description",
+      label: t("section.description"),
       value: form.description || "",
       onChange: (v: string) => setForm((f) => ({ ...f, description: v })),
       type: "text",
-      placeholder: "Enter section description",
+      placeholder: t("section.descriptionPlaceholder"),
     },
   ];
   const cardFields = [
     {
-      label: "Card Title",
+      label: t("card.title"),
       value: form.title || "",
       onChange: (v: string) => setForm((f) => ({ ...f, title: v })),
       type: "text",
-      placeholder: "Enter card title",
+      placeholder: t("card.titlePlaceholder"),
       required: true,
     },
     {
-      label: "Card Body",
+      label: t("card.body"),
       value: form.body || "",
       onChange: (v: string) => setForm((f) => ({ ...f, body: v })),
       type: "text",
-      placeholder: "Enter card body",
+      placeholder: t("card.bodyPlaceholder"),
       required: true,
     },
     {
-      label: "Image URL (optional)",
+      label: t("card.image"),
       value: form.imageUrl || "",
       onChange: (v: string) => setForm((f) => ({ ...f, imageUrl: v })),
       type: "text",
-      placeholder: "Paste image URL",
+      placeholder: t("card.imagePlaceholder"),
       required: false,
     },
   ];
 
-  if (loading) return <div>Loading sections...</div>;
+  if (loading) return <div>{t("section.loading")}</div>;
   if (error) return <div className="text-red-500">{error}</div>;
 
   return (
     <div className="space-y-8">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-xl font-semibold dark:text-gray-100">Sections</h3>
+        <h3 className="text-xl font-semibold dark:text-gray-100">
+          {t("section.pageTitle")}
+        </h3>
         <button
           className="px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700"
           onClick={openAddSection}
         >
-          + Add Section
+          {t("section.add")}
         </button>
       </div>
       <div className="space-y-6">
@@ -295,7 +303,7 @@ const SectionCardManager: React.FC<SectionCardManagerProps> = ({
                   <button
                     onClick={() => moveSection(section.id, "up")}
                     disabled={sIdx === 0}
-                    title="Move up"
+                    title={t("sections.moveUp")}
                     className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
                   >
                     ↑
@@ -303,7 +311,7 @@ const SectionCardManager: React.FC<SectionCardManagerProps> = ({
                   <button
                     onClick={() => moveSection(section.id, "down")}
                     disabled={sIdx === sections.length - 1}
-                    title="Move down"
+                    title={t("sections.moveDown")}
                     className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
                   >
                     ↓
@@ -312,13 +320,13 @@ const SectionCardManager: React.FC<SectionCardManagerProps> = ({
                     onClick={() => openEditSection(section)}
                     className="px-2 py-1 bg-yellow-200 rounded hover:bg-yellow-300"
                   >
-                    Edit
+                    {t("section.buttons.edit")}
                   </button>
                   <button
                     onClick={() => deleteSection(section.id)}
                     className="px-2 py-1 bg-red-200 rounded hover:bg-red-300"
                   >
-                    Delete
+                    {t("section.buttons.delete")}
                   </button>
                 </div>
               </div>
@@ -326,19 +334,19 @@ const SectionCardManager: React.FC<SectionCardManagerProps> = ({
               <div className="ml-4">
                 <div className="flex justify-between items-center mb-2">
                   <span className="font-semibold dark:text-gray-200">
-                    Cards
+                    {t("card.pageTitle")}
                   </span>
                   <button
                     onClick={() => openAddCard(section)}
                     className="px-2 py-1 bg-indigo-100 rounded hover:bg-indigo-200"
                   >
-                    + Add Card
+                    {t("card.add")}
                   </button>
                 </div>
                 <div className="space-y-2">
                   {section.cards.length === 0 && (
                     <div className="text-gray-400 italic">
-                      No cards in this section.
+                      {t("card.noCards")}
                     </div>
                   )}
                   {section.cards
@@ -367,7 +375,7 @@ const SectionCardManager: React.FC<SectionCardManagerProps> = ({
                           <button
                             onClick={() => moveCard(section.id, card.id, "up")}
                             disabled={cIdx === 0}
-                            title="Move up"
+                            title={t("section.moveUp")}
                             className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
                           >
                             ↑
@@ -377,7 +385,7 @@ const SectionCardManager: React.FC<SectionCardManagerProps> = ({
                               moveCard(section.id, card.id, "down")
                             }
                             disabled={cIdx === section.cards.length - 1}
-                            title="Move down"
+                            title={t("section.moveDown")}
                             className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
                           >
                             ↓
@@ -386,13 +394,13 @@ const SectionCardManager: React.FC<SectionCardManagerProps> = ({
                             onClick={() => openEditCard(section, card.id)}
                             className="px-2 py-1 bg-yellow-100 rounded hover:bg-yellow-200"
                           >
-                            Edit
+                            {t("section.buttons.edit")}
                           </button>
                           <button
                             onClick={() => deleteCard(section.id, card.id)}
                             className="px-2 py-1 bg-red-100 rounded hover:bg-red-200"
                           >
-                            Delete
+                            {t("section.buttons.delete")}
                           </button>
                         </div>
                       </div>
@@ -402,25 +410,42 @@ const SectionCardManager: React.FC<SectionCardManagerProps> = ({
             </div>
           ))}
       </div>
+
       {/* Alert Modals */}
       <Alert
         open={modal.type === "add-section" || modal.type === "edit-section"}
         onClose={() => setModal({ type: null })}
         onConfirm={handleSectionModalConfirm}
-        title={modal.type === "add-section" ? "Add Section" : "Edit Section"}
+        title={
+          modal.type === "add-section"
+            ? t("section.alert.addTitle")
+            : t("section.alert.editTitle")
+        }
         fields={sectionFields}
-        confirmText={modal.type === "add-section" ? "Add" : "Save"}
-        cancelText="Cancel"
+        confirmText={
+          modal.type === "add-section"
+            ? t("section.add")
+            : t("section.buttons.save")
+        }
+        cancelText={t("section.buttons.cancel")}
         loading={loading}
       />
       <Alert
         open={modal.type === "add-card" || modal.type === "edit-card"}
         onClose={() => setModal({ type: null })}
         onConfirm={handleCardModalConfirm}
-        title={modal.type === "add-card" ? "Add Card" : "Edit Card"}
+        title={
+          modal.type === "add-card"
+            ? t("card.alert.addTitle")
+            : t("card.alert.editTitle")
+        }
         fields={cardFields}
-        confirmText={modal.type === "add-card" ? "Add" : "Save"}
-        cancelText="Cancel"
+        confirmText={
+          modal.type === "add-card"
+            ? t("section.add")
+            : t("section.buttons.save")
+        }
+        cancelText={t("section.buttons.cancel")}
         loading={loading}
       />
     </div>

@@ -47,5 +47,63 @@
     "delete": "Delete Logo",
     "imageSizeError": "Logo must be {size}x{size} pixels",
     "imageTypeError": "Logo must be a valid image file"
+  },
+  "sectionAndCards": {
+    "title": "Section and cards"
+  },
+  "section": {
+    "pageTitle": "Sections",
+    "title": "Section Title",
+    "titlePlaceholder": "Enter section title",
+    "description": "Section Description",
+    "descriptionPlaceholder": "Enter section description",
+    "loading": "Loading sections...",
+    "add": "+ Add Section",
+    "confirm": {
+      "delete": "Delete this section and all its cards?"
+    },
+    "error": {
+      "notFound": "Section not found",
+      "save": "Failed to save section",
+      "delete": "Failed to delete section",
+      "reorder": "Failed to reorder sections"
+    },
+    "alert": {
+      "addTitle": "Add section",
+      "editTitle": "Edit section"
+    },
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "buttons": {
+      "edit": "Edit",
+      "delete": "Delete",
+      "add": "Add",
+      "save": "Save",
+      "cancel": "Cancel"
+    }
+  },
+  "card": {
+    "pageTitle": "Cards",
+    "title": "Card Title",
+    "titlePlaceholder": "Enter card title",
+    "body": "Card Body",
+    "bodyPlaceholder": "Enter card body",
+    "image": "Image (optional)",
+    "imagePlaceholder": "Paste image URL",
+    "add": "+ Add Card",
+    "noCards": "No cards in this section.",
+    "confirm": {
+      "delete": "Delete this card?"
+    },
+    "error": {
+      "notFound": "Card not found",
+      "save": "Failed to save card",
+      "delete": "Failed to delete card",
+      "reorder": "Failed to reorder cards"
+    },
+    "alert": {
+      "addTitle": "Add card",
+      "editTitle": "Edit card"
+    }
   }
 }

@@ -50,5 +50,9 @@
   },
   "loading": "Chargement",
   "get_started": "Commencer",
-  "save": "Enregistrer"
+  "save": "Enregistrer",
+  "alert": {
+    "saving": "Enregistrement...",
+    "close": "Fermer"
+  }
 }
