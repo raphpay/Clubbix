@@ -50,5 +50,9 @@
   },
   "loading": "Loading",
   "get_started": "Get Started",
-  "save": "Save"
+  "save": "Save",
+  "alert": {
+    "saving": "Saving...",
+    "close": "Close"
+  }
 }

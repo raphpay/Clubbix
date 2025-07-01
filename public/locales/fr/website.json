@@ -47,5 +47,63 @@
     "delete": "Supprimer le logo",
     "imageSizeError": "Le logo doit être de {size}x{size} pixels",
     "imageTypeError": "Le logo doit être un fichier image valide"
+  },
+  "sectionAndCards": {
+    "title": "Section et cartes"
+  },
+  "section": {
+    "pageTitle": "Sections",
+    "title": "Titre de Section",
+    "titlePlaceholder": "Entrez un titre de section",
+    "description": "Description de Section",
+    "descriptionPlaceholder": "Entrez une description de section",
+    "loading": "Chargement des sections...",
+    "add": "+ Ajouter une Section",
+    "confirm": {
+      "delete": "Supprimer cette section et toutes ces cartes ?"
+    },
+    "error": {
+      "notFound": "Section non trouvée",
+      "save": "Section non sauvegardée",
+      "delete": "Section non supprimée",
+      "reorder": "Sections non rangées"
+    },
+    "alert": {
+      "addTitle": "Add section",
+      "editTitle": "Edit section"
+    },
+    "moveUp": "Déplacer vers le haut",
+    "moveDown": "Déplacer vers le bas",
+    "buttons": {
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "add": "Ajouter",
+      "save": "Sauvegarder",
+      "cancel": "Annuler"
+    }
+  },
+  "card": {
+    "pageTitle": "Cartes",
+    "title": "Titre de Carte",
+    "titlePlaceholder": "Entrez un titre de carte",
+    "body": "Corps de Carte",
+    "bodyPlaceholder": "Entrez un corps de carte",
+    "image": "Image (optionnel)",
+    "imagePlaceholder": "Coller l'URL de l'image",
+    "add": "+ Ajouter une Carte",
+    "noCards": "Pas de cartes dans cette section.",
+    "confirm": {
+      "delete": "Supprimer cette carte ?"
+    },
+    "error": {
+      "notFound": "Carte non trouvée",
+      "save": "Carte non sauvégardée",
+      "delete": "Carte non supprimée",
+      "reorder": "Carte non rangée"
+    },
+    "alert": {
+      "addTitle": "Ajouter une carte",
+      "editTitle": "Modifier une carte"
+    }
   }
 }

@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { getClubWebsiteContent } from "../services/firestore/clubWebsiteService";
-import { ClubWebsiteContent } from "../services/firestore/types";
+import { ClubWebsiteContent } from "../services/firestore/types/clubWebsite";
 
 const ClubWebsite: React.FC = () => {
   const { t } = useTranslation("website");

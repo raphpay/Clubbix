@@ -1,6 +1,11 @@
 import {
+  collection,
+  deleteDoc,
   doc,
   getDoc,
+  getDocs,
+  orderBy,
+  query,
   serverTimestamp,
   setDoc,
   updateDoc,
@@ -14,23 +19,13 @@ import {
 } from "firebase/storage";
 import { nanoid } from "nanoid";
 import { db, storage } from "../../config/firebase";
-import { ClubWebsiteContent } from "./types";
+import {
+  ClubWebsiteCard,
+  ClubWebsiteContent,
+  ClubWebsiteSection,
+} from "./types/clubWebsite";
 
-export const uploadWebsiteImage = async (
-  clubId: string | undefined,
-  file: File,
-  type: "banner" | "gallery" | "event"
-): Promise<string> => {
-  if (!clubId) return "";
-  const fileNameWithDate = `${Date.now()}-${file.name}`;
-  const storageRef = ref(
-    storage,
-    `clubs/${clubId}/website/${type}/${fileNameWithDate}`
-  );
-  await uploadBytes(storageRef, file);
-  return getDownloadURL(storageRef);
-};
-
+// READ
 export const getClubWebsiteContent = async (
   clubId: string
 ): Promise<ClubWebsiteContent | null> => {
@@ -44,6 +39,19 @@ export const getClubWebsiteContent = async (
   return websiteDoc.data() as ClubWebsiteContent;
 };
 
+// Get all sections for a website, ordered
+export const getSections = async (
+  websiteId: string
+): Promise<ClubWebsiteSection[]> => {
+  const sectionsRef = collection(db, `clubWebsites/${websiteId}/sections`);
+  const q = query(sectionsRef, orderBy("order"));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(
+    (doc) => ({ id: doc.id, ...doc.data() } as ClubWebsiteSection)
+  );
+};
+
+// CREATE/ADD
 export const createClubWebsiteContent = async (
   clubId: string,
   content: Omit<ClubWebsiteContent, "id" | "clubId" | "updatedAt" | "createdAt">
@@ -59,18 +67,20 @@ export const createClubWebsiteContent = async (
   });
 };
 
-export const updateClubWebsiteContent = async (
-  clubId: string,
-  content: Partial<
-    Omit<ClubWebsiteContent, "id" | "clubId" | "updatedAt" | "createdAt">
-  >
-): Promise<void> => {
-  const websiteRef = doc(db, "clubWebsites", clubId);
-
-  await updateDoc(websiteRef, {
-    ...content,
-    updatedAt: serverTimestamp(),
-  });
+// Add or update a section
+export const saveSection = async (
+  websiteId: string,
+  section: Omit<ClubWebsiteSection, "id"> & { id?: string }
+) => {
+  const sectionId =
+    section.id || doc(collection(db, `clubWebsites/${websiteId}/sections`)).id;
+  const sectionRef = doc(db, `clubWebsites/${websiteId}/sections/${sectionId}`);
+  await setDoc(
+    sectionRef,
+    { ...section, id: sectionId, updatedAt: serverTimestamp() },
+    { merge: true }
+  );
+  return sectionId;
 };
 
 export const addGalleryImage = async (
@@ -125,6 +135,31 @@ export const addEvent = async (
   });
 };
 
+// Save a card (add or update) within a section
+export const saveCard = async (
+  websiteId: string,
+  sectionId: string,
+  card: Omit<ClubWebsiteCard, "id"> & { id?: string }
+) => {
+  const sectionRef = doc(db, `clubWebsites/${websiteId}/sections/${sectionId}`);
+  const sectionSnap = await getDoc(sectionRef);
+  if (!sectionSnap.exists()) throw new Error("Section not found");
+  const section = sectionSnap.data() as ClubWebsiteSection;
+  const cards = section.cards || [];
+  let updatedCards;
+  if (card.id) {
+    updatedCards = cards.map((c) => (c.id === card.id ? { ...c, ...card } : c));
+  } else {
+    const newCard = { ...card, id: crypto.randomUUID() };
+    updatedCards = [...cards, newCard];
+  }
+  await updateDoc(sectionRef, {
+    cards: updatedCards,
+    updatedAt: serverTimestamp(),
+  });
+};
+
+// UPDATE
 export const updateEvent = async (
   clubId: string | undefined,
   eventId: string,
@@ -169,6 +204,21 @@ export const updateEvent = async (
   });
 };
 
+export const updateClubWebsiteContent = async (
+  clubId: string,
+  content: Partial<
+    Omit<ClubWebsiteContent, "id" | "clubId" | "updatedAt" | "createdAt">
+  >
+): Promise<void> => {
+  const websiteRef = doc(db, "clubWebsites", clubId);
+
+  await updateDoc(websiteRef, {
+    ...content,
+    updatedAt: serverTimestamp(),
+  });
+};
+
+// UPLOAD
 export const uploadLogoImage = async (
   clubId: string,
   file: File
@@ -178,12 +228,6 @@ export const uploadLogoImage = async (
   await deleteObject(logoRef).catch(() => {});
   await uploadBytes(logoRef, file);
   return getDownloadURL(logoRef);
-};
-
-export const deleteLogoImage = async (clubId: string): Promise<void> => {
-  const fileName = `logo.png`;
-  const logoRef = ref(storage, `clubs/${clubId}/public/${fileName}`);
-  await deleteObject(logoRef).catch(() => {});
 };
 
 export const uploadBannerImage = async (
@@ -203,6 +247,43 @@ export const uploadBannerImage = async (
   );
   await uploadBytes(newBannerRef, file);
   return getDownloadURL(newBannerRef);
+};
+
+export const uploadWebsiteImage = async (
+  clubId: string | undefined,
+  file: File,
+  type: "banner" | "gallery" | "event"
+): Promise<string> => {
+  if (!clubId) return "";
+  const fileNameWithDate = `${Date.now()}-${file.name}`;
+  const storageRef = ref(
+    storage,
+    `clubs/${clubId}/website/${type}/${fileNameWithDate}`
+  );
+  await uploadBytes(storageRef, file);
+  return getDownloadURL(storageRef);
+};
+
+export const uploadCardImage = async (
+  websiteId: string,
+  sectionId: string,
+  file: File
+): Promise<string> => {
+  // Validate file size/type here if needed
+  const fileName = `${Date.now()}-${file.name}`;
+  const imageRef = ref(
+    storage,
+    `clubWebsites/${websiteId}/sections/${sectionId}/cards/${fileName}`
+  );
+  await uploadBytes(imageRef, file);
+  return getDownloadURL(imageRef);
+};
+
+// DELETE
+export const deleteLogoImage = async (clubId: string): Promise<void> => {
+  const fileName = `logo.png`;
+  const logoRef = ref(storage, `clubs/${clubId}/public/${fileName}`);
+  await deleteObject(logoRef).catch(() => {});
 };
 
 export const deleteBannerImage = async (clubId: string): Promise<void> => {
@@ -239,4 +320,47 @@ export const deleteGalleryImage = async (
     updatedAt: serverTimestamp(),
   });
   return { ...websiteData, gallery: updatedGallery };
+};
+
+// Delete a section (and all its cards)
+export const deleteSection = async (websiteId: string, sectionId: string) => {
+  const sectionRef = doc(db, `clubWebsites/${websiteId}/sections/${sectionId}`);
+  await deleteDoc(sectionRef);
+};
+
+// Delete a card from a section
+export const deleteCard = async (
+  websiteId: string,
+  sectionId: string,
+  cardId: string
+) => {
+  const sectionRef = doc(db, `clubWebsites/${websiteId}/sections/${sectionId}`);
+  const sectionSnap = await getDoc(sectionRef);
+  if (!sectionSnap.exists()) throw new Error("Section not found");
+  const section = sectionSnap.data() as ClubWebsiteSection;
+  const updatedCards = (section.cards || []).filter(
+    (c: ClubWebsiteCard) => c.id !== cardId
+  );
+  await updateDoc(sectionRef, {
+    cards: updatedCards,
+    updatedAt: serverTimestamp(),
+  });
+};
+
+// Reorder sections (update 'order' field for all)
+export const reorderSections = async (
+  websiteId: string,
+  orderedSectionIds: string[]
+) => {
+  const batch = [] as Promise<void>[];
+  orderedSectionIds.forEach((sectionId, idx) => {
+    const sectionRef = doc(
+      db,
+      `clubWebsites/${websiteId}/sections/${sectionId}`
+    );
+    batch.push(
+      updateDoc(sectionRef, { order: idx + 1, updatedAt: serverTimestamp() })
+    );
+  });
+  await Promise.all(batch);
 };

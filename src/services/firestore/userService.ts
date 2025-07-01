@@ -1,7 +1,7 @@
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { db } from "../../config/firebase";
 import { createAuthUser, sendPasswordReset } from "./authService";
-import { UserData } from "./types";
+import { UserData } from "./types/user";
 
 export const createUserProfile = async (
   userId: string,

@@ -12,7 +12,7 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../../config/firebase";
-import { ClubData, ClubSubscriptionData, StripeSessionData } from "./types";
+import { ClubData, ClubSubscriptionData } from "./types/club";
 
 // Save subscription data
 export const saveSubscription = async (
@@ -73,23 +73,6 @@ export const updateClubSubscription = async (
   });
 
   console.log("Club subscription updated:", clubId);
-};
-
-// Update club with Stripe session info
-export const updateClubStripeSession = async (
-  clubId: string,
-  sessionData: Partial<StripeSessionData>
-) => {
-  const clubRef = doc(db, "clubs", clubId);
-
-  await updateDoc(clubRef, {
-    stripeSession: {
-      ...sessionData,
-      createdAt: serverTimestamp(),
-    },
-  });
-
-  console.log("Club Stripe session updated:", clubId);
 };
 
 // Get subscription by ID

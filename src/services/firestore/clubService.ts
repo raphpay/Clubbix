@@ -10,7 +10,7 @@ import {
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { nanoid } from "nanoid";
 import { db, storage } from "../../config/firebase";
-import { ClubData } from "./types";
+import { ClubData } from "./types/club";
 
 export const generateInviteCode = () => {
   return nanoid(8).toUpperCase();

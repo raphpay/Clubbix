@@ -11,7 +11,7 @@ import {
   sendPasswordReset,
   updateUserEmail,
 } from "../services/firestore/authService";
-import { UserData } from "../services/firestore/types";
+import { UserData } from "../services/firestore/types/user";
 import { updateUserProfile } from "../services/firestore/userService";
 import { createCustomerPortalSession } from "../services/stripe";
 

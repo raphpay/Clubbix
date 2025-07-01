@@ -1,7 +1,8 @@
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, serverTimestamp, Timestamp } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "../components/ui/Button";
+import SectionCardManager from "../components/website/SectionCardManagement";
 import { db } from "../config/firebase";
 import { useClub } from "../hooks/useClub";
 import {
@@ -13,11 +14,10 @@ import {
   deleteLogoImage,
   getClubWebsiteContent,
   updateClubWebsiteContent,
-  updateEvent,
   uploadBannerImage,
   uploadLogoImage,
 } from "../services/firestore/clubWebsiteService";
-import { ClubWebsiteContent } from "../services/firestore/types";
+import { ClubWebsiteContent } from "../services/firestore/types/clubWebsite";
 
 const LOGO_SIZE = 256; // px, square
 const BANNER_WIDTH = 1200;
@@ -55,12 +55,12 @@ const ClubWebsiteManager: React.FC = () => {
             events: [],
           };
           await createClubWebsiteContent(club.id, defaultContent);
-          const newContent = {
+          const newContent: ClubWebsiteContent = {
             ...defaultContent,
             id: club.id,
             clubId: club.id,
-            updatedAt: new Date(),
-            createdAt: new Date(),
+            updatedAt: serverTimestamp() as Timestamp,
+            createdAt: serverTimestamp() as Timestamp,
           };
           setContent(newContent);
           setLocalContent(newContent);
@@ -114,7 +114,7 @@ const ClubWebsiteManager: React.FC = () => {
         return;
       }
       try {
-        const url = await uploadLogoImage(club.id, file);
+        const url = await uploadLogoImage(club.id ?? "clubWithNoId", file);
         setLocalContent((prev) => (prev ? { ...prev, logoUrl: url } : prev));
       } catch (err) {
         setError(t("error.upload"));
@@ -156,7 +156,10 @@ const ClubWebsiteManager: React.FC = () => {
         return;
       }
       try {
-        const imageUrl = await uploadBannerImage(club.id, file);
+        const imageUrl = await uploadBannerImage(
+          club.id ?? "clubWithNoId",
+          file
+        );
         handleContentChange({ bannerImageUrl: imageUrl });
       } catch (err) {
         setError(t("error.upload"));
@@ -437,7 +440,7 @@ const ClubWebsiteManager: React.FC = () => {
         </section>
 
         {/* Gallery Section */}
-        <section className="mb-8">
+        {/* <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4 dark:text-gray-100">
             {t("gallery.title")}
           </h2>
@@ -502,10 +505,10 @@ const ClubWebsiteManager: React.FC = () => {
               </p>
             )}
           </div>
-        </section>
+        </section> */}
 
         {/* Events Section */}
-        <section>
+        {/* <section>
           <h2 className="text-2xl font-semibold mb-4 dark:text-gray-100">
             {t("event.title")}
           </h2>
@@ -595,6 +598,14 @@ const ClubWebsiteManager: React.FC = () => {
           >
             {t("event.addEvent")}
           </button>
+        </section> */}
+
+        {/* Sections & Cards Management Section */}
+        <section className="mb-8 pt-4">
+          <h2 className="text-2xl font-semibold mb-4 dark:text-gray-100">
+            {t("sectionAndCards.title")}
+          </h2>
+          {club?.id && <SectionCardManager websiteId={club.id} />}
         </section>
       </div>
     </div>
