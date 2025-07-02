@@ -19,7 +19,33 @@
     },
     "roles": {
       "admin": "Administrateur",
-      "member": "Membre"
+      "member": "Membre",
+      "treasurer": "Trésorier",
+      "rider": "Rider",
+      "coach": "Coach",
+      "parent": "Parent"
+    },
+    "status": {
+      "active": "Actif",
+      "inactive": "Inactif",
+      "pending": "En cours",
+      "banned": "Bannis",
+      "undefined": "Indéfini"
+    },
+    "loading": "Chargement des membres...",
+    "searchPlaceholder": "Rechercher un membre",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "empty": "Pas de membre",
+    "filterRole": "Filtrer par rôle",
+    "filterStatus": "Filtrer par statut",
+    "page": "Page {{page}}",
+    "total": "{{count}} membres",
+    "noResult": "Pas de résultat",
+    "sort": {
+      "nameAsc": "Nom (A-Z)",
+      "joinDateDesc": "Date d'entrée (Plus récent)",
+      "statusAsc": "Statut"
     }
   },
   "form": {
@@ -75,6 +101,8 @@
     "name": "Nom",
     "email": "Email",
     "role": "Rôle",
-    "actions": "Actions"
+    "actions": "Actions",
+    "status": "Statut",
+    "joinDate": "Date d'éntrée"
   }
 }
