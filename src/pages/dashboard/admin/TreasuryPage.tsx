@@ -32,7 +32,6 @@ const TreasuryPage: React.FC = () => {
       try {
         setLoading(true);
         const fetchedEntries = await getTreasuryEntries(club.id);
-        console.log("fetchedEntries", fetchedEntries);
         setEntries(fetchedEntries);
       } catch (err) {
         setError("Failed to fetch treasury entries");

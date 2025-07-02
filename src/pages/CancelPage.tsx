@@ -1,12 +1,10 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { useClub } from "../hooks/useClub";
 
 const CancelPage: React.FC = () => {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation("subscription");
   const navigate = useNavigate();
-  const { club } = useClub();
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -43,7 +41,7 @@ const CancelPage: React.FC = () => {
                 onClick={() => navigate("/admin/dashboard")}
                 className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
               >
-                {t("cancel.dashboardNav")}
+                {t("cancel.dahsboardNav")}
               </button>
             </div>
           </div>

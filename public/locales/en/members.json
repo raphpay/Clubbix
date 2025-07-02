@@ -19,9 +19,34 @@
     },
     "roles": {
       "admin": "Admin",
-      "member": "Member"
+      "member": "Member",
+      "treasurer": "Treasurer",
+      "rider": "Rider",
+      "coach": "Coach",
+      "parent": "Parent"
     },
-    "loading": "Loading members..."
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "pending": "Pending",
+      "banned": "Banned",
+      "undefined": "Undefined"
+    },
+    "loading": "Loading members...",
+    "searchPlaceholder": "Search for a member",
+    "next": "Next",
+    "previous": "Previous",
+    "empty": "No members",
+    "filterRole": "Filter by role",
+    "filterByStatus": "Filter by status",
+    "page": "Page {{page}}",
+    "total": "{{count}} members",
+    "noResults": "No results",
+    "sort": {
+      "nameAsc": "Name (A-Z)",
+      "joinDateDesc": "Join date (Newest)",
+      "statusAsc": "Status"
+    }
   },
   "form": {
     "title": {
@@ -76,6 +101,10 @@
     "name": "Name",
     "email": "Email",
     "role": "Role",
-    "actions": "Actions"
+    "status": "Status",
+    "joinDate": "Join date"
+  },
+  "error": {
+    "load": "Loading error"
   }
 }
