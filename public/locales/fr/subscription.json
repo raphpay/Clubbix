@@ -9,7 +9,7 @@
   "cancel": {
     "paymentCancelled": "Paiement annulé",
     "message": "Votre paiement a été annulé. Vous pouvez réessayer ou contacter le support\nsi vous avez besoin d'aide.",
-    "tryAgain": "réessayer",
+    "tryAgain": "Réessayer",
     "dahsboardNav": "Aller au Dashboard"
   }
 }

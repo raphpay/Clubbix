@@ -103,5 +103,8 @@
     "role": "Role",
     "status": "Status",
     "joinDate": "Join date"
+  },
+  "error": {
+    "load": "Loading error"
   }
 }
