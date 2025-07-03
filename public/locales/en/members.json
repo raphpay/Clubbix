@@ -73,7 +73,11 @@
         "label": "Role",
         "options": {
           "admin": "Admin",
-          "member": "Member"
+          "member": "Member",
+          "coach": "Coach",
+          "parent": "Parent",
+          "rider": "Rider",
+          "treasurer": "Treasurer"
         }
       }
     },
@@ -102,7 +106,8 @@
     "email": "Email",
     "role": "Role",
     "status": "Status",
-    "joinDate": "Join date"
+    "joinDate": "Join date",
+    "actions": "Actions"
   },
   "error": {
     "load": "Loading error"
