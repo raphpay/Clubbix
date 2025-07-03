@@ -113,7 +113,7 @@ function InviteMembersPage() {
 
   function handleCopyInvite(code: string) {
     navigator.clipboard.writeText(
-      `${window.location.origin}/register?invite=${code}`
+      `${window.location.origin}/signup?invite=${code}`
     );
     toast.success(t("toast.copied", "Invite link copied"));
   }

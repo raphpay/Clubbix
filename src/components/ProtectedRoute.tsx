@@ -4,7 +4,7 @@ import { useAuth } from "../hooks/useAuth";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
-  requiredRole?: "admin" | "member";
+  requiredRole?: "admin" | "member" | string[];
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
@@ -18,8 +18,16 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  if (requiredRole && user.role !== requiredRole) {
-    return <Navigate to="/" replace />;
+  if (requiredRole) {
+    if (Array.isArray(requiredRole)) {
+      if (!requiredRole.includes(user.role)) {
+        return <Navigate to="/" replace />;
+      }
+    } else {
+      if (user.role !== requiredRole) {
+        return <Navigate to="/" replace />;
+      }
+    }
   }
 
   return <>{children}</>;

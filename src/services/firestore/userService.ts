@@ -1,6 +1,6 @@
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { db } from "../../config/firebase";
-import { createAuthUser, sendPasswordReset } from "./authService";
+import { sendPasswordReset } from "./authService";
 import { UserData } from "./types/user";
 
 export const createUserProfile = async (
@@ -37,18 +37,13 @@ export const getMembers = async (clubId: string): Promise<UserData[]> => {
 };
 
 export const addMember = async (
+  userId: string,
   clubId: string,
   userData: Omit<UserData, "createdAt">
-): Promise<string> => {
+): Promise<void> => {
   try {
-    // Generate a temporary password
-    const tempPassword = Math.random().toString(36).slice(-8);
-
-    // Create the user in Firebase Auth
-    const authUser = await createAuthUser(userData.email, tempPassword);
-
     // Create the user profile in Firestore
-    const userRef = doc(db, "users", authUser.uid);
+    const userRef = doc(db, "users", userId);
     await setDoc(userRef, {
       ...userData,
       createdAt: serverTimestamp(),
@@ -62,15 +57,13 @@ export const addMember = async (
     await setDoc(
       clubRef,
       {
-        members: [...(clubData?.members || []), authUser.uid],
+        members: [...(clubData?.members || []), userId],
       },
       { merge: true }
     );
 
     // Send password reset email to the new user
     await sendPasswordReset(userData.email);
-
-    return authUser.uid;
   } catch (error: any) {
     if (error.message === "Email already in use") {
       // If the user already exists, just add them to the club
