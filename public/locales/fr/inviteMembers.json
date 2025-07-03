@@ -1,10 +1,12 @@
 {
   "title": "Inviter des membres",
   "createTitle": "Créer un code",
-  "type": "Type d'invitation",
-  "singleUse": "Usage unique",
-  "multiUse": "Multi-usage",
-  "unlimited": "Illlimité",
+  "type": {
+    "title": "Type d'invitation",
+    "single": "Usage unique",
+    "multi": "Multi-usage",
+    "unlimited": "Illlimité"
+  },
   "tags": "Tags",
   "maxUses": "Limite d'utilisation",
   "expiresAt": "Date d'expiration",
@@ -31,6 +33,20 @@
     "delete": "Supprimer",
     "cancel": "Annuler",
     "saving": "Sauvegarde en cours...",
-    "save": "Sauvegarder"
+    "save": "Sauvegarder",
+    "confirm": "Confirmer"
+  },
+  "status": {
+    "revoked": "Révoqué",
+    "usedUp": "Utilisé",
+    "active": "Actif"
+  },
+  "deleteModal": {
+    "title": "Êtes-vous sûr de vouloir supprimer ce code ?",
+    "message": "La suppression est définitive"
+  },
+  "revokeModal": {
+    "title": "Êtes-vous sûr de vouloir révoquer ce code ?",
+    "message": "Cette action est définitive"
   }
 }

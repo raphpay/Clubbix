@@ -1,10 +1,12 @@
 {
   "title": "Invite members",
   "createTitle": "Create invite",
-  "type": "Invite type",
-  "singleUse": "Single-use",
-  "multiUse": "Multi-use",
-  "unlimited": "Unlimited",
+  "type": {
+    "title": "Invite type",
+    "single": "Single-use",
+    "multi": "Multi-use",
+    "unlimited": "Unlimited"
+  },
   "tags": "Tags",
   "maxUses": "Usage Limit",
   "expiresAt": "Expiration Date",
@@ -31,6 +33,20 @@
     "delete": "Delete",
     "cancel": "Cancel",
     "saving": "Saving...",
-    "save": "Save"
+    "save": "Save",
+    "confirm": "Confirm"
+  },
+  "status": {
+    "revoked": "Revoked",
+    "usedUp": "Used up",
+    "active": "Active"
+  },
+  "deleteModal": {
+    "title": "Are you sure you want to delete this code?",
+    "message": "Deletion is permanent"
+  },
+  "revokeModal": {
+    "title": "Are you sure you want to revoke this code?",
+    "message": "This action is permanent"
   }
 }

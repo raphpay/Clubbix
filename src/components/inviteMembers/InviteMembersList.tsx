@@ -26,7 +26,7 @@ const InviteMembersList: React.FC<InviteMemberListProps> = ({
   const [loading, setLoading] = useState<boolean>(false);
 
   function getStatus(invite: InviteData) {
-    if (invite.status === "revoked") return t("invite.revoked");
+    if (invite.status === "revoked") return t("status.revoked");
     if (invite.expiresAt && new Date(invite.expiresAt) < new Date())
       return t("invite.expired");
     if (
@@ -34,8 +34,8 @@ const InviteMembersList: React.FC<InviteMemberListProps> = ({
       invite.maxUses &&
       invite.used >= invite.maxUses
     )
-      return t("invite.usedUp");
-    return t("invite.active");
+      return t("status.usedUp");
+    return t("status.active");
   }
 
   function handleCopy(code: string) {
@@ -115,25 +115,39 @@ const InviteMembersList: React.FC<InviteMemberListProps> = ({
               }
             >
               <td className="px-6 py-4 whitespace-nowrap text-center">
-                {invite.code}
+                <div className="text-sm font-medium text-gray-900 dark:text-gray-200">
+                  {invite.code}
+                </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-center">
-                {invite.role}
+                <div className="text-sm font-medium text-gray-900 dark:text-gray-200">
+                  {t(`role.${invite.role}`)}
+                </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-center">
-                {invite.type}
+                <div className="text-sm font-medium text-gray-900 dark:text-gray-200">
+                  {t(`type.${invite.type}`)}
+                </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-center">
-                {invite.type === "unlimited"
-                  ? "∞"
-                  : `${invite.used}/${invite.maxUses || 1}`}
+                <div className="text-sm font-medium text-gray-900 dark:text-gray-200">
+                  {invite.type === "unlimited"
+                    ? "∞"
+                    : `${invite.used}/${invite.maxUses || 1}`}
+                </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-center">
-                {invite.expiresAt
-                  ? new Date(invite.expiresAt).toLocaleDateString()
-                  : t("invite.noExpiration", "-")}
+                <div className="text-sm font-medium text-gray-900 dark:text-gray-200">
+                  {invite.expiresAt
+                    ? new Date(invite.expiresAt).toLocaleDateString()
+                    : t("invite.noExpiration", "-")}
+                </div>
               </td>
-              <td>{getStatus(invite)}</td>
+              <td>
+                <div className="text-sm font-medium text-gray-900 dark:text-gray-200">
+                  {getStatus(invite)}
+                </div>
+              </td>
               <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                 <div className="flex justify-end gap-2">
                   <Button size="sm" onClick={() => handleCopy(invite.code)}>
