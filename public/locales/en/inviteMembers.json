@@ -50,5 +50,10 @@
     "title": "Are you sure you want to revoke this code?",
     "message": "This action is permanent"
   },
-  "noExpiration": "No expiration"
+  "noExpiration": "No expiration",
+  "toast": {
+    "copied": "Link copied",
+    "revoked": "Code revoked",
+    "deleted": "Code deleted"
+  }
 }

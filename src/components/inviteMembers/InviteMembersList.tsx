@@ -11,6 +11,7 @@ interface InviteMemberListProps {
   onEditInvite: (invite: InviteData) => void;
   onDeleteInvite: (invite: InviteData) => void;
   onRevokeInvite: (invite: InviteData) => void;
+  onCopyInvite: (code: string) => void;
 }
 
 const InviteMembersList: React.FC<InviteMemberListProps> = ({
@@ -18,6 +19,7 @@ const InviteMembersList: React.FC<InviteMemberListProps> = ({
   onEditInvite,
   onDeleteInvite,
   onRevokeInvite,
+  onCopyInvite,
 }) => {
   const { t } = useTranslation("inviteMembers");
   const { club } = useClub();
@@ -44,12 +46,6 @@ const InviteMembersList: React.FC<InviteMemberListProps> = ({
     )
       return t("status.usedUp");
     return t("status.active");
-  }
-
-  function handleCopy(code: string) {
-    navigator.clipboard.writeText(
-      `${window.location.origin}/register?invite=${code}`
-    );
   }
 
   function isExpiringSoon(invite: InviteData) {
@@ -163,7 +159,7 @@ const InviteMembersList: React.FC<InviteMemberListProps> = ({
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                 <div className="flex justify-end gap-2">
-                  <Button size="sm" onClick={() => handleCopy(invite.code)}>
+                  <Button size="sm" onClick={() => onCopyInvite(invite.code)}>
                     {t("buttons.copy")}
                   </Button>
                   <Button

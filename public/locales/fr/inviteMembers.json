@@ -50,5 +50,10 @@
     "title": "Êtes-vous sûr de vouloir révoquer ce code ?",
     "message": "Cette action est définitive"
   },
-  "noExpiration": "Pas d'expiration"
+  "noExpiration": "Pas d'expiration",
+  "toast": {
+    "copied": "Lien copié",
+    "revoked": "Code révoqué",
+    "deleted": "Code supprimé"
+  }
 }

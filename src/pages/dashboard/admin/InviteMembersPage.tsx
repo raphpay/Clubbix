@@ -1,6 +1,7 @@
 import { nanoid } from "nanoid";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { toast, Toaster } from "sonner";
 import CreateInviteCodeModal from "../../../components/inviteMembers/CreateInviteCodeModal";
 import InviteMembersList from "../../../components/inviteMembers/InviteMembersList";
 import RevokeDeleteModal from "../../../components/inviteMembers/RevokeDeleteModal";
@@ -76,6 +77,8 @@ function InviteMembersPage() {
     try {
       await createInvite(club.id, invite);
       setIsModalOpen(false);
+      toast.success(t("toast.added", "Invite created successfully"));
+      setReloadKey((k) => k + 1);
     } catch (e: any) {
       setError(e.message);
     }
@@ -92,8 +95,14 @@ function InviteMembersPage() {
 
   async function handleConfirmModal() {
     if (!club?.id || !modal.invite) return;
-    if (modal.type === "delete") await deleteInvite(club.id, modal.invite.code);
-    if (modal.type === "revoke") await revokeInvite(club.id, modal.invite.code);
+    if (modal.type === "delete") {
+      await deleteInvite(club.id, modal.invite.code);
+      toast.success(t("toast.deleted", "Invite deleted"));
+    }
+    if (modal.type === "revoke") {
+      await revokeInvite(club.id, modal.invite.code);
+      toast.success(t("toast.revoked", "Invite revoked"));
+    }
     setModal({ type: "delete", invite: null });
     setReloadKey((k) => k + 1);
   }
@@ -102,8 +111,16 @@ function InviteMembersPage() {
     setModal({ type: "delete", invite: null });
   }
 
+  function handleCopyInvite(code: string) {
+    navigator.clipboard.writeText(
+      `${window.location.origin}/register?invite=${code}`
+    );
+    toast.success(t("toast.copied", "Invite link copied"));
+  }
+
   return (
     <div className="space-y-6">
+      <Toaster />
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
           {t("title")}
@@ -115,6 +132,7 @@ function InviteMembersPage() {
           onEditInvite={() => {}}
           onDeleteInvite={handleDeleteInvite}
           onRevokeInvite={handleRevokeInvite}
+          onCopyInvite={handleCopyInvite}
           key={reloadKey}
         />
       </div>
