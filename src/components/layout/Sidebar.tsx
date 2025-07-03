@@ -15,6 +15,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
 
   const adminNavItems = [
     { path: "/admin/dashboard/members", icon: Users, label: t("members") },
+    {
+      path: "/admin/dashboard/invites",
+      icon: User,
+      label: t("inviteMembers"),
+    },
     { path: "/admin/dashboard/treasury", icon: Wallet, label: t("treasury") },
     { path: "/admin/dashboard/website", icon: Globe, label: t("website") },
     { path: "/admin/dashboard/events", icon: Calendar, label: t("events") },

@@ -1,0 +1,36 @@
+{
+  "title": "Invite members",
+  "createTitle": "Create invite",
+  "type": "Invite type",
+  "singleUse": "Single-use",
+  "multiUse": "Multi-use",
+  "unlimited": "Unlimited",
+  "tags": "Tags",
+  "maxUses": "Usage Limit",
+  "expiresAt": "Expiration Date",
+  "role": {
+    "selectRole": "Select role",
+    "member": "Member",
+    "coach": "Coach",
+    "parent": "Parent"
+  },
+  "list": {
+    "code": "Code",
+    "role": "Role",
+    "type": "Type",
+    "usage": "Usage",
+    "expiration": "Expiration",
+    "status": "Status",
+    "actions": "Actions",
+    "empty": "No invite codes"
+  },
+  "buttons": {
+    "create": "Create Invite",
+    "copy": "Copy Link",
+    "revoke": "Revoke",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "saving": "Saving...",
+    "save": "Save"
+  }
+}

@@ -6,7 +6,6 @@ export interface ClubData {
   formattedName: string;
   logoUrl?: string;
   createdBy: string;
-  inviteCode: string;
   members: string[];
   createdAt: Timestamp;
   subscription?: ClubSubscriptionData;
@@ -25,4 +24,16 @@ export interface ClubSubscriptionData {
   cancelAtPeriodEnd: boolean;
   createdAt: Timestamp;
   updatedAt: Timestamp;
+}
+
+export interface InviteData {
+  code: string;
+  type: "single" | "multi" | "unlimited";
+  maxUses?: number;
+  used: number;
+  role: string;
+  tags?: string[];
+  expiresAt?: Timestamp;
+  createdAt: Timestamp;
+  status: "active" | "revoked" | "expired" | "used-up";
 }

@@ -19,6 +19,7 @@ import CancelPage from "./pages/CancelPage";
 import ClubWebsite from "./pages/ClubWebsite";
 import ClubWebsiteManager from "./pages/ClubWebsiteManager";
 import AdminDashboard from "./pages/dashboard/admin/AdminDashboard";
+import InviteMembersPage from "./pages/dashboard/admin/InviteMembersPage";
 import MembersPage from "./pages/dashboard/admin/MembersPage";
 import TreasuryPage from "./pages/dashboard/admin/TreasuryPage";
 import EventsPage from "./pages/dashboard/EventsPage";
@@ -81,6 +82,7 @@ const AppContent: React.FC = () => {
         <Route index element={<AdminDashboard />} />
         <Route path="treasury" element={<TreasuryPage />} />
         <Route path="members" element={<MembersPage />} />
+        <Route path="invites" element={<InviteMembersPage />} />
         <Route path="events" element={<EventsPage />} />
         <Route path="website" element={<ClubWebsiteManager />} />
         <Route path="profile" element={<ProfilePage />} />

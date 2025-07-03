@@ -1,0 +1,36 @@
+{
+  "title": "Inviter des membres",
+  "createTitle": "Créer un code",
+  "type": "Type d'invitation",
+  "singleUse": "Usage unique",
+  "multiUse": "Multi-usage",
+  "unlimited": "Illlimité",
+  "tags": "Tags",
+  "maxUses": "Limite d'utilisation",
+  "expiresAt": "Date d'expiration",
+  "role": {
+    "selectRole": "Selectionner le rôle",
+    "member": "Membre",
+    "coach": "Coach",
+    "parent": "Parent"
+  },
+  "list": {
+    "code": "Code",
+    "role": "Rôle",
+    "type": "Type",
+    "usage": "Usage",
+    "expiration": "Expiration",
+    "status": "Statut",
+    "actions": "Actions",
+    "empty": "Pas de code d'invitation"
+  },
+  "buttons": {
+    "create": "Créer un code",
+    "copy": "Copier le lien",
+    "revoke": "Revoquer",
+    "delete": "Supprimer",
+    "cancel": "Annuler",
+    "saving": "Sauvegarde en cours...",
+    "save": "Sauvegarder"
+  }
+}
