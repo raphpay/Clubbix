@@ -1,3 +1,4 @@
+import { Timestamp } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useClub } from "../../hooks/useClub";
@@ -25,10 +26,17 @@ const InviteMembersList: React.FC<InviteMemberListProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
+  function convertToDate(value: string | Timestamp | undefined): Date | null {
+    if (!value) return null;
+    if (typeof value === "string") return new Date(value);
+    if (value instanceof Timestamp) return value.toDate();
+    return null;
+  }
+
   function getStatus(invite: InviteData) {
     if (invite.status === "revoked") return t("status.revoked");
-    if (invite.expiresAt && new Date(invite.expiresAt) < new Date())
-      return t("invite.expired");
+    const expiresDate = convertToDate(invite.expiresAt);
+    if (expiresDate && expiresDate < new Date()) return t("status.expired");
     if (
       invite.type !== "unlimited" &&
       invite.maxUses &&
@@ -46,7 +54,9 @@ const InviteMembersList: React.FC<InviteMemberListProps> = ({
 
   function isExpiringSoon(invite: InviteData) {
     if (!invite.expiresAt) return false;
-    const diff = new Date(invite.expiresAt).getTime() - Date.now();
+    const expiresDate = convertToDate(invite.expiresAt);
+    if (!expiresDate) return false;
+    const diff = expiresDate.getTime() - Date.now();
     return diff < 1000 * 60 * 60 * 24 * 3 && diff > 0;
   }
 
@@ -138,9 +148,12 @@ const InviteMembersList: React.FC<InviteMemberListProps> = ({
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-center">
                 <div className="text-sm font-medium text-gray-900 dark:text-gray-200">
-                  {invite.expiresAt
-                    ? new Date(invite.expiresAt).toLocaleDateString()
-                    : t("invite.noExpiration", "-")}
+                  {(() => {
+                    const expiresDate = convertToDate(invite.expiresAt);
+                    return expiresDate
+                      ? expiresDate.toLocaleDateString()
+                      : t("noExpiration", "-");
+                  })()}
                 </div>
               </td>
               <td>

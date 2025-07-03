@@ -39,7 +39,8 @@
   "status": {
     "revoked": "Revoked",
     "usedUp": "Used up",
-    "active": "Active"
+    "active": "Active",
+    "expired": "Expired"
   },
   "deleteModal": {
     "title": "Are you sure you want to delete this code?",
@@ -48,5 +49,6 @@
   "revokeModal": {
     "title": "Are you sure you want to revoke this code?",
     "message": "This action is permanent"
-  }
+  },
+  "noExpiration": "No expiration"
 }
