@@ -9,12 +9,17 @@ import {
   registerWithEmailAndPassword,
 } from "../services/auth";
 import {
+  addMember,
   checkClubNameExists,
-  createClub,
   createUserProfile,
-  joinClub,
-  uploadClubLogo,
 } from "../services/firestore";
+import {
+  createClub,
+  getInviteByCode,
+  updateInvite,
+  uploadClubLogo,
+  validateInvite,
+} from "../services/firestore/clubService";
 import { createCheckoutSession } from "../services/stripe";
 import { useRegistrationStore } from "../store/useRegistrationStore";
 import LabelInput from "./inputs/LabelInput";
@@ -38,6 +43,12 @@ const RegistrationForm = () => {
   const [authError, setAuthError] = useState<string | null>(null);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const [inviteStatus, setInviteStatus] = useState<{
+    valid: boolean;
+    error: string | null;
+    invite?: any;
+    clubId?: string;
+  } | null>(null);
 
   // Handle URL parameters for plan and billing cycle
   useEffect(() => {
@@ -58,32 +69,54 @@ const RegistrationForm = () => {
     }
   }, [searchParams, setSelectedPlan, setSelectedBillingCycle, setRole]);
 
+  // Pre-fill invite code from URL
+  useEffect(() => {
+    const invite = searchParams.get("invite");
+    if (invite) {
+      setRole("member");
+      setFormData({ inviteCode: invite });
+    }
+  }, [searchParams, setRole, setFormData]);
+
+  // Validate invite code when entered
+  useEffect(() => {
+    async function checkInvite() {
+      if (role !== "member" || !formData.inviteCode) {
+        setInviteStatus(null);
+        return;
+      }
+      setInviteStatus(null);
+      const result = await getInviteByCode(formData.inviteCode.trim());
+      if (!result) {
+        setInviteStatus({ valid: false, error: "Invalid invite code" });
+        return;
+      }
+      const { invite, clubId } = result;
+      const validation = validateInvite(invite);
+      setInviteStatus({ ...validation, invite, clubId });
+    }
+    checkInvite();
+  }, [formData.inviteCode, role]);
+
   const validateInitialStep = async () => {
     const newErrors: Record<string, string> = {};
-
     if (role === "admin") {
-      if (!formData.clubName) {
+      if (!formData.clubName)
         newErrors.clubName = t("register:errors.clubNameRequired");
-      } else {
+      else {
         const exists = await checkClubNameExists(formData.clubName);
-        if (exists) {
-          newErrors.clubName = t("register:errors.clubNameTaken");
-        }
+        if (exists) newErrors.clubName = t("register:errors.clubNameTaken");
       }
-
-      // Validate that admin users have selected a plan and billing cycle
-      if (!selectedPlan) {
-        newErrors.plan = t("register:errors.planRequired");
-      }
-      if (!selectedBillingCycle) {
+      if (!selectedPlan) newErrors.plan = t("register:errors.planRequired");
+      if (!selectedBillingCycle)
         newErrors.billing = t("register:errors.billingRequired");
-      }
     }
-
-    if (role === "member" && !formData.inviteCode) {
-      newErrors.inviteCode = t("register:errors.inviteCodeRequired");
+    if (role === "member") {
+      if (!formData.inviteCode)
+        newErrors.inviteCode = t("register:errors.inviteCodeRequired");
+      else if (!inviteStatus || !inviteStatus.valid)
+        newErrors.inviteCode = inviteStatus?.error || "Invalid invite code";
     }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -114,92 +147,121 @@ const RegistrationForm = () => {
   const handleDetailsSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setAuthError(null);
-
-    if (validateDetailsStep()) {
-      setIsLoading(true);
-      try {
+    if (!validateDetailsStep()) return;
+    setIsLoading(true);
+    try {
+      console.log("role", role);
+      if (role === "member") {
+        // Invite code registration flow
+        if (
+          !inviteStatus?.valid ||
+          !inviteStatus.invite ||
+          !inviteStatus.clubId
+        ) {
+          setAuthError(inviteStatus?.error || "Invalid invite code");
+          setIsLoading(false);
+          return;
+        }
+        try {
+          // Register user with Firebase auth
+          console.log("1");
+          const userCredential = await registerWithEmailAndPassword(
+            formData.email,
+            formData.password
+          );
+          console.log("2", userCredential);
+          const userId = userCredential.user.uid;
+          console.log("3", userId);
+          // Use addMember service
+          await addMember(userId, inviteStatus.clubId, {
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            email: formData.email,
+            role: inviteStatus.invite.role,
+            status: "active",
+            clubId: inviteStatus.clubId,
+          });
+          console.log("4");
+          // Increment invite usage
+          await updateInvite({
+            clubId: inviteStatus.clubId,
+            code: inviteStatus.invite.code,
+            data: { used: (inviteStatus.invite.used || 0) + 1 },
+          });
+          console.log("5");
+          setFormData({
+            clubName: "",
+            inviteCode: "",
+            firstName: "",
+            lastName: "",
+            email: "",
+            logo: null,
+            password: "",
+          });
+          console.log("6");
+          navigate("/member/dashboard");
+          console.log("7");
+          setIsLoading(false);
+          console.log("8");
+          return;
+        } catch (err: any) {
+          console.log("err", err);
+          if (err.message && err.message.includes("email")) {
+            setAuthError("Email already registered. Please log in.");
+            setIsLoading(false);
+            return;
+          }
+          setAuthError(getAuthErrorMessage(err));
+          setIsLoading(false);
+          return;
+        }
+      } else {
         // Register user with Firebase Auth
         const userCredential = await registerWithEmailAndPassword(
           formData.email,
           formData.password
         );
         const userId = userCredential.user.uid;
-
-        if (role === "admin") {
-          // Upload club logo if provided
-          let logoUrl: string | undefined;
-          if (formData.logo) {
-            logoUrl = await uploadClubLogo(
-              formData.clubName?.toLowerCase().replace(/\s+/g, "-") ??
-                "no-name",
-              formData.logo
-            );
-          }
-
-          // Create club
-          const clubId = await createClub({
-            name: formData.clubName!,
-            logoUrl: logoUrl ?? "",
-            createdBy: userId,
-            members: [userId],
-            formattedName: formData
-              .clubName!.toLowerCase()
-              .replace(/\s+/g, "-"),
-          });
-
-          // Create user profile
-          await createUserProfile(userId, {
-            firstName: formData.firstName,
-            lastName: formData.lastName,
-            email: formData.email,
-            role: "admin",
-            clubId,
-          });
-
-          // Create checkout session
-          const checkoutResponse = await createCheckoutSession({
-            plan: selectedPlan!,
-            billingCycle: selectedBillingCycle!,
-            userId,
-            email: formData.email,
-            clubId,
-          });
-
-          // Redirect to Stripe Checkout
-          window.location.href = checkoutResponse.url;
-        } else {
-          // Join existing club
-          const clubId = await joinClub(userId, formData.inviteCode!);
-
-          // Create user profile
-          await createUserProfile(userId, {
-            firstName: formData.firstName,
-            lastName: formData.lastName,
-            email: formData.email,
-            role: "member",
-            clubId,
-          });
+        // Upload club logo if provided
+        let logoUrl: string | undefined;
+        if (formData.logo) {
+          logoUrl = await uploadClubLogo(
+            formData.clubName?.toLowerCase().replace(/\s+/g, "-") ?? "no-name",
+            formData.logo
+          );
         }
-
-        // Reset form
-        setFormData({
-          clubName: "",
-          inviteCode: "",
-          firstName: "",
-          lastName: "",
-          email: "",
-          logo: null,
-          password: "",
+        // Create club
+        const clubId = await createClub({
+          name: formData.clubName!,
+          logoUrl: logoUrl ?? "",
+          createdBy: userId,
+          members: [userId],
+          formattedName: formData.clubName!.toLowerCase().replace(/\s+/g, "-"),
         });
-
-        // Redirect to dashboard
-        navigate(role === "admin" ? "/admin/dashboard" : "/member/dashboard");
-      } catch (error) {
-        console.log("error", error);
-        setAuthError(getAuthErrorMessage(error));
-      } finally {
-        setIsLoading(false);
+        // Create user profile
+        await createUserProfile(userId, {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          role: "admin",
+          clubId,
+        });
+        // Create checkout session
+        const checkoutResponse = await createCheckoutSession({
+          plan: selectedPlan!,
+          billingCycle: selectedBillingCycle!,
+          userId,
+          email: formData.email,
+          clubId,
+        });
+        // Redirect to Stripe Checkout
+        window.location.href = checkoutResponse.url;
       }
+    } catch (error) {
+      console.log("error", error);
+      setAuthError(getAuthErrorMessage(error));
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -309,7 +371,19 @@ const RegistrationForm = () => {
             value={formData.inviteCode || ""}
             errors={errors.inviteCode}
             onChange={(value) => setFormData({ inviteCode: value })}
+            disabled={!!searchParams.get("invite")}
           />
+        )}
+        {role === "member" && inviteStatus && inviteStatus.error && (
+          <div className="rounded-md bg-red-50 p-4">
+            <div className="flex">
+              <div className="ml-3">
+                <h3 className="text-sm font-medium text-red-800">
+                  {inviteStatus.error}
+                </h3>
+              </div>
+            </div>
+          </div>
         )}
         <div>
           <Button type="submit" variant="primary" fullWidth>

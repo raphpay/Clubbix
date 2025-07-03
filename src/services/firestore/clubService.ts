@@ -2,6 +2,7 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
   query,
   serverTimestamp,
@@ -132,4 +133,41 @@ export async function deleteInvite(clubId: string, code: string) {
 export async function revokeInvite(clubId: string, code: string) {
   const inviteRef = doc(db, `clubs/${clubId}/invites/${code}`);
   await setDoc(inviteRef, { status: "revoked" }, { merge: true });
+}
+
+// Fetch invite by code across all clubs
+export async function getInviteByCode(
+  inviteCode: string
+): Promise<{ invite: InviteData; clubId: string } | null> {
+  const clubsRef = collection(db, "clubs");
+  const clubsSnapshot = await getDocs(clubsRef);
+  for (const clubDoc of clubsSnapshot.docs) {
+    const clubId = clubDoc.id;
+    const inviteRef = doc(db, `clubs/${clubId}/invites/${inviteCode}`);
+    const inviteSnap = await getDoc(inviteRef);
+    if (inviteSnap.exists())
+      return { invite: inviteSnap.data() as InviteData, clubId };
+  }
+  return null;
+}
+
+// Validate invite status, expiry, and usage
+export function validateInvite(invite: InviteData): {
+  valid: boolean;
+  error: string | null;
+} {
+  if (!invite) return { valid: false, error: "Invalid invite code" };
+  if (invite.status === "revoked")
+    return { valid: false, error: "This invite was revoked" };
+  if (invite.status === "expired")
+    return { valid: false, error: "This invite code has expired" };
+  if (invite.status === "used-up")
+    return { valid: false, error: "Invite code has reached its usage limit" };
+  if (invite.expiresAt && invite.expiresAt.toDate() < new Date())
+    return { valid: false, error: "This invite code has expired" };
+  if (invite.maxUses !== undefined && invite.used >= invite.maxUses)
+    return { valid: false, error: "Invite code has reached its usage limit" };
+  if (invite.status !== "active")
+    return { valid: false, error: "Invalid invite code" };
+  return { valid: true, error: null };
 }
