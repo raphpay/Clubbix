@@ -156,7 +156,7 @@ const InviteMembersList: React.FC<InviteMemberListProps> = ({
                   })()}
                 </div>
               </td>
-              <td>
+              <td className="px-6 py-4 whitespace-nowrap text-center">
                 <div className="text-sm font-medium text-gray-900 dark:text-gray-200">
                   {getStatus(invite)}
                 </div>

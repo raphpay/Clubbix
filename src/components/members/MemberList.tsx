@@ -261,7 +261,7 @@ const MemberList: React.FC<MemberListProps> = ({
                     {t(`list.roles.${member.role}`)}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-center">
+                <td className="px-6 py-4 whitespace-nowrap text-right">
                   <span
                     className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
                       member.status === "active"

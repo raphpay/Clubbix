@@ -19,11 +19,11 @@ const RevokeDeleteModal: React.FC<RevokeDeleteModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
-        <h2 className="text-lg font-semibold mb-4">
+      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md border border-gray-200 dark:border-gray-700">
+        <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">
           {type === "delete" ? t("deleteModal.title") : t("revokeModal.title")}
         </h2>
-        <div className="mb-4">
+        <div className="mb-4 text-gray-700 dark:text-gray-300">
           {type === "delete"
             ? t("deleteModal.message", { code: inviteCode })
             : t("revokeModal.message", { code: inviteCode })}
