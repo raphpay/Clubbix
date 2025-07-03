@@ -1,0 +1,59 @@
+{
+  "title": "Invite members",
+  "createTitle": "Create invite",
+  "type": {
+    "title": "Invite type",
+    "single": "Single-use",
+    "multi": "Multi-use",
+    "unlimited": "Unlimited"
+  },
+  "tags": "Tags",
+  "maxUses": "Usage Limit",
+  "expiresAt": "Expiration Date",
+  "role": {
+    "selectRole": "Select role",
+    "member": "Member",
+    "coach": "Coach",
+    "parent": "Parent"
+  },
+  "list": {
+    "code": "Code",
+    "role": "Role",
+    "type": "Type",
+    "usage": "Usage",
+    "expiration": "Expiration",
+    "status": "Status",
+    "actions": "Actions",
+    "empty": "No invite codes"
+  },
+  "buttons": {
+    "create": "Create Invite",
+    "copy": "Copy Link",
+    "revoke": "Revoke",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "saving": "Saving...",
+    "save": "Save",
+    "confirm": "Confirm"
+  },
+  "status": {
+    "revoked": "Revoked",
+    "usedUp": "Used up",
+    "active": "Active",
+    "expired": "Expired"
+  },
+  "deleteModal": {
+    "title": "Are you sure you want to delete this code?",
+    "message": "Deletion is permanent"
+  },
+  "revokeModal": {
+    "title": "Are you sure you want to revoke this code?",
+    "message": "This action is permanent"
+  },
+  "noExpiration": "No expiration",
+  "toast": {
+    "copied": "Link copied",
+    "revoked": "Code revoked",
+    "deleted": "Code deleted"
+  }
+}

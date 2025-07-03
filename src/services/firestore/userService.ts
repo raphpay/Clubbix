@@ -5,7 +5,7 @@ import { UserData } from "./types/user";
 
 export const createUserProfile = async (
   userId: string,
-  userData: Omit<UserData, "createdAt">
+  userData: Omit<UserData, "createdAt" | "status">
 ): Promise<void> => {
   const userRef = doc(db, "users", userId);
   await setDoc(userRef, {

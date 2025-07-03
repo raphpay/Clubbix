@@ -1,5 +1,6 @@
 import {
   collection,
+  deleteDoc,
   doc,
   getDocs,
   query,
@@ -8,13 +9,8 @@ import {
   where,
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { nanoid } from "nanoid";
 import { db, storage } from "../../config/firebase";
-import { ClubData } from "./types/club";
-
-export const generateInviteCode = () => {
-  return nanoid(8).toUpperCase();
-};
+import { ClubData, InviteData } from "./types/club";
 
 export const uploadClubLogo = async (
   clubName: string,
@@ -93,3 +89,47 @@ export const joinClub = async (
 
   return clubId;
 };
+
+export async function createInvite(
+  clubId: string,
+  invite: Omit<InviteData, "createdAt">
+) {
+  if (!invite.role) throw new Error("Role is required");
+  const inviteId = invite.code;
+  const inviteRef = doc(db, `clubs/${clubId}/invites/${inviteId}`);
+  // Remove undefined fields
+  const inviteToSave = Object.fromEntries(
+    Object.entries(invite).filter(([_, v]) => v !== undefined)
+  );
+  await setDoc(inviteRef, inviteToSave);
+  return inviteId;
+}
+
+export async function listInvites({ clubId }: { clubId: string }) {
+  const invitesRef = collection(db, `clubs/${clubId}/invites`);
+  const snapshot = await getDocs(invitesRef);
+  return snapshot.docs.map((doc) => doc.data() as InviteData);
+}
+
+export async function updateInvite({
+  clubId,
+  code,
+  data,
+}: {
+  clubId: string;
+  code: string;
+  data: Partial<InviteData>;
+}) {
+  const inviteRef = doc(db, `clubs/${clubId}/invites/${code}`);
+  await setDoc(inviteRef, data, { merge: true });
+}
+
+export async function deleteInvite(clubId: string, code: string) {
+  const inviteRef = doc(db, `clubs/${clubId}/invites/${code}`);
+  await deleteDoc(inviteRef);
+}
+
+export async function revokeInvite(clubId: string, code: string) {
+  const inviteRef = doc(db, `clubs/${clubId}/invites/${code}`);
+  await setDoc(inviteRef, { status: "revoked" }, { merge: true });
+}

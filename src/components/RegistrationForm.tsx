@@ -12,7 +12,6 @@ import {
   checkClubNameExists,
   createClub,
   createUserProfile,
-  generateInviteCode,
   joinClub,
   uploadClubLogo,
 } from "../services/firestore";
@@ -142,7 +141,6 @@ const RegistrationForm = () => {
             name: formData.clubName!,
             logoUrl: logoUrl ?? "",
             createdBy: userId,
-            inviteCode: generateInviteCode(),
             members: [userId],
             formattedName: formData
               .clubName!.toLowerCase()
