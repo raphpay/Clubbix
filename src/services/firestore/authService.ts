@@ -44,10 +44,7 @@ export const sendPasswordReset = async (email: string) => {
   }
 };
 
-export const updateUserEmail = async (
-  newEmail: string,
-  password?: string
-): Promise<void> => {
+export const updateUserEmail = async (newEmail: string): Promise<void> => {
   const currentUser = auth.currentUser;
   if (!currentUser) {
     throw new Error("No authenticated user");

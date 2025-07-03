@@ -20,10 +20,10 @@
     "roles": {
       "admin": "Administrateur",
       "member": "Membre",
-      "treasurer": "Trésorier",
-      "rider": "Rider",
       "coach": "Coach",
-      "parent": "Parent"
+      "parent": "Parent",
+      "rider": "Rider",
+      "treasurer": "Trésorier"
     },
     "status": {
       "active": "Actif",
@@ -73,7 +73,11 @@
         "label": "Rôle",
         "options": {
           "admin": "Administrateur",
-          "member": "Membre"
+          "member": "Membre",
+          "coach": "Coach",
+          "parent": "Parent",
+          "rider": "Rider",
+          "treasurer": "Trésorier"
         }
       }
     },

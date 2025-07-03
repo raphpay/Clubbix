@@ -3,71 +3,77 @@ import { useTranslation } from "react-i18next";
 import DeleteMemberModal from "../../../components/members/DeleteMemberModal";
 import MemberForm from "../../../components/members/MemberForm";
 import MemberList from "../../../components/members/MemberList";
+import { useAuth } from "../../../hooks/useAuth";
 import { useClub } from "../../../hooks/useClub";
-import {
-  addMember,
-  deleteMember,
-  updateMember,
-} from "../../../services/firestore";
+import { deleteMember, updateMember } from "../../../services/firestore";
+
 import { UserData } from "../../../services/firestore/types/user";
 
 const MembersPage: React.FC = () => {
   const { t } = useTranslation("members");
   const { club } = useClub();
+  const { user } = useAuth();
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState<UserData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
+  const currentUserId = user?.uid;
 
-  const handleAddMember = () => {
+  function handleAddMember() {
     setSelectedMember(null);
     setIsFormOpen(true);
-  };
+  }
 
-  const handleEditMember = (member: UserData) => {
+  function handleEditMember(member: UserData) {
     setSelectedMember(member);
     setIsFormOpen(true);
-  };
+  }
 
-  const handleDeleteMember = (member: UserData) => {
+  function handleDeleteMember(member: UserData) {
     setSelectedMember(member);
     setIsDeleteModalOpen(true);
-  };
+  }
 
-  const handleFormSubmit = async (
-    data: Omit<UserData, "id" | "createdAt" | "updatedAt">
-  ) => {
+  async function handleFormSubmit(
+    data: Omit<UserData, "id" | "createdAt" | "updatedAt" | "email">
+  ) {
     if (!club?.id) return;
-
+    if (!selectedMember || !selectedMember.id) return;
+    if (
+      !["admin", "treasurer", "rider", "coach", "parent"].includes(data.role)
+    ) {
+      setError(t("form.fields.role.error"));
+      return;
+    }
+    if (
+      selectedMember.id === currentUserId &&
+      data.role !== selectedMember.role
+    ) {
+      setError(t("form.fields.role.selfChangeError"));
+      return;
+    }
     try {
-      if (selectedMember && selectedMember.id) {
-        await updateMember(club.id, selectedMember.id, data);
-      } else {
-        await addMember(club.id, data);
-      }
+      await updateMember(club.id, selectedMember.id, data);
       setIsFormOpen(false);
       setError(null);
       setReloadKey((prev) => prev + 1);
-    } catch (err) {
-      console.error("Error saving member:", err);
-      setError(t("page.error.save"));
+    } catch (err: any) {
+      setError(err.message || t("page.error.save"));
     }
-  };
+  }
 
-  const handleDeleteConfirm = async () => {
+  async function handleDeleteConfirm() {
     if (!club?.id || !selectedMember || !selectedMember.id) return;
-
     try {
       await deleteMember(club.id, selectedMember.id);
       setIsDeleteModalOpen(false);
       setError(null);
       setReloadKey((prev) => prev + 1);
     } catch (err) {
-      console.error("Error deleting member:", err);
       setError(t("page.error.delete"));
     }
-  };
+  }
 
   return (
     <div className="space-y-6">
@@ -143,11 +149,14 @@ const MembersPage: React.FC = () => {
                       : t("form.title.add")}
                   </h3>
                   <div className="mt-4">
-                    <MemberForm
-                      member={selectedMember || undefined}
-                      onSubmit={handleFormSubmit}
-                      onCancel={() => setIsFormOpen(false)}
-                    />
+                    {selectedMember ? (
+                      <MemberForm
+                        member={selectedMember}
+                        currentUserId={currentUserId}
+                        onSubmit={handleFormSubmit}
+                        onCancel={() => setIsFormOpen(false)}
+                      />
+                    ) : null}
                   </div>
                 </div>
               </div>
