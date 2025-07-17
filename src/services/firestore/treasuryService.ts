@@ -31,11 +31,13 @@ export const addTreasuryEntry = async (
   const treasuryRef = collection(db, `clubs/${clubId}/treasury`);
   const entryRef = doc(treasuryRef);
 
-  await setDoc(entryRef, {
+  const dataToSave: any = {
     ...entry,
     createdAt: serverTimestamp(),
-  });
+  };
+  if (entry.memberId) dataToSave.memberId = entry.memberId;
 
+  await setDoc(entryRef, dataToSave);
   return entryRef.id;
 };
 
