@@ -2,6 +2,7 @@ import { Timestamp } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import DeleteTreasuryModal from "../../../components/treasury/DeleteTreasuryModal";
+import { ExportCSVModal } from "../../../components/treasury/ExportCSVModal";
 import TreasuryChart from "../../../components/treasury/TreasuryChart";
 import TreasuryForm from "../../../components/treasury/TreasuryForm";
 import TreasuryList from "../../../components/treasury/TreasuryList";
@@ -24,6 +25,8 @@ const TreasuryPage: React.FC = () => {
   );
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isExportOpen, setIsExportOpen] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
 
   useEffect(() => {
     const fetchEntries = async () => {
@@ -69,9 +72,9 @@ const TreasuryPage: React.FC = () => {
     setIsDeleteOpen(false);
   };
 
-  const handleExportCSV = () => {
+  const handleExportCSV = (filteredEntries: TreasuryEntry[]) => {
+    setIsExporting(true);
     try {
-      // Create CSV header
       const headers = [
         "Date",
         "Type",
@@ -80,9 +83,7 @@ const TreasuryPage: React.FC = () => {
         "Category",
         "Member Name",
       ].join(",");
-
-      // Create CSV rows
-      const rows = entries.map((entry) => {
+      const rows = filteredEntries.map((entry) => {
         const date =
           entry.date instanceof Timestamp
             ? entry.date.toDate().toLocaleDateString()
@@ -97,11 +98,7 @@ const TreasuryPage: React.FC = () => {
           entry.memberName,
         ].join(",");
       });
-
-      // Combine header and rows
       const csvContent = [headers, ...rows].join("\n");
-
-      // Create and trigger download
       const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
       const link = document.createElement("a");
       const url = URL.createObjectURL(blob);
@@ -113,9 +110,12 @@ const TreasuryPage: React.FC = () => {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      setIsExportOpen(false);
     } catch (err) {
       setError(t("page.error.export"));
       console.error(err);
+    } finally {
+      setIsExporting(false);
     }
   };
 
@@ -169,7 +169,7 @@ const TreasuryPage: React.FC = () => {
           />
         </div>
         <div>
-          <TreasuryChart entries={entries} exportCSV={handleExportCSV} />
+          <TreasuryChart entries={entries} setIsExportOpen={setIsExportOpen} />
         </div>
       </div>
 
@@ -236,6 +236,13 @@ const TreasuryPage: React.FC = () => {
           onConfirm={() => handleDeleteEntry(selectedEntry)}
         />
       )}
+      <ExportCSVModal
+        isOpen={isExportOpen}
+        onClose={() => setIsExportOpen(false)}
+        onExport={handleExportCSV}
+        entries={entries}
+        loading={isExporting}
+      />
     </div>
   );
 };

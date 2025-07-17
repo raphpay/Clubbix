@@ -6,10 +6,13 @@
       "load": "Failed to load treasury entries",
       "save": "Failed to save treasury entry",
       "delete": "Failed to delete treasury entry",
-      "export": "Failed to export treasury entries"
+      "export": "Failed to export treasury entries",
+      "noData": "No data available with these criterias"
     },
     "buttons": {
-      "export": "Export to CSV"
+      "export": "Export to CSV",
+      "cancel": "Cancel",
+      "exportShort": "Export"
     }
   },
   "form": {
@@ -52,7 +55,9 @@
       "memberName": "Member Name",
       "startDate": "Start Date",
       "endDate": "End Date",
-      "all": "All"
+      "all": "All",
+      "incomeOnly": "Income only",
+      "expenseOnly": "Expense only"
     },
     "summary": {
       "totalIncome": "Total Income",
