@@ -6,10 +6,13 @@
       "load": "Échec du chargement des entrées de trésorerie",
       "save": "Échec de la sauvegarde de l'entrée de trésorerie",
       "delete": "Échec de la suppression de l'entrée de trésorerie",
-      "export": "Échec de l'exportation des entrées de trésorerie"
+      "export": "Échec de l'exportation des entrées de trésorerie",
+      "noData": "Pas de données disponibles pour ces critères"
     },
     "buttons": {
-      "export": "Exporter en CSV"
+      "export": "Exporter en CSV",
+      "cancel": "Annuler",
+      "exportShort": "Exporter"
     }
   },
   "form": {
@@ -52,7 +55,9 @@
       "memberName": "Nom du membre",
       "startDate": "Date de début",
       "endDate": "Date de fin",
-      "all": "Tous"
+      "all": "Tous",
+      "incomeOnly": "Revenus seulement",
+      "expenseOnly": "Dépenses seulement"
     },
     "summary": {
       "totalIncome": "Revenus totaux",

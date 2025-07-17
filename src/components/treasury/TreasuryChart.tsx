@@ -33,12 +33,12 @@ ChartJS.register(
 
 interface TreasuryChartProps {
   entries: TreasuryEntry[];
-  exportCSV: () => void;
+  setIsExportOpen: (value: boolean) => void;
 }
 
 const TreasuryChart: React.FC<TreasuryChartProps> = ({
   entries,
-  exportCSV,
+  setIsExportOpen,
 }) => {
   const { t } = useTranslation("treasury");
   const { theme } = useTheme();
@@ -188,7 +188,7 @@ const TreasuryChart: React.FC<TreasuryChartProps> = ({
         <h2 className="text-xl font-semibold mb-4 dark:text-gray-100">
           {t("chart.title")}
         </h2>
-        <Button variant="primary" onClick={exportCSV}>
+        <Button variant="primary" onClick={() => setIsExportOpen(true)}>
           <Download className="h-4 w-4 mr-2" />
           {t("page.buttons.export")}
         </Button>
