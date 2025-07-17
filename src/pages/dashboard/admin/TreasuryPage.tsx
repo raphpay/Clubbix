@@ -122,7 +122,7 @@ const TreasuryPage: React.FC = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen dark:text-gray-300">
-        Loading...
+        {t("page.loading")}
       </div>
     );
   }

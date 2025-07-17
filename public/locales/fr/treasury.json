@@ -39,6 +39,9 @@
       "description": "Entrez la description",
       "category": "Sélectionnez une catégorie",
       "memberName": "Entrez le nom du membre"
+    },
+    "errors": {
+      "memberNotFound": "Membre non trouvé"
     }
   },
   "list": {

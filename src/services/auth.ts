@@ -23,7 +23,13 @@ export interface User {
   createdAt: Timestamp;
 }
 
-export type UserRole = "member" | "admin";
+export type UserRole =
+  | "admin"
+  | "treasurer"
+  | "rider"
+  | "coach"
+  | "parent"
+  | "member";
 
 export const getAuthErrorMessage = (error: AuthError): string => {
   switch (error.code) {

@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useClub } from "../../hooks/useClub";
 import { TreasuryEntry } from "../../services/firestore/treasuryService";
+import { UserData } from "../../services/firestore/types/user";
+import { getMembersWithQuery } from "../../services/firestore/userService";
 
 interface TreasuryFormProps {
   onAddEntry: (entry: Omit<TreasuryEntry, "id" | "createdAt">) => void;
@@ -12,6 +15,7 @@ const TreasuryForm: React.FC<TreasuryFormProps> = ({
   onCancel,
 }) => {
   const { t } = useTranslation("treasury");
+  const { club } = useClub();
   const [formData, setFormData] = useState({
     type: "income" as const,
     amount: "",
@@ -23,6 +27,46 @@ const TreasuryForm: React.FC<TreasuryFormProps> = ({
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [memberQuery, setMemberQuery] = useState("");
+  const [memberOptions, setMemberOptions] = useState<UserData[]>([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [memberSearchLoading, setMemberSearchLoading] = useState(false);
+
+  // Autocomplete effect
+  useEffect(() => {
+    if (!club?.id || !memberQuery) {
+      setMemberOptions([]);
+      return;
+    }
+    setMemberSearchLoading(true);
+    getMembersWithQuery({ clubId: club.id, search: memberQuery, pageSize: 5 })
+      .then((res) => setMemberOptions(res.members))
+      .finally(() => setMemberSearchLoading(false));
+  }, [memberQuery, club?.id]);
+
+  function handleMemberInput(e: React.ChangeEvent<HTMLInputElement>) {
+    const value = e.target.value;
+    setFormData((prev) => ({ ...prev, memberName: value, memberId: "" }));
+    setMemberQuery(value);
+    setShowDropdown(!!value);
+  }
+
+  function handleSelectMember(member: UserData) {
+    setFormData((prev) => ({
+      ...prev,
+      memberName: `${member.firstName} ${member.lastName}`,
+      memberId: member.id || "",
+    }));
+    setShowDropdown(false);
+  }
+
+  function validateMemberField() {
+    if (!formData.memberName) return true; // empty is allowed
+    if (!formData.memberId) return false; // must select from dropdown
+    return true;
+  }
+
+  const canSubmit = validateMemberField() && !loading && !error;
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -155,10 +199,35 @@ const TreasuryForm: React.FC<TreasuryFormProps> = ({
             type="text"
             name="memberName"
             value={formData.memberName}
-            onChange={handleChange}
+            onChange={handleMemberInput}
+            onFocus={() => setShowDropdown(!!formData.memberName)}
+            autoComplete="off"
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2"
             placeholder={t("form.placeholders.memberName")}
           />
+          {showDropdown && memberOptions.length > 0 && (
+            <ul className="absolute z-10 bg-white border border-gray-200 w-full mt-1 rounded shadow max-h-48 overflow-auto">
+              {memberOptions.map((member) => (
+                <li
+                  key={member.id}
+                  className="px-4 py-2 cursor-pointer hover:bg-indigo-100"
+                  onMouseDown={() => handleSelectMember(member)}
+                >
+                  <span className="font-medium">
+                    {member.firstName} {member.lastName}
+                  </span>
+                  <span className="ml-2 text-xs text-gray-500">
+                    {member.email}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+          {formData.memberName && !formData.memberId && (
+            <div className="text-red-500 text-xs mt-1">
+              {t("form.errors.memberNotFound")}
+            </div>
+          )}
         </div>
 
         <div className="flex justify-end space-x-3">
@@ -171,8 +240,8 @@ const TreasuryForm: React.FC<TreasuryFormProps> = ({
           </button>
           <button
             type="submit"
-            disabled={loading}
-            className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            disabled={!canSubmit}
+            className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-gray-500"
           >
             {loading ? t("page.loading") : t("form.buttons.submit")}
           </button>

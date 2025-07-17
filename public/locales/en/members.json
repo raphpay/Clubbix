@@ -6,6 +6,13 @@
       "load": "Failed to load members",
       "save": "Failed to save member",
       "delete": "Failed to delete member"
+    },
+    "email": "Email:",
+    "role": "Role:",
+    "status": "Status",
+    "joined": "Joined",
+    "buttons": {
+      "close": "Close"
     }
   },
   "list": {
@@ -15,7 +22,12 @@
       "name": "Name",
       "email": "Email",
       "role": "Role",
-      "actions": "Actions"
+      "actions": "Actions",
+      "date": "Date",
+      "amount": "Amount",
+      "category": "Category",
+      "notes": "Notes",
+      "type": "Type"
     },
     "roles": {
       "admin": "Admin",
@@ -46,7 +58,17 @@
       "nameAsc": "Name (A-Z)",
       "joinDateDesc": "Join date (Newest)",
       "statusAsc": "Status"
-    }
+    },
+    "filters": {
+      "allTypes": "All types",
+      "income": "Income",
+      "expense": "Expense",
+      "startDate": "Start date",
+      "endDate": "End date"
+    },
+    "paymentHistory": "Historique de paiement",
+    "noPayments": "No payments",
+    "paymentHistoryError": "Payment history error"
   },
   "form": {
     "title": {

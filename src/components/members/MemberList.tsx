@@ -1,13 +1,18 @@
-import { Pencil, Plus, Trash2 } from "lucide-react";
+import { Eye, Pencil, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "../../hooks/useAuth";
 import { useClub } from "../../hooks/useClub";
+import {
+  getTreasuryEntries,
+  TreasuryEntry,
+} from "../../services/firestore/treasuryService";
 import { UserData } from "../../services/firestore/types/user";
 import { getMembersWithQuery } from "../../services/firestore/userService";
 import { Button } from "../ui/Button";
+import MemberProfileModal from "./MemberProfileModal";
 
 interface MemberListProps {
-  onAddMember: () => void;
   onEditMember: (member: UserData) => void;
   onDeleteMember: (member: UserData) => void;
   reloadKey?: number;
@@ -18,7 +23,6 @@ const STATUSES = ["active", "inactive", "pending", "banned"];
 const PAGE_SIZES = [15, 30, 50];
 
 const MemberList: React.FC<MemberListProps> = ({
-  onAddMember,
   onEditMember,
   onDeleteMember,
   reloadKey = 0,
@@ -66,6 +70,18 @@ const MemberList: React.FC<MemberListProps> = ({
     lastVisible: null,
   });
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [viewedMember, setViewedMember] = useState<UserData | undefined>(
+    undefined
+  );
+  const { user: currentUser } = useAuth();
+  const [paymentFilters, setPaymentFilters] = useState({
+    type: "",
+    startDate: "",
+    endDate: "",
+  });
+  const [payments, setPayments] = useState<TreasuryEntry[]>([]);
+  const [isLoadingPayments, setIsLoadingPayments] = useState(false);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
 
   useEffect(() => {
     const handler = setTimeout(() => setDebouncedSearch(search), 300);
@@ -94,6 +110,34 @@ const MemberList: React.FC<MemberListProps> = ({
       .finally(() => setLoading(false));
   }, [club?.id, debouncedSearch, filters, sort, page, pageSize, reloadKey, t]);
 
+  useEffect(() => {
+    if (!club?.id || !viewedMember || currentUser?.role !== "treasurer") return;
+    setIsLoadingPayments(true);
+    setPaymentError(null);
+    getTreasuryEntries(club.id, {
+      type: paymentFilters.type as "income" | "expense" | undefined,
+      memberId: viewedMember.id,
+      startDate: paymentFilters.startDate
+        ? new Date(paymentFilters.startDate)
+        : undefined,
+      endDate: paymentFilters.endDate
+        ? new Date(paymentFilters.endDate)
+        : undefined,
+    })
+      .then((result) => {
+        console.log("result", result);
+        setPayments(result);
+      })
+      .catch((error) => {
+        console.log("error", error);
+        setPaymentError(t("list.paymentHistoryError"));
+      })
+      .finally(() => {
+        console.log("finally");
+        setIsLoadingPayments(false);
+      });
+  }, [club?.id, viewedMember, paymentFilters, currentUser, t]);
+
   function handleFilterChange(e: React.ChangeEvent<HTMLSelectElement>) {
     setFilters((f) => ({ ...f, [e.target.name]: e.target.value }));
     setPage(1);
@@ -108,6 +152,13 @@ const MemberList: React.FC<MemberListProps> = ({
   function handlePageSizeChange(e: React.ChangeEvent<HTMLSelectElement>) {
     setPageSize(+e.target.value);
     setPage(1);
+  }
+
+  function handlePaymentFilterChange(
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) {
+    const { name, value } = e.target;
+    setPaymentFilters((prev) => ({ ...prev, [name]: value }));
   }
 
   if (loading) {
@@ -188,14 +239,6 @@ const MemberList: React.FC<MemberListProps> = ({
               </option>
             ))}
           </select>
-          <Button
-            onClick={onAddMember}
-            variant="primary"
-            className="flex items-center gap-2"
-          >
-            <Plus className="w-4 h-4" />
-            {t("list.addButton")}
-          </Button>
         </div>
       </div>
       <div className="bg-white dark:bg-blue-900 shadow-sm rounded-lg overflow-x-auto">
@@ -280,6 +323,12 @@ const MemberList: React.FC<MemberListProps> = ({
                 <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                   <div className="flex justify-end gap-2">
                     <button
+                      onClick={() => setViewedMember(member)}
+                      className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-200"
+                    >
+                      <Eye className="w-4 h-4" />
+                    </button>
+                    <button
                       onClick={() => onEditMember(member)}
                       className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-200"
                     >
@@ -318,6 +367,17 @@ const MemberList: React.FC<MemberListProps> = ({
           </Button>
         </div>
       </div>
+      {viewedMember && (
+        <MemberProfileModal
+          viewedMember={viewedMember}
+          setViewedMember={setViewedMember}
+          payments={payments}
+          isLoadingPayments={isLoadingPayments}
+          paymentError={paymentError}
+          paymentFilters={paymentFilters}
+          handlePaymentFilterChange={handlePaymentFilterChange}
+        />
+      )}
     </div>
   );
 };
