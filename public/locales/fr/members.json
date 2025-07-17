@@ -6,6 +6,13 @@
       "load": "Échec du chargement des membres",
       "save": "Échec de l'enregistrement du membre",
       "delete": "Échec de la suppression du membre"
+    },
+    "email": "Email :",
+    "role": "Role :",
+    "status": "Statut :",
+    "joined": "Membre depuis le :",
+    "buttons": {
+      "close": "Fermer"
     }
   },
   "list": {
@@ -15,7 +22,12 @@
       "name": "Nom",
       "email": "Email",
       "role": "Rôle",
-      "actions": "Actions"
+      "actions": "Actions",
+      "date": "Date",
+      "amount": "Montant",
+      "category": "Catégorie",
+      "notes": "Notes",
+      "type": "Type"
     },
     "roles": {
       "admin": "Administrateur",
@@ -46,7 +58,17 @@
       "nameAsc": "Nom (A-Z)",
       "joinDateDesc": "Date d'entrée (Plus récent)",
       "statusAsc": "Statut"
-    }
+    },
+    "filters": {
+      "allTypes": "Tous les types",
+      "income": "Revenu",
+      "expense": "Dépense",
+      "startDate": "Date de début",
+      "endDate": "Date de fin"
+    },
+    "paymentHistory": "Historique de paiement",
+    "noPayments": "Pas de paiements",
+    "paymentHistoryError": "Erreur d'historique"
   },
   "form": {
     "title": {

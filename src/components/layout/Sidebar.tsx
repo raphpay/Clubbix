@@ -11,7 +11,8 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
   const { t } = useTranslation("sidebar");
   const { user } = useAuth();
-  const isAdmin = user?.role === "admin";
+  const adminRoles = ["admin", "treasurer", "coach"];
+  const isAdmin = user && adminRoles.includes(user?.role);
 
   const adminNavItems = [
     { path: "/admin/dashboard/members", icon: Users, label: t("members") },

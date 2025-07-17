@@ -50,7 +50,11 @@ const LoginPage: React.FC = () => {
       // Get user and redirect accordingly
       const user = await getUser(userCredential.user.uid);
       login(user);
-      navigate(`/${user.role === "admin" ? "admin" : "member"}/dashboard`);
+      const adminRoles = ["admin", "treasurer", "coach"];
+      const memberRoles = ["member", "parent", "rider"];
+      if (adminRoles.includes(user.role)) navigate("/admin/dashboard");
+      else if (memberRoles.includes(user.role)) navigate("/member/dashboard");
+      else navigate("/");
     } catch (error) {
       console.log("error", error);
       setAuthError(getAuthErrorMessage(error));

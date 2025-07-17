@@ -73,12 +73,13 @@ export const getTreasuryEntries = async (
   }
 
   const querySnapshot = await getDocs(q);
-  console.log("querySnapshot", querySnapshot);
-  return querySnapshot.docs.map((doc) => ({
+  const docs = querySnapshot.docs.map((doc) => ({
     id: doc.id,
     ...doc.data(),
     date: doc.data().date.toDate(),
   })) as TreasuryEntry[];
+  console.log("doc", docs);
+  return docs;
 };
 
 export const getTreasurySummary = async (

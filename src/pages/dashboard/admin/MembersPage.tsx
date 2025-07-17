@@ -20,11 +20,6 @@ const MembersPage: React.FC = () => {
   const [reloadKey, setReloadKey] = useState(0);
   const currentUserId = user?.uid;
 
-  function handleAddMember() {
-    setSelectedMember(null);
-    setIsFormOpen(true);
-  }
-
   function handleEditMember(member: UserData) {
     setSelectedMember(member);
     setIsFormOpen(true);
@@ -97,7 +92,6 @@ const MembersPage: React.FC = () => {
 
       <div className="bg-white shadow rounded-lg p-6 dark:bg-gray-800">
         <MemberList
-          onAddMember={handleAddMember}
           onEditMember={handleEditMember}
           onDeleteMember={handleDeleteMember}
           reloadKey={reloadKey}
