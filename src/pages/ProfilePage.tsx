@@ -19,6 +19,7 @@ const ProfilePage: React.FC = () => {
   const { t } = useTranslation("common");
   const { user, updateUser } = useAuth();
   const { club } = useClub();
+  const isAdmin = user?.role === "admin";
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -421,34 +422,36 @@ const ProfilePage: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Stripe Customer Portal Button */}
-                <div className="bg-gray-50 rounded-lg p-4 mb-4 dark:bg-gray-700">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                        {t("stripe.manageSubscriptionTitle")}
-                      </h4>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        {t("stripe.manageSubscriptionDescription")}
-                      </p>
+                {/*  Customer Portal Button */}
+                {isAdmin && (
+                  <div className="bg-gray-50 rounded-lg p-4 mb-4 dark:bg-gray-700">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                          {t("stripe.manageSubscriptionTitle")}
+                        </h4>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          {t("stripe.manageSubscriptionDescription")}
+                        </p>
+                      </div>
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        onClick={handleOpenCustomerPortal}
+                        disabled={portalLoading}
+                      >
+                        {portalLoading
+                          ? t("loading")
+                          : t("stripe.openCustomerPortal")}
+                      </Button>
                     </div>
-                    <Button
-                      type="button"
-                      variant="secondary"
-                      onClick={handleOpenCustomerPortal}
-                      disabled={portalLoading}
-                    >
-                      {portalLoading
-                        ? t("loading")
-                        : t("stripe.openCustomerPortal")}
-                    </Button>
+                    {portalError && (
+                      <div className="mt-2 text-sm text-red-600 dark:text-red-400">
+                        {portalError}
+                      </div>
+                    )}
                   </div>
-                  {portalError && (
-                    <div className="mt-2 text-sm text-red-600 dark:text-red-400">
-                      {portalError}
-                    </div>
-                  )}
-                </div>
+                )}
               </div>
 
               {/* Error Messages */}
