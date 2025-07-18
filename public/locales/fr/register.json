@@ -25,6 +25,12 @@
   "toggleRole": "Basculer le rôle",
   "registerAsAdmin": "S'inscrire en tant qu'administrateur",
   "errors": {
+    "firstNameRequired": "Le prénom est requis",
+    "lastNameRequired": "Le nom est requis",
+    "emailRequired": "L'adresse mail est requise",
+    "passwordRequired": "Le mot de passe est requis",
+    "emailFormat": "Format de l'adresse mail invalide",
+    "passwordLength": "Le mot de passe doit contenir au moins 6 caractères",
     "clubNameRequired": "Le nom du club est requis",
     "clubNameTaken": "Ce nom de club est déjà pris",
     "inviteCodeRequired": "Le code d'invitation est requis",
