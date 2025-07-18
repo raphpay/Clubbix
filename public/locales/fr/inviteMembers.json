@@ -14,7 +14,10 @@
     "selectRole": "Selectionner le rôle",
     "member": "Membre",
     "coach": "Coach",
-    "parent": "Parent"
+    "parent": "Parent",
+    "admin": "Administrateur",
+    "treasurer": "Trésorier",
+    "rider": "Rider"
   },
   "list": {
     "code": "Code",
