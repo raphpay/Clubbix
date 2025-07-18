@@ -52,7 +52,6 @@ const SectionCardManager: React.FC<SectionCardManagerProps> = ({
     setLoading(true);
     getSections(websiteId)
       .then((data) => {
-        console.log("data", data);
         setSections(data);
       })
       .catch((err) => setError("Failed to load sections"))

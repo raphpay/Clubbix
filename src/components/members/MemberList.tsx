@@ -125,15 +125,12 @@ const MemberList: React.FC<MemberListProps> = ({
         : undefined,
     })
       .then((result) => {
-        console.log("result", result);
         setPayments(result);
       })
       .catch((error) => {
-        console.log("error", error);
         setPaymentError(t("list.paymentHistoryError"));
       })
       .finally(() => {
-        console.log("finally");
         setIsLoadingPayments(false);
       });
   }, [club?.id, viewedMember, paymentFilters, currentUser, t]);

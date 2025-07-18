@@ -110,7 +110,6 @@ const ProfilePage: React.FC = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      console.log("user", user?.uid);
       if (!user?.uid) return;
 
       try {
@@ -124,7 +123,6 @@ const ProfilePage: React.FC = () => {
             ...data,
             id: userDoc.id,
           };
-          console.log("Fetched user data:", userDataWithId);
           setUserData(userDataWithId);
 
           const initialFormData = {

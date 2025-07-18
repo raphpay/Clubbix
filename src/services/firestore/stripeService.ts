@@ -39,7 +39,6 @@ export const saveSubscription = async (
   };
 
   await setDoc(subscriptionRef, dataToSave);
-  console.log("Subscription saved:", subscriptionData.subscriptionId);
   return subscriptionData.subscriptionId;
 };
 
@@ -54,8 +53,6 @@ export const updateSubscription = async (
     ...updates,
     updatedAt: serverTimestamp(),
   });
-
-  console.log("Subscription updated:", subscriptionId);
 };
 
 // Update club with subscription info
@@ -71,8 +68,6 @@ export const updateClubSubscription = async (
       updatedAt: serverTimestamp(),
     },
   });
-
-  console.log("Club subscription updated:", clubId);
 };
 
 // Get subscription by ID

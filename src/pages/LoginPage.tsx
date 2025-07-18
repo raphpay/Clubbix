@@ -52,11 +52,11 @@ const LoginPage: React.FC = () => {
       login(user);
       const adminRoles = ["admin", "treasurer", "coach"];
       const memberRoles = ["member", "parent", "rider"];
-      if (adminRoles.includes(user.role)) navigate("/admin/dashboard");
-      else if (memberRoles.includes(user.role)) navigate("/member/dashboard");
+      if (adminRoles.includes(user.role)) navigate("/admin/dashboard/members");
+      else if (memberRoles.includes(user.role))
+        navigate("/member/dashboard/profile");
       else navigate("/");
     } catch (error) {
-      console.log("error", error);
       setAuthError(getAuthErrorMessage(error));
     } finally {
       setLoading(false);
