@@ -78,7 +78,6 @@ export const getTreasuryEntries = async (
     ...doc.data(),
     date: doc.data().date.toDate(),
   })) as TreasuryEntry[];
-  console.log("doc", docs);
   return docs;
 };
 

@@ -150,7 +150,6 @@ const RegistrationForm = () => {
     if (!validateDetailsStep()) return;
     setIsLoading(true);
     try {
-      console.log("role", role);
       if (role === "member") {
         // Invite code registration flow
         if (
@@ -164,14 +163,11 @@ const RegistrationForm = () => {
         }
         try {
           // Register user with Firebase auth
-          console.log("1");
           const userCredential = await registerWithEmailAndPassword(
             formData.email,
             formData.password
           );
-          console.log("2", userCredential);
           const userId = userCredential.user.uid;
-          console.log("3", userId);
           // Use addMember service
           await addMember(userId, inviteStatus.clubId, {
             firstName: formData.firstName,
@@ -181,14 +177,12 @@ const RegistrationForm = () => {
             status: "active",
             clubId: inviteStatus.clubId,
           });
-          console.log("4");
           // Increment invite usage
           await updateInvite({
             clubId: inviteStatus.clubId,
             code: inviteStatus.invite.code,
             data: { used: (inviteStatus.invite.used || 0) + 1 },
           });
-          console.log("5");
           setFormData({
             clubName: "",
             inviteCode: "",
@@ -198,14 +192,19 @@ const RegistrationForm = () => {
             logo: null,
             password: "",
           });
-          console.log("6");
-          navigate("/member/dashboard");
-          console.log("7");
-          setIsLoading(false);
-          console.log("8");
-          return;
+          const adminRoles = ["admin", "treasurer", "coach"];
+          const memberRoles = ["member", "parent", "rider"];
+          if (adminRoles.includes(inviteStatus.invite.role)) {
+            navigate("/admin/dashboard/members");
+            setIsLoading(false);
+          } else if (memberRoles.includes(inviteStatus.invite.role)) {
+            navigate("/member/dashboard/profile");
+            setIsLoading(false);
+          } else {
+            setIsLoading(false);
+            return;
+          }
         } catch (err: any) {
-          console.log("err", err);
           if (err.message && err.message.includes("email")) {
             setAuthError("Email already registered. Please log in.");
             setIsLoading(false);
@@ -258,7 +257,6 @@ const RegistrationForm = () => {
         window.location.href = checkoutResponse.url;
       }
     } catch (error) {
-      console.log("error", error);
       setAuthError(getAuthErrorMessage(error));
     } finally {
       setIsLoading(false);
