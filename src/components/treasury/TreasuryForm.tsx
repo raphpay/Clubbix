@@ -191,44 +191,47 @@ const TreasuryForm: React.FC<TreasuryFormProps> = ({
           />
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            {t("form.fields.memberName")}
-          </label>
-          <input
-            type="text"
-            name="memberName"
-            value={formData.memberName}
-            onChange={handleMemberInput}
-            onFocus={() => setShowDropdown(!!formData.memberName)}
-            autoComplete="off"
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2"
-            placeholder={t("form.placeholders.memberName")}
-          />
-          {showDropdown && memberOptions.length > 0 && (
-            <ul className="absolute z-10 bg-white border border-gray-200 w-full mt-1 rounded shadow max-h-48 overflow-auto">
-              {memberOptions.map((member) => (
-                <li
-                  key={member.id}
-                  className="px-4 py-2 cursor-pointer hover:bg-indigo-100"
-                  onMouseDown={() => handleSelectMember(member)}
-                >
-                  <span className="font-medium">
-                    {member.firstName} {member.lastName}
-                  </span>
-                  <span className="ml-2 text-xs text-gray-500">
-                    {member.email}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
-          {formData.memberName && !formData.memberId && (
-            <div className="text-red-500 text-xs mt-1">
-              {t("form.errors.memberNotFound")}
-            </div>
-          )}
-        </div>
+        {/* Member field */}
+        {formData.type === "income" && (
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              {t("form.fields.memberName")}
+            </label>
+            <input
+              type="text"
+              name="memberName"
+              value={formData.memberName}
+              onChange={handleMemberInput}
+              onFocus={() => setShowDropdown(!!formData.memberName)}
+              autoComplete="off"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2"
+              placeholder={t("form.placeholders.memberName")}
+            />
+            {showDropdown && memberOptions.length > 0 && (
+              <ul className="absolute z-10 bg-white border border-gray-200 w-full mt-1 rounded shadow max-h-48 overflow-auto">
+                {memberOptions.map((member) => (
+                  <li
+                    key={member.id}
+                    className="px-4 py-2 cursor-pointer hover:bg-indigo-100"
+                    onMouseDown={() => handleSelectMember(member)}
+                  >
+                    <span className="font-medium">
+                      {member.firstName} {member.lastName}
+                    </span>
+                    <span className="ml-2 text-xs text-gray-500">
+                      {member.email}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {formData.memberName && !formData.memberId && (
+              <div className="text-red-500 text-xs mt-1">
+                {t("form.errors.memberNotFound")}
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="flex justify-end space-x-3">
           <button
