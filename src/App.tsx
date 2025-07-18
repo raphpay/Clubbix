@@ -70,6 +70,9 @@ const AppContent: React.FC = () => {
       <Route path="/success" element={<SuccessPage />} />
       <Route path="/cancel" element={<CancelPage />} />
       <Route path="/help" element={<UnderConstructionPage />} />
+      <Route path="/terms" element={<UnderConstructionPage />} />
+      <Route path="/privacy" element={<UnderConstructionPage />} />
+      <Route path="/blog" element={<UnderConstructionPage />} />
       {/* Note: /signup?plan={plan}&billing={billingCycle} is handled by RegistrationForm */}
 
       {/* Protected routes */}
