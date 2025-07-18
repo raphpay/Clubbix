@@ -57,7 +57,10 @@ const LandingPage: React.FC = () => {
       title: t("footer.sections.support.title"),
       links: [
         { label: t("footer.sections.support.links.help"), href: "/help" },
-        { label: t("footer.sections.support.links.contact"), href: "/contact" },
+        {
+          label: t("footer.sections.support.links.contact"),
+          href: "/book-demo",
+        },
       ],
     },
     {
@@ -70,7 +73,10 @@ const LandingPage: React.FC = () => {
     {
       title: t("footer.sections.company.title"),
       links: [
-        { label: t("footer.sections.company.links.about"), href: "/about" },
+        {
+          label: t("footer.sections.company.links.about"),
+          href: "https://www.linkedin.com/in/raphael-payet/",
+        },
         { label: t("footer.sections.company.links.blog"), href: "/blog" },
       ],
     },

@@ -25,6 +25,12 @@
   "toggleRole": "Toggle role",
   "registerAsAdmin": "Register as Admin",
   "errors": {
+    "firstNameRequired": "First name is required",
+    "lastNameRequired": "Last name is required",
+    "emailRequired": "Email is required",
+    "passwordRequired": "Password is required",
+    "emailFormat": "Invalid email format",
+    "passwordLength": "Password must be at least 6 characters",
     "clubNameRequired": "Club name is required",
     "clubNameTaken": "This club name is already taken",
     "inviteCodeRequired": "Invite code is required",

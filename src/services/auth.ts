@@ -34,19 +34,19 @@ export type UserRole =
 export const getAuthErrorMessage = (error: AuthError): string => {
   switch (error.code) {
     case "auth/email-already-in-use":
-      return "This email is already registered. Please use a different email or try logging in.";
+      return "email-already-in-use";
     case "auth/invalid-email":
-      return "Please enter a valid email address.";
+      return "invalid-email";
     case "auth/operation-not-allowed":
-      return "Email/password accounts are not enabled. Please contact support.";
+      return "operation-not-allowed";
     case "auth/weak-password":
-      return "Password is too weak. Please use a stronger password (at least 6 characters).";
+      return "weak-password";
     case "auth/user-not-found":
-      return "No account found with this email. Please check your email or sign up.";
+      return "user-not-found";
     case "auth/wrong-password":
-      return "Incorrect password. Please try again.";
+      return "wrong-password";
     default:
-      return "An error occurred. Please try again.";
+      return "default";
   }
 };
 

@@ -25,7 +25,7 @@ import { useRegistrationStore } from "../store/useRegistrationStore";
 import LabelInput from "./inputs/LabelInput";
 
 const RegistrationForm = () => {
-  const { t } = useTranslation(["register", "pricing"]);
+  const { t } = useTranslation(["register", "pricing", "auth"]);
   const {
     role,
     step,
@@ -88,7 +88,7 @@ const RegistrationForm = () => {
       setInviteStatus(null);
       const result = await getInviteByCode(formData.inviteCode.trim());
       if (!result) {
-        setInviteStatus({ valid: false, error: "Invalid invite code" });
+        setInviteStatus({ valid: false, error: t("auth:invalid-invite-code") });
         return;
       }
       const { invite, clubId } = result;
@@ -115,7 +115,8 @@ const RegistrationForm = () => {
       if (!formData.inviteCode)
         newErrors.inviteCode = t("register:errors.inviteCodeRequired");
       else if (!inviteStatus || !inviteStatus.valid)
-        newErrors.inviteCode = inviteStatus?.error || "Invalid invite code";
+        newErrors.inviteCode =
+          inviteStatus?.error || t("auth:invalid-invide-code");
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -123,15 +124,18 @@ const RegistrationForm = () => {
 
   const validateDetailsStep = () => {
     const newErrors: Record<string, string> = {};
-    if (!formData.firstName) newErrors.firstName = "First name is required";
-    if (!formData.lastName) newErrors.lastName = "Last name is required";
-    if (!formData.email) newErrors.email = "Email is required";
-    if (!formData.password) newErrors.password = "Password is required";
+    if (!formData.firstName)
+      newErrors.firstName = t("register:errors.firstNameRequired");
+    if (!formData.lastName)
+      newErrors.lastName = t("register:errors.lastNameRequired");
+    if (!formData.email) newErrors.email = t("register:errors.emailRequired");
+    if (!formData.password)
+      newErrors.password = t("register:errors.passwordRequired");
     if (formData.email && !/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Invalid email format";
+      newErrors.email = t("register:errors.emailFormat");
     }
     if (formData.password && formData.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
+      newErrors.password = t("register:errors.passwordLength");
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -157,7 +161,7 @@ const RegistrationForm = () => {
           !inviteStatus.invite ||
           !inviteStatus.clubId
         ) {
-          setAuthError(inviteStatus?.error || "Invalid invite code");
+          setAuthError(inviteStatus?.error || t("auth:invalid-invite-code"));
           setIsLoading(false);
           return;
         }
@@ -206,7 +210,7 @@ const RegistrationForm = () => {
           }
         } catch (err: any) {
           if (err.message && err.message.includes("email")) {
-            setAuthError("Email already registered. Please log in.");
+            setAuthError(t("auth:email-already-registered"));
             setIsLoading(false);
             return;
           }
@@ -257,7 +261,8 @@ const RegistrationForm = () => {
         window.location.href = checkoutResponse.url;
       }
     } catch (error) {
-      setAuthError(getAuthErrorMessage(error));
+      const errorTranslationCode = getAuthErrorMessage(error);
+      setAuthError(t(`auth:${errorTranslationCode}`));
     } finally {
       setIsLoading(false);
     }
