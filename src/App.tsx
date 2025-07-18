@@ -31,6 +31,7 @@ import LoginPage from "./pages/LoginPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import ProfilePage from "./pages/ProfilePage";
 import SuccessPage from "./pages/SuccessPage";
+import UnderConstructionPage from "./pages/UnderConstructionPage";
 
 // Component to handle authenticated user redirects
 const AuthenticatedRedirect: React.FC = () => {
@@ -68,6 +69,7 @@ const AppContent: React.FC = () => {
       <Route path="/signup" element={<RegistrationForm />} />
       <Route path="/success" element={<SuccessPage />} />
       <Route path="/cancel" element={<CancelPage />} />
+      <Route path="/help" element={<UnderConstructionPage />} />
       {/* Note: /signup?plan={plan}&billing={billingCycle} is handled by RegistrationForm */}
 
       {/* Protected routes */}
