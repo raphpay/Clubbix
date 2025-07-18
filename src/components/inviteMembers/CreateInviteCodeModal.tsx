@@ -58,9 +58,12 @@ const CreateInviteCodeModal: React.FC<CreateInviteCodeModalProps> = ({
               className="w-full border rounded p-2 border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
             >
               <option value="">{t("role.selectRole")}</option>
-              <option value="member">{t("role.member")}</option>
+              <option value="admin">{t("role.admin")}</option>
+              <option value="treasurer">{t("role.treasurer")}</option>
               <option value="coach">{t("role.coach")}</option>
+              <option value="rider">{t("role.rider")}</option>
               <option value="parent">{t("role.parent")}</option>
+              <option value="member">{t("role.member")}</option>
             </select>
           </div>
           <div>
